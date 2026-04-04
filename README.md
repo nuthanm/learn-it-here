@@ -1,4 +1,4 @@
-# 📋 Project Requirements Questionnaire
+# 📋 Learn it here
 
 A **professional, single-page Streamlit web app** that captures all key tech-stack
 questions before a project kicks off. Responses are stored in **Supabase (PostgreSQL)**
