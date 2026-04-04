@@ -18,12 +18,21 @@ st.set_page_config(
 
 # ── Session State Initialization ──────────────────────────────────────────────
 _DEFAULTS = {
-    "page": "landing",        # "landing" | "requirements" | "learn"
+    "page": "landing",              # "landing" | "requirements" | "learn"
     "animation_state": "welcome",
     "submitted": False,
     "pdf_bytes": None,
     "interacted": False,
+    "learn_section": "GIT",         # active learn-hub section
+    "learn_banner_dismissed": False, # new-topic banner dismissed this session
 }
+
+# ── Learn-hub menu definitions ─────────────────────────────────────────────────
+# To add a new menu item, append to this list and update LATEST_NEW_TOPIC.
+LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle"]
+# LATEST_NEW_TOPIC is the item that triggers the "new menu" banner.
+# Update this string whenever a brand-new item is added to LEARN_MENU_ITEMS.
+LATEST_NEW_TOPIC = "EF Core + Oracle"
 for _k, _v in _DEFAULTS.items():
     if _k not in st.session_state:
         st.session_state[_k] = _v
@@ -353,6 +362,97 @@ st.markdown(
     .hero-eyebrow, .hero-headline, .hero-sub, .hero-stats { animation: none !important; opacity: 1 !important; }
   }
 
+  /* ─ Learn-hub sidebar navigation ─ */
+  .learn-sidebar {
+    background: #FFFFFF; border-radius: 14px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .learn-sidebar-title {
+    font-size: 0.68rem; font-weight: 800; color: #40916C;
+    text-transform: uppercase; letter-spacing: 1.3px;
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid #F0F0F0;
+    background: #FAFAFA;
+  }
+  /* Style st.radio inside the sidebar to look like a vertical nav list */
+  div[data-testid="stRadio"] > label { display: none !important; }
+  div[data-testid="stRadio"] > div {
+    display: flex !important; flex-direction: column !important; gap: 0 !important;
+  }
+  div[data-testid="stRadio"] > div > label {
+    width: 100% !important;
+    padding: 0.58rem 1rem !important;
+    border-left: 3px solid transparent !important;
+    border-top: 1px solid #F5F5F5 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    transition: background .15s, border-color .15s !important;
+    font-size: 0.88rem !important; font-weight: 600 !important; color: #444444 !important;
+    display: flex !important; align-items: center !important;
+  }
+  div[data-testid="stRadio"] > div > label:first-child { border-top: none !important; }
+  div[data-testid="stRadio"] > div > label:hover {
+    background: #F5FAF7 !important; color: #2D6A4F !important;
+    border-left-color: #74C69D !important;
+  }
+  /* Hide the radio circle */
+  div[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child {
+    display: none !important;
+  }
+  /* Selected radio item */
+  div[data-testid="stRadio"] > div > label:has(input:checked) {
+    background: #F0F7F4 !important; color: #1A1A1A !important;
+    border-left-color: #1A1A1A !important; font-weight: 700 !important;
+  }
+  /* Suggest topic button in sidebar */
+  div[data-testid="stButton"].suggest-topic-btn > button {
+    background: linear-gradient(135deg, #2D6A4F, #40916C) !important;
+    color: #FFFFFF !important; border: none !important; border-radius: 8px !important;
+    font-size: 0.82rem !important; font-weight: 700 !important;
+    box-shadow: 0 3px 10px rgba(45,106,79,0.28) !important;
+    padding: 0.55rem 0 !important;
+    transition: opacity .2s !important;
+  }
+  div[data-testid="stButton"].suggest-topic-btn > button:hover { opacity: 0.85 !important; }
+
+  /* ─ Breadcrumb ─ */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.8rem; color: #888888;
+    padding: 0.35rem 0 0.7rem;
+    flex-wrap: wrap;
+  }
+  .breadcrumb-sep { color: #CCCCCC; }
+  .breadcrumb-link { color: #2D6A4F; font-weight: 600; cursor: pointer; }
+  .breadcrumb-current { color: #1A1A1A; font-weight: 700; }
+
+  /* ─ New-topic announcement banner ─ */
+  .new-topic-banner {
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(90deg, #1A1A1A 0%, #2D6A4F 100%);
+    border-radius: 10px; padding: 0.55rem 1rem;
+    margin-bottom: 0.9rem;
+    color: #FFFFFF; font-size: 0.83rem; font-weight: 600;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+    animation: headlineIn .5s ease both;
+  }
+  .new-topic-badge {
+    display: inline-block;
+    background: #FFB3BA; color: #1A1A1A;
+    font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; border-radius: 20px;
+    padding: 2px 9px; margin-right: 8px;
+  }
+
+  /* ─ Suggest-topic dialog note ─ */
+  .suggest-note {
+    font-size: 0.76rem; color: #888888; font-style: italic;
+    border-left: 3px solid #2D6A4F; padding: 0.5rem 0.8rem;
+    background: #F5FAF7; border-radius: 0 8px 8px 0;
+    margin-top: 0.6rem; line-height: 1.6;
   /* ─ Mobile responsive ─ */
   @media (max-width: 768px) {
     /* Allow vertical scrolling */
@@ -1529,9 +1629,36 @@ def page_requirements():
     st.markdown(_footer_html(), unsafe_allow_html=True)
 
 
+# ── Suggest-topic dialog (module-level so the decorator is stable) ────────────
+@st.dialog("Add Your Suggested Topic")
+def _suggest_topic_dialog():
+    st.markdown(
+        "Share your idea and we'll consider adding it to the learning hub.",
+    )
+    topic = st.text_area(
+        "What topic would you like to learn about?",
+        placeholder="e.g. Docker & Kubernetes, CI/CD Pipelines, Azure Services...",
+        height=130,
+    )
+    st.markdown(
+        '<div class="suggest-note">'
+        "<strong>Note:</strong> Suggested topics will be reviewed by our team. "
+        "Topics with the most requests will be featured on a dedicated stats page "
+        "with <strong>#hashtag details</strong> and the number of requests received."
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("Submit Suggestion", type="primary", use_container_width=True):
+        if topic.strip():
+            st.success("Thank you! Your suggestion has been noted.")
+        else:
+            st.warning("Please enter a topic before submitting.")
+
+
 # ── Learning Hub Page ─────────────────────────────────────────────────────────
 def page_learn():
-    """Tabbed learning hub: GIT | Visual Studio IDE | VS Code."""
+    """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
     # Nav bar
     st.markdown(
         """
@@ -1541,23 +1668,80 @@ def page_learn():
     <div class="kfp-nav-title">Learn It Here</div>
     <div class="kfp-nav-tagline">Developer Learning Hub</div>
   </div>
-  <div class="kfp-nav-sub">🎓 Knowledge is your best weapon</div>
+  <div class="kfp-nav-sub">Knowledge is your best weapon</div>
 </div>
 """,
         unsafe_allow_html=True,
     )
 
-    if st.button("← Back to Home", key="learn_back"):
-        _nav_to("landing")
+    # ── Two-column layout: sidebar (2) + content (8) ──────────────────────────
+    nav_col, content_col = st.columns([2, 8], gap="medium")
 
-    tab_git, tab_vsIDE, tab_vsCode, tab_efcore_oracle = st.tabs(
-        ["🔧  GIT", "💻  Visual Studio IDE", "📝  VS Code", "🗄️  EF Core + Oracle"]
-    )
+    # ── Sidebar nav ───────────────────────────────────────────────────────────
+    with nav_col:
+        st.markdown(
+            '<div class="learn-sidebar">'
+            '<div class="learn-sidebar-title">Topics</div>'
+            "</div>",
+            unsafe_allow_html=True,
+        )
+        st.radio(
+            "Topics",
+            options=LEARN_MENU_ITEMS,
+            key="learn_section",
+            label_visibility="collapsed",
+        )
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button(
+            "Add your suggested topic",
+            key="suggest_topic_btn",
+            use_container_width=True,
+        ):
+            _suggest_topic_dialog()
+
+    # ── Main content area ─────────────────────────────────────────────────────
+    with content_col:
+        # Back + breadcrumb row
+        bc1, bc2 = st.columns([1, 7])
+        with bc1:
+            if st.button("← Home", key="learn_back"):
+                _nav_to("landing")
+        with bc2:
+            section = st.session_state.learn_section
+            st.markdown(
+                f'<div class="breadcrumb">'
+                f'<span>Home</span>'
+                f'<span class="breadcrumb-sep">›</span>'
+                f'<span>Developer Learning Hub</span>'
+                f'<span class="breadcrumb-sep">›</span>'
+                f'<span class="breadcrumb-current">{section}</span>'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+
+        # ── New-topic banner (shown until dismissed within the session) ───────
+        if not st.session_state.get("learn_banner_dismissed", False):
+            banner_col, dismiss_col = st.columns([9, 1])
+            with banner_col:
+                st.markdown(
+                    f'<div class="new-topic-banner">'
+                    f'<span><span class="new-topic-badge">NEW</span>'
+                    f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
+            with dismiss_col:
+                if st.button("Dismiss", key="banner_dismiss", help="Dismiss this banner"):
+                    st.session_state.learn_banner_dismissed = True
+                    st.rerun()
+
+        section = st.session_state.learn_section
 
     # ══════════════════════════════════════════════════════════════════════════
-    # GIT TAB
+    # GIT SECTION
     # ══════════════════════════════════════════════════════════════════════════
-    with tab_git:
+    with content_col:
+      if section == "GIT":
         # Overview
         st.markdown(
             """
@@ -1765,9 +1949,9 @@ git branch -d feature/my-feature-name
         )
 
     # ══════════════════════════════════════════════════════════════════════════
-    # VISUAL STUDIO IDE TAB
+    # VISUAL STUDIO IDE SECTION
     # ══════════════════════════════════════════════════════════════════════════
-    with tab_vsIDE:
+      elif section == "Visual Studio IDE":
         # Overview
         st.markdown(
             """
@@ -1966,9 +2150,9 @@ git branch -d feature/my-feature-name
         st.markdown("</div>", unsafe_allow_html=True)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # VS CODE TAB
+    # VS CODE SECTION
     # ══════════════════════════════════════════════════════════════════════════
-    with tab_vsCode:
+      elif section == "VS Code":
         # Overview
         st.markdown(
             """
@@ -2162,9 +2346,9 @@ git branch -d feature/my-feature-name
         st.markdown("</div>", unsafe_allow_html=True)
 
     # ══════════════════════════════════════════════════════════════════════════
-    # EF CORE + ORACLE TAB
+    # EF CORE + ORACLE SECTION
     # ══════════════════════════════════════════════════════════════════════════
-    with tab_efcore_oracle:
+      elif section == "EF Core + Oracle":
         # Overview
         st.markdown(
             """
