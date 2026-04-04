@@ -1627,7 +1627,7 @@ def page_learn():
             section = st.session_state.learn_section
             st.markdown(
                 f'<div class="breadcrumb">'
-                f'<span class="breadcrumb-link" style="cursor:default">Home</span>'
+                f'<span>Home</span>'
                 f'<span class="breadcrumb-sep">›</span>'
                 f'<span>Developer Learning Hub</span>'
                 f'<span class="breadcrumb-sep">›</span>'
@@ -1648,7 +1648,7 @@ def page_learn():
                     unsafe_allow_html=True,
                 )
             with dismiss_col:
-                if st.button("✕", key="banner_dismiss", help="Dismiss"):
+                if st.button("Dismiss", key="banner_dismiss", help="Dismiss this banner"):
                     st.session_state.learn_banner_dismissed = True
                     st.rerun()
 
