@@ -53,7 +53,8 @@ st.markdown(
   [data-testid="stAppViewContainer"] { background: #F5F0E8; }
   [data-testid="stHeader"]           { background: transparent; }
   .block-container {
-    padding-top: 1.2rem !important;
+    padding-top: 0.4rem !important;
+    padding-bottom: 0 !important;
     max-width: 1280px !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
@@ -62,7 +63,7 @@ st.markdown(
   /* ─ Top nav bar ─ */
   .kfp-nav {
     display: flex; align-items: center; gap: 1.2rem;
-    padding: 0.7rem 1.6rem; margin-bottom: 1.6rem;
+    padding: 0.55rem 1.6rem; margin-bottom: 0.8rem;
     background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
     border-radius: 16px;
     box-shadow: 0 6px 24px rgba(0,0,0,0.28);
@@ -76,16 +77,19 @@ st.markdown(
   }
   .kfp-nav-sub { font-size: 0.78rem; color: #94A3B8; margin-left: auto; }
 
-  /* ─ Landing hero ─ */
-  .hero-title {
-    font-size: 2.9rem; font-weight: 900; line-height: 1.15;
-    color: #1A1A1A; margin-bottom: 0;
+  /* ─ Landing description card ─ */
+  .landing-desc {
+    background: linear-gradient(135deg, #FFF8EC 0%, #FFF3DC 100%);
+    border: 1.5px solid #D4AC0D;
+    border-radius: 14px;
+    padding: 1rem 1.3rem;
+    margin-bottom: 1.2rem;
+    color: #3D2B00;
+    font-size: 0.93rem;
+    line-height: 1.7;
+    box-shadow: 0 2px 12px rgba(212,172,13,0.12);
   }
-  .hero-title span { color: #C4541A; }
-  .hero-sub {
-    font-size: 1.05rem; color: #475569;
-    margin: 0.9rem 0 1.8rem; line-height: 1.75;
-  }
+  .landing-desc strong { color: #C4541A; }
 
   /* ─ Workflow steps on landing ─ */
   .wf-step {
@@ -111,11 +115,11 @@ st.markdown(
   div[data-testid="stButton"] > button[kind="primary"]:hover { opacity: 0.88 !important; }
 
   div[data-testid="stButton"] > button[kind="secondary"] {
-    background: linear-gradient(135deg, #2D6A4F 0%, #40916C 100%) !important;
-    color: white !important; border: none !important;
+    background: linear-gradient(135deg, #B8860B 0%, #D4AC0D 100%) !important;
+    color: #1A1A1A !important; border: none !important;
     border-radius: 12px !important; font-size: 1rem !important;
     font-weight: 700 !important; padding: 0.7rem 0 !important;
-    box-shadow: 0 6px 20px rgba(45,106,79,0.38) !important;
+    box-shadow: 0 6px 20px rgba(212,172,13,0.40) !important;
     transition: opacity 0.2s !important;
   }
   div[data-testid="stButton"] > button[kind="secondary"]:hover { opacity: 0.88 !important; }
@@ -289,7 +293,7 @@ def _panda_landing_html() -> str:
     display:flex;flex-direction:column;align-items:center;
     justify-content:flex-start;padding-top:8px;
     font-family:'Segoe UI',system-ui,sans-serif;
-    min-height:500px;overflow:hidden;
+    min-height:400px;overflow:hidden;
   }
 
   /* ─ Drop-in entrance ─ */
@@ -329,7 +333,7 @@ def _panda_landing_html() -> str:
   }
 
   /* Scene */
-  .scene{position:relative;width:270px;height:490px;display:flex;flex-direction:column;align-items:center}
+  .scene{position:relative;width:270px;height:420px;display:flex;flex-direction:column;align-items:center}
 
   /* Dust */
   .dust1{
@@ -478,7 +482,7 @@ def _panda_landing_html() -> str:
   <div class="dust1"></div>
   <div class="dust2"></div>
   <div class="po-wrap">
-    <div class="bubble">Hey there! 🐼<br>Check the content on the left —<br>that's where the magic happens!</div>
+    <div class="bubble">Welcome! 🐼<br>Pick your path on the left —<br>I've got your back!</div>
     <div class="panda">
       <div class="p-head">
         <div class="ep-l"></div><div class="ep-r"></div>
@@ -628,46 +632,26 @@ def _robot_html(state: str) -> str:
 
 # ── KFP Footer ────────────────────────────────────────────────────────────────
 def _footer_html() -> str:
-    """Kung Fu Panda themed footer — lazy panda on left, active on right."""
+    """Simple Kung Fu Panda themed footer — site name, copyright, and development year."""
     return """
 <div style="
-  display:flex;align-items:center;justify-content:center;gap:2.5rem;
-  padding:1.2rem 1rem 0.6rem;margin-top:2.8rem;
+  display:flex;align-items:center;justify-content:center;
+  padding:0.6rem 1rem;margin-top:0.8rem;
   border-top:2px dashed #D4AC0D;
   font-family:'Segoe UI',system-ui,sans-serif;
 ">
-  <!-- Lazy / sleeping panda (left) -->
-  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-    <div style="font-size:2.8rem;animation:snoozeBob 3s ease-in-out infinite">🐼</div>
-    <div style="font-size:0.72rem;color:#94A3B8;font-style:italic">Yesterday…</div>
-  </div>
-
-  <!-- Centre text -->
   <div style="text-align:center;">
-    <div style="font-size:0.95rem;font-weight:800;
+    <span style="
+      font-size:0.88rem;font-weight:800;
       background:linear-gradient(135deg,#D4AC0D,#C4541A);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
       🐼 Learn It Here
-    </div>
-    <div style="font-size:0.75rem;color:#94A3B8;margin-top:2px;">
-      From lazy scrolling to legendary skills ✨
-    </div>
-  </div>
-
-  <!-- Active / kung-fu panda (right) -->
-  <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-    <div style="font-size:2.8rem;animation:kungFuKick 1.4s ease-in-out infinite">🥋</div>
-    <div style="font-size:0.72rem;color:#C4541A;font-weight:700">Today! 💪</div>
+    </span>
+    <span style="font-size:0.82rem;color:#94A3B8;margin-left:0.8rem;">
+      © 2025 Learn It Here · Developed in 2024
+    </span>
   </div>
 </div>
-
-<style>
-  @keyframes snoozeBob{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-4px)}}
-  @keyframes kungFuKick{0%,100%{transform:rotate(0deg) scale(1)}25%{transform:rotate(-15deg) scale(1.1)}75%{transform:rotate(15deg) scale(1.1)}}
-  @media (prefers-reduced-motion: reduce) {
-    [style*="animation:snoozeBob"], [style*="animation:kungFuKick"] { animation: none !important; }
-  }
-</style>
 """
 
 
@@ -778,14 +762,14 @@ def save_to_supabase(data: dict) -> tuple:
 # ── Landing Page ──────────────────────────────────────────────────────────────
 def page_landing():
     """Full-width hero landing page with Po animation and two CTAs."""
-    # Top nav bar
+    # Top nav bar — logo on left with updated tagline
     st.markdown(
         """
 <div class="kfp-nav">
   <span class="kfp-nav-logo">🐼</span>
   <div>
     <div class="kfp-nav-title">Learn It Here</div>
-    <div style="font-size:0.72rem;color:#94A3B8;">Your developer learning hub</div>
+    <div style="font-size:0.72rem;color:#94A3B8;">Hub to learn most important topics</div>
   </div>
 </div>
 """,
@@ -797,39 +781,15 @@ def page_landing():
     with col_left:
         st.markdown(
             """
-<div class="hero-title">
-  Your <span>one-stop guide</span><br>for project developers
-</div>
-<div class="hero-sub">
-  Whether you're kicking off a new project or want to sharpen your skills —
-  this is the place. Fill your project requirements to get a reference PDF,
-  or jump straight into our tech guides.
+<div class="landing-desc">
+  <strong>Know before you go!</strong><br>
+  Capture your project requirements — so you always know what support you need —
+  or dive straight into our curated tech guides to master the skills your project demands.
+  Click <strong>Learn It Here →</strong> to explore all available topics.
 </div>
 """,
             unsafe_allow_html=True,
         )
-
-        # Workflow steps
-        steps = [
-            ("📋", "Fill Project Requirements",
-             "Answer 12 quick questions about your tech stack and download a shareable PDF reference document."),
-            ("🔧", "Learn GIT",
-             "Understand version control workflows, supported platforms (GitHub, Azure DevOps, Bitbucket, GitLab) and daily commands with VS IDE."),
-            ("💻", "Master Visual Studio IDE",
-             "Unlock productivity features: Paste JSON as Classes, Quick Actions, IntelliSense, and the best settings."),
-            ("📝", "Level up with VS Code",
-             "Lightweight but powerful — extensions, multi-cursor editing, integrated terminal and the shortcuts that save hours."),
-        ]
-        for icon, title, desc in steps:
-            st.markdown(
-                f"""<div class="wf-step">
-  <div class="wf-step-icon">{icon}</div>
-  <div class="wf-step-text"><strong>{title}</strong><p>{desc}</p></div>
-</div>""",
-                unsafe_allow_html=True,
-            )
-
-        st.markdown("<br>", unsafe_allow_html=True)
 
         btn_col1, btn_col2 = st.columns(2, gap="medium")
         with btn_col1:
