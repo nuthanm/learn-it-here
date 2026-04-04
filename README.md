@@ -73,6 +73,7 @@ pip install -r requirements.txt
 
 # 4. Configure secrets
 cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+copy .streamlit/secrets.toml.example .streamlit/secrets.toml # for windows
 # Edit .streamlit/secrets.toml and add your Supabase URL + key
 ```
 
