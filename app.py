@@ -1161,10 +1161,17 @@ def _footer_html() -> str:
 
 
 def _scroll_nav_html() -> str:
-    """Scroll-to-top and scroll-to-bottom floating buttons (GitHub-style)."""
+    """Return HTML/JS for GitHub-style scroll navigation buttons.
+
+    Renders two fixed-position circular buttons (↑ top, ↓ bottom) using the
+    panda theme palette. Each button is hidden (opacity 0) by default and only
+    becomes visible when there is scrollable content in the relevant direction.
+    JavaScript attaches to the Streamlit main container's scroll event and
+    toggles the ``snb-visible`` class accordingly.
+    """
     return """
-<button class="scroll-nav-btn" id="snb-top" title="Scroll to top" aria-label="Scroll to top">&#8679;</button>
-<button class="scroll-nav-btn" id="snb-bot" title="Scroll to bottom" aria-label="Scroll to bottom">&#8681;</button>
+<button type="button" class="scroll-nav-btn" id="snb-top" title="Scroll to top" aria-label="Scroll to top">&#8679;</button>
+<button type="button" class="scroll-nav-btn" id="snb-bot" title="Scroll to bottom" aria-label="Scroll to bottom">&#8681;</button>
 <script>
 (function(){
   var topBtn = document.getElementById('snb-top');
