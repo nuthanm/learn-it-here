@@ -453,6 +453,87 @@ st.markdown(
     border-left: 3px solid #2D6A4F; padding: 0.5rem 0.8rem;
     background: #F5FAF7; border-radius: 0 8px 8px 0;
     margin-top: 0.6rem; line-height: 1.6;
+  /* ─ Mobile responsive ─ */
+  @media (max-width: 768px) {
+    /* Allow vertical scrolling */
+    html, body { overflow-y: auto !important; }
+    .stApp,
+    [data-testid="stAppViewContainer"],
+    .stMain,
+    [data-testid="stMain"] { overflow-y: auto !important; }
+
+    /* Tighter side padding */
+    .block-container {
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
+      padding-bottom: 70px !important;
+    }
+
+    /* Stack all Streamlit columns vertically */
+    [data-testid="stHorizontalBlock"] { flex-wrap: wrap !important; }
+    [data-testid="stColumn"],
+    [data-testid="column"] {
+      width: 100% !important;
+      flex: 1 1 100% !important;
+      min-width: 100% !important;
+    }
+
+    /* Shrink hero headline */
+    .hero-headline { font-size: 1.5rem !important; }
+
+    /* Hide non-essential nav sub-text */
+    .kfp-nav-sub { display: none !important; }
+    .kfp-nav-title { font-size: 1.15rem !important; }
+    .kfp-nav-tagline { font-size: 0.68rem !important; }
+
+    /* Reduce page title */
+    .app-title { font-size: 1.4rem !important; }
+
+    /* Tighter card padding */
+    .content-card { padding: 1.1rem 0.9rem !important; }
+    .form-card { padding: 1.1rem 0.9rem !important; }
+    .success-card { padding: 1.5rem 1rem !important; }
+    .success-title { font-size: 1.25rem !important; }
+
+    /* Shrink tab bar labels so they don't overflow */
+    [data-testid="stTabs"] button {
+      font-size: 0.78rem !important;
+      padding: 0.4rem 0.55rem !important;
+    }
+
+    /* Single-column feature grid */
+    .feature-grid { grid-template-columns: 1fr !important; }
+
+    /* Platform badges — stack to full width */
+    .platform-row { flex-direction: column !important; gap: 0.5rem !important; }
+    .platform-badge { width: 100% !important; box-sizing: border-box !important; }
+
+    /* Smaller mono blocks */
+    .cmd-block, .json-block {
+      font-size: 0.75rem !important;
+      padding: 0.8rem 0.8rem !important;
+    }
+
+    /* Shortcut table — tighter cells */
+    .shortcut-table th, .shortcut-table td {
+      padding: 0.4rem 0.6rem !important;
+      font-size: 0.78rem !important;
+    }
+
+    /* Footer — wrap text on small screens */
+    .kfp-footer {
+      flex-wrap: wrap !important;
+      gap: 0.5rem !important;
+      padding: 5px 0.75rem !important;
+    }
+    .kfp-footer > span { font-size: 0.68rem !important; }
+
+    /* Extra bottom padding so footer doesn't cover content */
+    .stMain section,
+    [data-testid="stMainBlockContainer"] { padding-bottom: 70px !important; }
+
+    /* Panda iframe: cap height when stacked below hero */
+    iframe { max-height: 340px !important; }
   }
 </style>
 """,
@@ -467,6 +548,7 @@ def _panda_landing_html() -> str:
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{
@@ -871,6 +953,7 @@ def _robot_html(state: str) -> str:
 
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   *{{box-sizing:border-box;margin:0;padding:0}}
   html,body{{
