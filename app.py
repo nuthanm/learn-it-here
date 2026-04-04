@@ -51,7 +51,7 @@ st.markdown(
   [data-testid="collapsedControl"] { display: none !important; }
 
   /* ─ Global — panda fur white/gray palette, fills full viewport ─ */
-  html, body { overflow-x: hidden !important; overflow-y: auto !important; width: 100% !important; height: 100% !important; }
+  html, body { overflow-x: hidden !important; overflow-y: auto !important; width: 100% !important; min-height: 100% !important; }
   /* Override Streamlit's default blue theme root fully */
   .stApp,
   .st-emotion-cache-1nryt4l,
@@ -358,11 +358,11 @@ st.markdown(
   /* ─ Mobile responsive ─ */
   @media (max-width: 768px) {
     /* Allow vertical scrolling */
-    html, body { overflow-y: auto !important; height: auto !important; }
+    html, body { overflow-y: auto !important; }
     .stApp,
     [data-testid="stAppViewContainer"],
     .stMain,
-    [data-testid="stMain"] { overflow-y: auto !important; height: auto !important; }
+    [data-testid="stMain"] { overflow-y: auto !important; }
 
     /* Tighter side padding */
     .block-container {
@@ -425,7 +425,7 @@ st.markdown(
     /* Footer — wrap text on small screens */
     .kfp-footer {
       flex-wrap: wrap !important;
-      gap: 2px !important;
+      gap: 0.5rem !important;
       padding: 5px 0.75rem !important;
     }
     .kfp-footer > span { font-size: 0.68rem !important; }
