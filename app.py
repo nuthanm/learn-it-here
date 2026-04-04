@@ -5,7 +5,7 @@ Stores responses in Supabase (PostgreSQL) and allows PDF export.
 
 import os
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timezone
 
 # ── Page Config (must be first Streamlit call) ────────────────────────────────
 st.set_page_config(
@@ -265,10 +265,9 @@ st.markdown(
   .shortcut-table tr:last-child td { border-bottom: none; }
   .shortcut-table tr:nth-child(even) td { background: #FAFAFA; }
 
-  /* ─ KFP footer ─ */
-  .kfp-footer {
-    margin-top: 3rem; padding: 0.5rem 0 1rem;
-    text-align: center; font-size: 0.8rem; color: #94A3B8;
+  /* ─ Reduce motion for accessibility ─ */
+  @media (prefers-reduced-motion: reduce) {
+    .wf-step, .content-card, .kfp-nav { transition: none !important; }
   }
 </style>
 """,
@@ -463,13 +462,23 @@ def _panda_landing_html() -> str:
     background:#1A1A1A;border-radius:0 0 22px 22px;
     position:absolute;bottom:-10px;left:-3px;
   }
+
+  /* ─ Respect reduced-motion preference ─ */
+  @media (prefers-reduced-motion: reduce) {
+    .po-wrap { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .dust1, .dust2 { animation: none !important; display: none !important; }
+    .bubble { animation: none !important; opacity: 1 !important; }
+    .panda  { animation: none !important; }
+    .arm-r  { animation: none !important; transform: rotate(-80deg) translateX(-4px) !important; }
+    .eye-l, .eye-r { animation: none !important; }
+  }
 </style></head>
 <body>
 <div class="scene">
   <div class="dust1"></div>
   <div class="dust2"></div>
   <div class="po-wrap">
-    <div class="bubble">Hey there! 🐼<br>Check the left — that's where<br>the magic happens! 👈</div>
+    <div class="bubble">Hey there! 🐼<br>Check the content on the left —<br>that's where the magic happens!</div>
     <div class="panda">
       <div class="p-head">
         <div class="ep-l"></div><div class="ep-r"></div>
@@ -588,6 +597,14 @@ def _robot_html(state: str) -> str:
   @keyframes dotBounce{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-6px)}}}}
   @keyframes thinkBob{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-10px)}}}}
   @keyframes fadeUp{{from{{opacity:0;transform:translateY(-12px)}}to{{opacity:1;transform:translateY(0)}}}}
+  @media (prefers-reduced-motion: reduce){{
+    .bubble{{animation:none;opacity:1}}
+    .robot-wrap,.think-bob{{animation:none}}
+    .wave-right,.wave-left{{animation:none}}
+    .chest-led,.antenna-ball{{animation:none}}
+    .eye{{animation:none}}
+    .dots span{{animation:none}}
+  }}
 </style></head>
 <body>
   <div class="bubble">{msg}</div>
@@ -647,6 +664,9 @@ def _footer_html() -> str:
 <style>
   @keyframes snoozeBob{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-4px)}}
   @keyframes kungFuKick{0%,100%{transform:rotate(0deg) scale(1)}25%{transform:rotate(-15deg) scale(1.1)}75%{transform:rotate(15deg) scale(1.1)}}
+  @media (prefers-reduced-motion: reduce) {
+    [style*="animation:snoozeBob"], [style*="animation:kungFuKick"] { animation: none !important; }
+  }
 </style>
 """
 
@@ -690,7 +710,7 @@ def generate_pdf(data: dict) -> bytes:
     pdf.cell(0, 10, "Learn It Here — Project Requirements", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(180, 205, 230)
-    ts = data.get("submitted_at", datetime.utcnow().isoformat())
+    ts = data.get("submitted_at", datetime.now(timezone.utc).isoformat())
     # Make ISO timestamp human-readable for PDF display
     ts_display = ts.replace("T", " ").replace("Z", " UTC") if "T" in ts else ts
     pdf.set_x(20)
@@ -888,7 +908,7 @@ def page_requirements():
                 st.download_button(
                     label="⬇️  Download Requirements as PDF",
                     data=st.session_state.pdf_bytes,
-                    file_name=f"project_requirements_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.pdf",
+                    file_name=f"project_requirements_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.pdf",
                     mime="application/pdf",
                     use_container_width=True,
                 )
@@ -1133,7 +1153,7 @@ def page_requirements():
                 deploy_val = f"{deploy} — {deploy_notes.strip()}"
 
             record = {
-                "submitted_at":    datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "submitted_at":    datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 "version_control": vc_val,
                 "ide":             ide_val,
                 "dotnet_csharp":   dotnet,
