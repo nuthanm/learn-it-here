@@ -5,6 +5,7 @@ Stores responses in Supabase (PostgreSQL) and allows PDF export.
 
 import os
 import streamlit as st
+import streamlit.components.v1 as components
 from datetime import datetime, timezone
 
 # ── Page Config (must be first Streamlit call) ────────────────────────────────
@@ -49,13 +50,23 @@ st.markdown(
   [data-testid="stSidebar"]        { display: none !important; }
   [data-testid="collapsedControl"] { display: none !important; }
 
-  /* ─ Global background (parchment / bamboo paper) ─ */
-  [data-testid="stAppViewContainer"] { background: #F5F0E8; }
-  [data-testid="stHeader"]           { background: transparent; }
+  /* ─ Global — panda fur white/gray palette, fills full viewport ─ */
+  html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; }
+  /* Override Streamlit's default blue theme root fully */
+  .stApp,
+  .st-emotion-cache-1nryt4l,
+  [data-testid="stAppViewContainer"],
+  .stMain,
+  [data-testid="stMain"] {
+    background: #F8F8F8 !important;
+    color: #1A1A1A !important;
+    overflow: hidden !important;
+  }
+  [data-testid="stHeader"] { background: transparent !important; }
   .block-container {
-    padding-top: 0.4rem !important;
-    padding-bottom: 0 !important;
-    max-width: 1280px !important;
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+    max-width: 100% !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
   }
@@ -63,163 +74,211 @@ st.markdown(
   /* ─ Top nav bar ─ */
   .kfp-nav {
     display: flex; align-items: center; gap: 1.2rem;
-    padding: 0.55rem 1.6rem; margin-bottom: 0.8rem;
-    background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
-    border-radius: 16px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.28);
+    padding: 0.3rem 0; margin-bottom: 0.4rem;
+    background: transparent;
+    justify-content: flex-start;
   }
-  .kfp-nav-logo  { font-size: 2.1rem; }
+  .kfp-nav-logo  {
+    font-size: 1.85rem; line-height: 1; align-self: center;
+    background: #1A1A1A; border-radius: 50%;
+    width: 2.6rem; height: 2.6rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .kfp-nav-text  { display: flex; flex-direction: column; gap: 0; line-height: 1; }
   .kfp-nav-title {
     font-size: 1.45rem; font-weight: 800;
-    background: linear-gradient(135deg, #D4AC0D, #F4D03F);
+    background: linear-gradient(135deg, #1A1A1A, #2D2D2D);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.3px; line-height: 1.2; margin: 0; padding: 0;
   }
-  .kfp-nav-sub { font-size: 0.78rem; color: #94A3B8; margin-left: auto; }
+  .kfp-nav-tagline { font-size: 0.72rem; color: #40916C; margin: 0; padding: 0; line-height: 1.3; }
+  .kfp-nav-sub { font-size: 0.78rem; color: #40916C; margin-left: auto; }
 
-  /* ─ Landing description card ─ */
-  .landing-desc {
-    background: linear-gradient(135deg, #FFF8EC 0%, #FFF3DC 100%);
-    border: 1.5px solid #D4AC0D;
-    border-radius: 14px;
-    padding: 1rem 1.3rem;
-    margin-bottom: 1.2rem;
-    color: #3D2B00;
-    font-size: 0.93rem;
-    line-height: 1.7;
-    box-shadow: 0 2px 12px rgba(212,172,13,0.12);
+  /* ─ Landing hero section ─ */
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; color: #2D6A4F;
+    background: #E8F5EE; border-radius: 20px;
+    padding: 3px 14px; margin-bottom: 6px;
+    animation: eyebrowPop .55s cubic-bezier(.34,1.56,.64,1) .1s both;
   }
-  .landing-desc strong { color: #C4541A; }
+  @keyframes eyebrowPop{
+    from{opacity:0;transform:translateY(-8px) scale(.88)}
+    to  {opacity:1;transform:translateY(0) scale(1)}
+  }
+  .hero-headline {
+    font-size: 2.1rem; font-weight: 900; color: #1A1A1A;
+    line-height: 1.15; margin: 0 0 10px;
+    animation: headlineIn .65s cubic-bezier(.34,1.56,.64,1) .22s both;
+  }
+  @keyframes headlineIn{
+    from{opacity:0;transform:translateY(16px)}
+    to  {opacity:1;transform:translateY(0)}
+  }
+  .hero-sub {
+    font-size: 0.9rem; color: #555555; line-height: 1.65;
+    margin-bottom: 14px;
+    animation: headlineIn .65s ease .38s both;
+  }
+  /* ─ animated accent divider ─ */
+  .hero-bar {
+    height: 4px; border-radius: 4px; margin-bottom: 14px;
+    background: linear-gradient(90deg, #1A1A1A 0%, #2D6A4F 50%, #FFB3BA 100%);
+    background-size: 200% 100%;
+    animation: barSlide 3.5s ease-in-out infinite;
+  }
+  @keyframes barSlide{
+    0%  {background-position: 0%   50%}
+    50% {background-position: 100% 50%}
+    100%{background-position: 0%   50%}
+  }
+  /* ─ hero feature highlights ─ */
+  .hero-features {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    margin-bottom: 14px;
+    animation: headlineIn .65s ease .50s both;
+  }
+  .hero-feat {
+    display: flex; align-items: flex-start; gap: 0.7rem;
+    background: #FFFFFF; border-radius: 9px; padding: 0.5rem 0.9rem;
+    border-left: 3px solid #2D6A4F;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  }
+  .feat-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 2px; }
+  .feat-text { display: flex; flex-direction: column; gap: 1px; }
+  .feat-text strong { font-size: 0.85rem; color: #1A1A1A; font-weight: 700; line-height: 1.3; }
+  .feat-text span { font-size: 0.76rem; color: #666666; line-height: 1.4; }
 
   /* ─ Workflow steps on landing ─ */
   .wf-step {
     display: flex; align-items: flex-start; gap: 0.9rem;
-    background: white; border-radius: 14px; padding: 0.85rem 1.3rem;
-    border-left: 4px solid #2D6A4F;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    background: #FFFFFF; border-radius: 14px; padding: 0.85rem 1.3rem;
+    border-left: 4px solid #1A1A1A;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     margin-bottom: 0.75rem;
   }
   .wf-step-icon { font-size: 1.5rem; flex-shrink: 0; }
   .wf-step-text strong { color: #1A1A1A; font-size: 0.9rem; display: block; }
-  .wf-step-text p { color: #64748B; font-size: 0.8rem; margin: 0.1rem 0 0; }
+  .wf-step-text p { color: #555555; font-size: 0.8rem; margin: 0.1rem 0 0; }
 
-  /* ─ CTA buttons ─ */
+  /* ─ CTA buttons — primary: panda black, secondary: bamboo green ─ */
   div[data-testid="stButton"] > button[kind="primary"] {
-    background: linear-gradient(135deg, #C4541A 0%, #E07040 100%) !important;
-    color: white !important; border: none !important;
+    background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%) !important;
+    color: #FFFFFF !important; border: none !important;
     border-radius: 12px !important; font-size: 1rem !important;
     font-weight: 700 !important; padding: 0.7rem 0 !important;
-    box-shadow: 0 6px 20px rgba(196,84,26,0.38) !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.32) !important;
     transition: opacity 0.2s !important;
   }
-  div[data-testid="stButton"] > button[kind="primary"]:hover { opacity: 0.88 !important; }
+  div[data-testid="stButton"] > button[kind="primary"]:hover { opacity: 0.85 !important; }
 
   div[data-testid="stButton"] > button[kind="secondary"] {
-    background: linear-gradient(135deg, #B8860B 0%, #D4AC0D 100%) !important;
-    color: #1A1A1A !important; border: none !important;
+    background: linear-gradient(135deg, #2D6A4F 0%, #40916C 100%) !important;
+    color: #FFFFFF !important; border: none !important;
     border-radius: 12px !important; font-size: 1rem !important;
     font-weight: 700 !important; padding: 0.7rem 0 !important;
-    box-shadow: 0 6px 20px rgba(212,172,13,0.40) !important;
+    box-shadow: 0 6px 20px rgba(45,106,79,0.38) !important;
     transition: opacity 0.2s !important;
   }
   div[data-testid="stButton"] > button[kind="secondary"]:hover { opacity: 0.88 !important; }
 
-  /* ─ Download button ─ */
+  /* ─ Download button — bamboo green ─ */
   div[data-testid="stDownloadButton"] > button {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    background: linear-gradient(135deg, #2D6A4F 0%, #40916C 100%) !important;
     color: white !important; border: none !important;
     border-radius: 12px !important; font-weight: 700 !important;
-    box-shadow: 0 4px 16px rgba(16,185,129,0.35) !important;
+    box-shadow: 0 4px 16px rgba(45,106,79,0.38) !important;
   }
 
-  /* ─ Tabs ─ */
+  /* ─ Tabs — panda black active ─ */
   [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: white !important; border-radius: 14px !important;
+    background: #FFFFFF !important; border-radius: 14px !important;
     padding: 0.3rem 0.5rem !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.07) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
     margin-bottom: 1.2rem !important;
   }
   [data-testid="stTabs"] button {
     font-size: 0.97rem !important; font-weight: 600 !important;
-    color: #475569 !important; border-radius: 10px !important;
+    color: #555555 !important; border-radius: 10px !important;
     padding: 0.5rem 1.2rem !important;
   }
   [data-testid="stTabs"] button[aria-selected="true"] {
-    background: linear-gradient(135deg, #C4541A, #E07040) !important;
-    color: white !important;
+    background: linear-gradient(135deg, #1A1A1A, #2D2D2D) !important;
+    color: #FFFFFF !important;
   }
 
-  /* ─ Content cards ─ */
+  /* ─ Content cards — panda white ─ */
   .content-card {
-    background: white; border-radius: 18px;
+    background: #FFFFFF; border-radius: 18px;
     padding: 2rem 2.4rem; margin-bottom: 1.5rem;
-    border: 1px solid #E2E8F0;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    border: 1px solid #D0D0D0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   }
   .card-title {
     font-size: 1.2rem; font-weight: 700; color: #1A1A1A;
     margin-bottom: 0.9rem;
   }
-  .card-body { color: #475569; line-height: 1.8; font-size: 0.95rem; }
+  .card-body { color: #444444; line-height: 1.8; font-size: 0.95rem; }
   .card-section-title {
-    font-size: 0.8rem; font-weight: 700; color: #94A3B8;
+    font-size: 0.8rem; font-weight: 700; color: #40916C;
     text-transform: uppercase; letter-spacing: 1.1px;
     margin: 1.6rem 0 0.6rem;
   }
 
-  /* ─ Workflow diagram nodes ─ */
+  /* ─ Workflow diagram nodes — panda black + bamboo ─ */
   .wf-diagram {
     display: flex; flex-wrap: wrap; align-items: center;
     gap: 0.4rem; margin: 1rem 0;
   }
   .wf-node {
-    background: linear-gradient(135deg, #1A1A1A, #333);
-    color: white; padding: 0.45rem 1rem; border-radius: 10px;
+    background: linear-gradient(135deg, #1A1A1A, #2D2D2D);
+    color: #FFFFFF; padding: 0.45rem 1rem; border-radius: 10px;
     font-size: 0.83rem; font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.22);
   }
   .wf-node-green {
     background: linear-gradient(135deg, #2D6A4F, #40916C);
-    color: white; padding: 0.45rem 1rem; border-radius: 10px;
+    color: #FFFFFF; padding: 0.45rem 1rem; border-radius: 10px;
     font-size: 0.83rem; font-weight: 600;
   }
-  .wf-arrow { color: #C4541A; font-size: 1.1rem; font-weight: 700; }
+  .wf-arrow { color: #1A1A1A; font-size: 1.1rem; font-weight: 700; }
 
-  /* ─ Feature grid pills ─ */
+  /* ─ Feature grid pills — panda off-white with dark border ─ */
   .feature-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 0.85rem; margin: 1rem 0;
   }
   .feature-pill {
-    background: #F0FDF4; border: 1px solid #BBF7D0;
+    background: #F5F5F5; border: 1px solid #CCCCCC;
     border-radius: 12px; padding: 0.85rem 1.1rem;
   }
-  .feature-pill strong { color: #166534; font-size: 0.88rem; display: block; }
-  .feature-pill p { color: #4B5563; font-size: 0.78rem; margin: 0.25rem 0 0; }
+  .feature-pill strong { color: #1A1A1A; font-size: 0.88rem; display: block; }
+  .feature-pill p { color: #555555; font-size: 0.78rem; margin: 0.25rem 0 0; }
 
-  /* ─ Platform badges ─ */
+  /* ─ Platform badges — panda black border ─ */
   .platform-row { display: flex; flex-wrap: wrap; gap: 0.9rem; margin: 1rem 0; }
   .platform-badge {
     display: flex; align-items: center; gap: 0.55rem;
-    background: white; border: 2px solid #E2E8F0;
+    background: #FFFFFF; border: 2px solid #1A1A1A;
     border-radius: 12px; padding: 0.65rem 1.3rem;
-    font-weight: 700; color: #1E3A5F; font-size: 0.88rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-weight: 700; color: #1A1A1A; font-size: 0.88rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
 
-  /* ─ Command blocks ─ */
+  /* ─ Command blocks — panda black bg, bamboo text ─ */
   .cmd-block {
-    background: #1A1A1A; color: #A3E635;
+    background: #1A1A1A; color: #74C69D;
     border-radius: 12px; padding: 1.1rem 1.5rem;
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
     overflow-x: auto;
   }
-  .cmd-comment { color: #6B7280; font-style: italic; }
+  .cmd-comment { color: #888888; font-style: italic; }
 
-  /* ─ Settings / JSON blocks ─ */
+  /* ─ Settings / JSON blocks — deep panda black ─ */
   .json-block {
-    background: #0F172A; color: #7DD3FC;
+    background: #0D0D0D; color: #B7E4C7;
     border-radius: 12px; padding: 1.1rem 1.5rem;
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
@@ -228,50 +287,71 @@ st.markdown(
 
   /* ─ Requirements form card ─ */
   .form-card {
-    background: #ffffff; border-radius: 18px;
-    padding: 2rem 2.2rem; border: 1px solid #E2E8F0;
-    box-shadow: 0 4px 24px rgba(30,58,95,0.07);
+    background: #FFFFFF; border-radius: 18px;
+    padding: 2rem 2.2rem; border: 1px solid #D0D0D0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   }
   .app-title   { font-size: 1.9rem; font-weight: 700; color: #1A1A1A; margin-bottom: 0.2rem; }
-  .app-subtitle { font-size: 0.92rem; color: #64748B; margin-bottom: 1.8rem; }
+  .app-subtitle { font-size: 0.92rem; color: #555555; margin-bottom: 1.8rem; }
   .q-label {
-    font-size: 0.93rem; font-weight: 600; color: #1E3A5F; margin-bottom: 2px;
+    font-size: 0.93rem; font-weight: 600; color: #1A1A1A; margin-bottom: 2px;
   }
   .q-hint {
-    font-size: 0.76rem; color: #94A3B8; margin-bottom: 4px; font-style: italic;
+    font-size: 0.76rem; color: #888888; margin-bottom: 4px; font-style: italic;
   }
   .section-label {
-    font-size: 0.7rem; font-weight: 700; color: #94A3B8;
+    font-size: 0.7rem; font-weight: 700; color: #40916C;
     text-transform: uppercase; letter-spacing: 1.2px;
     margin-top: 1.4rem; margin-bottom: 2px;
   }
 
-  /* ─ Success card ─ */
+  /* ─ Success card — panda white + bamboo accent ─ */
   .success-card {
-    background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
-    border: 1px solid #BBF7D0; border-radius: 18px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    border: 1.5px solid #1A1A1A; border-radius: 18px;
     padding: 2.5rem 3rem; text-align: center;
   }
-  .success-title { font-size: 1.6rem; font-weight: 700; color: #166534; margin-bottom: 0.4rem; }
-  .success-sub   { font-size: 0.95rem; color: #22C55E; margin-bottom: 1.8rem; }
+  .success-title { font-size: 1.6rem; font-weight: 700; color: #1A1A1A; margin-bottom: 0.4rem; }
+  .success-sub   { font-size: 0.95rem; color: #2D6A4F; margin-bottom: 1.8rem; }
 
-  /* ─ Shortcut table ─ */
+  /* ─ Shortcut table — panda black header ─ */
   .shortcut-table { width: 100%; border-collapse: collapse; margin: 0.6rem 0; }
   .shortcut-table th {
-    background: #1A1A1A; color: #D4AC0D;
+    background: #1A1A1A; color: #74C69D;
     padding: 0.55rem 1rem; text-align: left; font-size: 0.83rem;
     border-radius: 0;
   }
   .shortcut-table td {
-    padding: 0.5rem 1rem; font-size: 0.85rem; color: #374151;
-    border-bottom: 1px solid #F1F5F9;
+    padding: 0.5rem 1rem; font-size: 0.85rem; color: #333333;
+    border-bottom: 1px solid #E8E8E8;
   }
   .shortcut-table tr:last-child td { border-bottom: none; }
-  .shortcut-table tr:nth-child(even) td { background: #FAFAFA; }
+  .shortcut-table tr:nth-child(even) td { background: #F5F5F5; }
 
+  /* ─ Footer fixed at bottom ─ */
+  .kfp-footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 1.5rem;
+    background: #1A1A1A;
+    border-top: 2px solid #2D6A4F;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  .kfp-footer-text {
+    font-size: 0.78rem; color: #74C69D; font-weight: 700; margin-right: 12px;
+  }
+  .kfp-footer-copy { font-size: 0.75rem; color: #888888; }
+  /* push content above footer */
+  .stMain section, [data-testid="stMainBlockContainer"] {
+    padding-bottom: 30px !important;
+  }
+  /* ─ Tighter global spacing ─ */
+  .stVerticalBlock { gap: 0.25rem !important; }
   /* ─ Reduce motion for accessibility ─ */
   @media (prefers-reduced-motion: reduce) {
     .wf-step, .content-card, .kfp-nav { transition: none !important; }
+    .hero-bar { animation: none !important; }
+    .hero-eyebrow, .hero-headline, .hero-sub, .hero-stats { animation: none !important; opacity: 1 !important; }
   }
 </style>
 """,
@@ -281,231 +361,390 @@ st.markdown(
 
 # ── Kung Fu Panda — Landing Animation ────────────────────────────────────────
 def _panda_landing_html() -> str:
-    """Return an animated Kung Fu Panda (Po) HTML component for the landing page.
-    Po drops from the top, dust clouds puff out, a 'Welcome' bubble appears,
-    then his right arm swings to point towards the left-side content.
-    """
+    """Full KFP Po face — SVG with 5 cycling expressions + per-emotion orbital dots."""
     return """<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><style>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    background:transparent;
+  html,body{
+    background:transparent;width:100%;height:100%;
     display:flex;flex-direction:column;align-items:center;
-    justify-content:flex-start;padding-top:8px;
+    justify-content:center;overflow:hidden;
     font-family:'Segoe UI',system-ui,sans-serif;
-    min-height:400px;overflow:hidden;
   }
-
-  /* ─ Drop-in entrance ─ */
-  @keyframes poLand{
-    0%  {transform:translateY(-420px) rotate(-6deg);opacity:0}
-    65% {transform:translateY(18px)  rotate( 2deg);opacity:1}
-    78% {transform:translateY(-12px) rotate( 0deg)}
-    100%{transform:translateY(0)     rotate( 0deg);opacity:1}
+  /* ── Entrance bounce ── */
+  @keyframes entrance{
+    0%  {opacity:0;transform:scale(.25)translateY(-80px)rotate(-18deg)}
+    60% {transform:scale(1.06)translateY(8px)rotate(2deg);opacity:1}
+    78% {transform:scale(.97)translateY(-4px)rotate(-.4deg)}
+    100%{transform:scale(1)translateY(0)rotate(0);opacity:1}
   }
-  /* ─ Dust puffs ─ */
-  @keyframes dustPuff{
-    0%  {width:0;height:0;opacity:.85;transform:translateX(-50%) scaleY(1)}
-    100%{width:240px;height:70px;opacity:0;transform:translateX(-50%) scaleY(.7)}
+  /* ── Gentle float ── */
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%    {transform:translateY(-10px)}
   }
-  @keyframes dustPuff2{
-    0%  {width:0;height:0;opacity:.65}
-    100%{width:150px;height:55px;opacity:0}
+  /* ── Pupils wander ── */
+  @keyframes pupilL{
+    0%,12%{transform:translate(0,0)}20%,35%{transform:translate(4px,3px)}
+    45%,60%{transform:translate(-4px,-3px)}70%,84%{transform:translate(3px,-4px)}
+    92%,100%{transform:translate(0,0)}
   }
-  /* ─ Bubble & pointer ─ */
-  @keyframes bubbleIn{
-    from{opacity:0;transform:scale(.88) translateY(8px)}
-    to  {opacity:1;transform:scale(1)   translateY(0)}
+  @keyframes pupilR{
+    0%,12%{transform:translate(0,0)}20%,35%{transform:translate(-4px,3px)}
+    45%,60%{transform:translate(4px,-3px)}70%,84%{transform:translate(-2px,-4px)}
+    92%,100%{transform:translate(0,0)}
   }
-  @keyframes pointLeft{
-    0%,55%{transform:rotate(12deg)}
-    100%  {transform:rotate(-80deg) translateX(-4px)}
-  }
-  /* ─ Idle breathe ─ */
-  @keyframes breathe{
-    0%,100%{transform:scaleY(1)}
-    50%    {transform:scaleY(1.04)}
-  }
-  /* ─ Eye blink ─ */
+  /* ── Blink ── */
   @keyframes blink{
-    0%,86%,100%{transform:scaleY(1)}
-    90%         {transform:scaleY(.08)}
+    0%,84%,100%{transform:scaleY(1)}
+    88%        {transform:scaleY(.06)}
   }
+  /* ── 50s expression loop: 8s on, 2s crossfade ── */
+  @keyframes eHappy  {0%,2%{opacity:1}16%{opacity:1}20%{opacity:0}99%{opacity:0}100%{opacity:1}}
+  @keyframes eExcited{0%,18%{opacity:0}22%{opacity:1}36%{opacity:1}40%{opacity:0}100%{opacity:0}}
+  @keyframes eThink  {0%,38%{opacity:0}42%{opacity:1}56%{opacity:1}60%{opacity:0}100%{opacity:0}}
+  @keyframes eWink   {0%,58%{opacity:0}62%{opacity:1}76%{opacity:1}80%{opacity:0}100%{opacity:0}}
+  @keyframes eDeter  {0%,78%{opacity:0}82%{opacity:1}95%{opacity:1}99%{opacity:0}100%{opacity:0}}
+  /* same keyframes reused for labels / quotes */
+  @keyframes lblHappy  {0%,2%{opacity:.9}16%{opacity:.9}20%{opacity:0}99%{opacity:0}100%{opacity:.9}}
+  @keyframes lblExcited{0%,18%{opacity:0}22%{opacity:.9}36%{opacity:.9}40%{opacity:0}100%{opacity:0}}
+  @keyframes lblThink  {0%,38%{opacity:0}42%{opacity:.9}56%{opacity:.9}60%{opacity:0}100%{opacity:0}}
+  @keyframes lblWink   {0%,58%{opacity:0}62%{opacity:.9}76%{opacity:.9}80%{opacity:0}100%{opacity:0}}
+  @keyframes lblDeter  {0%,78%{opacity:0}82%{opacity:.9}95%{opacity:.9}99%{opacity:0}100%{opacity:0}}
+  /* ── Dot orbit spin ── */
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  @keyframes spinRev{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+  /* ── Dot pulse ── */
+  @keyframes dotPulse{0%,100%{r:4;opacity:.7}50%{r:6;opacity:1}}
+  /* ── Thought bubble pop ── */
+  @keyframes bubblePop{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+  /* ── Speed-line flicker ── */
+  @keyframes speedFlicker{0%,100%{opacity:.5}50%{opacity:1}}
 
-  /* Scene */
-  .scene{position:relative;width:270px;height:420px;display:flex;flex-direction:column;align-items:center}
+  .wrap{animation:entrance 1s cubic-bezier(.34,1.56,.64,1) .2s both;
+        display:flex;flex-direction:column;align-items:center;gap:8px}
+  .floater{animation:float 4s ease-in-out 1.4s infinite}
+  .pupil-l{transform-box:fill-box;transform-origin:center;animation:pupilL 11s ease-in-out 2s infinite}
+  .pupil-r{transform-box:fill-box;transform-origin:center;animation:pupilR 11s ease-in-out 2.6s infinite}
+  .lid-l{transform-box:fill-box;transform-origin:50% 40%;animation:blink 6.5s ease-in-out 3s infinite}
+  .lid-r{transform-box:fill-box;transform-origin:50% 40%;animation:blink 6.5s ease-in-out 3.3s infinite}
 
-  /* Dust */
-  .dust1{
-    position:absolute;bottom:115px;left:50%;border-radius:50%;
-    background:radial-gradient(ellipse,rgba(180,140,65,.6),transparent 70%);
-    animation:dustPuff 1s ease-out .6s both;pointer-events:none;
-  }
-  .dust2{
-    position:absolute;bottom:112px;left:42%;border-radius:50%;
-    background:radial-gradient(ellipse,rgba(160,115,50,.45),transparent 70%);
-    animation:dustPuff2 1.1s ease-out .7s both;width:0;height:0;pointer-events:none;
-  }
+  .e-happy  {animation:eHappy   50s ease-in-out 2.2s infinite}
+  .e-excited{animation:eExcited 50s ease-in-out 2.2s infinite;opacity:0}
+  .e-think  {animation:eThink   50s ease-in-out 2.2s infinite;opacity:0}
+  .e-wink   {animation:eWink    50s ease-in-out 2.2s infinite;opacity:0}
+  .e-deter  {animation:eDeter   50s ease-in-out 2.2s infinite;opacity:0}
 
-  /* Po wrapper */
-  .po-wrap{
-    animation:poLand .8s cubic-bezier(.22,1,.36,1) .1s both;
-    display:flex;flex-direction:column;align-items:center;
-    position:relative;margin-top:20px;
-  }
+  /* orbital container must be centred on the face */
+  .orbit-happy  {animation:eHappy   50s ease-in-out 2.2s infinite}
+  .orbit-excited{animation:eExcited 50s ease-in-out 2.2s infinite;opacity:0}
+  .orbit-think  {animation:eThink   50s ease-in-out 2.2s infinite;opacity:0}
+  .orbit-wink   {animation:eWink    50s ease-in-out 2.2s infinite;opacity:0}
+  .orbit-deter  {animation:eDeter   50s ease-in-out 2.2s infinite;opacity:0}
 
-  /* Speech bubble */
-  .bubble{
-    background:#fff;border:2.5px solid #C4541A;border-radius:18px;
-    padding:11px 18px;font-size:13.5px;color:#C4541A;font-weight:700;
-    max-width:210px;text-align:center;line-height:1.55;
-    box-shadow:0 4px 18px rgba(196,84,26,.18);
-    animation:bubbleIn .5s ease .95s both;
-    margin-bottom:14px;position:relative;
-  }
-  .bubble::after{
-    content:'';position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);
-    border:10px solid transparent;border-top-color:#C4541A;
-  }
-  .bubble::before{
-    content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
-    border:9px solid transparent;border-top-color:#fff;z-index:1;
-  }
+  .spin    {transform-box:fill-box;transform-origin:center;animation:spin 4s linear infinite}
+  .spin-rev{transform-box:fill-box;transform-origin:center;animation:spinRev 6s linear infinite}
+  .dp{animation:dotPulse 1.6s ease-in-out infinite}
+  .bp{animation:bubblePop 1.2s ease-in-out infinite}
+  .sf{animation:speedFlicker .8s ease-in-out infinite}
+  /* right base arm hides whilst thinking arm is shown */
+  @keyframes hideForThink{0%,38%{opacity:1}42%{opacity:0}56%{opacity:0}60%{opacity:1}100%{opacity:1}}
+  .base-arm-right{animation:hideForThink 50s ease-in-out 2.2s infinite}
 
-  /* Panda body */
-  .panda{
-    position:relative;display:flex;flex-direction:column;align-items:center;
-    animation:breathe 3.2s ease-in-out 1.3s infinite;
+  /* label pill */
+  .lbl{
+    font-size:12px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;
+    color:#2D6A4F;background:#fff;border:2px solid #2D6A4F;
+    border-radius:20px;padding:4px 16px;position:absolute;
+    box-shadow:0 2px 8px rgba(45,106,79,.15);
   }
+  .lbl-happy  {animation:lblHappy   50s ease-in-out 2.2s infinite}
+  .lbl-excited{animation:lblExcited 50s ease-in-out 2.2s infinite;opacity:0}
+  .lbl-think  {animation:lblThink   50s ease-in-out 2.2s infinite;opacity:0}
+  .lbl-wink   {animation:lblWink    50s ease-in-out 2.2s infinite;opacity:0}
+  .lbl-deter  {animation:lblDeter   50s ease-in-out 2.2s infinite;opacity:0}
+  .labels{position:relative;height:28px;width:160px;display:flex;align-items:center;justify-content:center}
 
-  /* Head */
-  .p-head{
-    width:112px;height:104px;background:#fff;border-radius:50%;
-    border:3px solid #1A1A1A;position:relative;z-index:2;
-    box-shadow:3px 4px 14px rgba(0,0,0,.14);
-  }
-  /* Ears via pseudo-elements */
-  .p-head::before,.p-head::after{
-    content:'';position:absolute;
-    width:32px;height:32px;border-radius:50%;background:#1A1A1A;
-  }
-  .p-head::before{top:-10px;left:8px}
-  .p-head::after {top:-10px;right:8px}
+  /* quote */
+  .quotebox{position:relative;height:100px;width:275px;display:flex;align-items:flex-start;justify-content:center;margin-top:4px}
+  .q{position:absolute;top:0;text-align:center;padding:0 6px;width:100%}
+  .qtext{display:block;font-size:13px;color:#444;line-height:1.6;font-style:italic}
+  .qattr{display:block;font-size:11.5px;color:#2D6A4F;margin-top:5px;font-weight:800;letter-spacing:.3px}
+  .q-happy  {animation:lblHappy   50s ease-in-out 2.2s infinite}
+  .q-excited{animation:lblExcited 50s ease-in-out 2.2s infinite;opacity:0}
+  .q-think  {animation:lblThink   50s ease-in-out 2.2s infinite;opacity:0}
+  .q-wink   {animation:lblWink    50s ease-in-out 2.2s infinite;opacity:0}
+  .q-deter  {animation:lblDeter   50s ease-in-out 2.2s infinite;opacity:0}
 
-  /* Eye patches */
-  .ep-l,.ep-r{
-    position:absolute;top:28px;
-    width:34px;height:30px;background:#1A1A1A;border-radius:50%;
+  @media(prefers-reduced-motion:reduce){
+    .wrap,.floater,.spin,.spin-rev{animation:none!important;opacity:1!important;transform:none!important}
+    .e-happy,.orbit-happy,.lbl-happy,.q-happy{animation:none;opacity:1}
+    .e-excited,.e-think,.e-wink,.e-deter{display:none}
+    .orbit-excited,.orbit-think,.orbit-wink,.orbit-deter{display:none}
+    .pupil-l,.pupil-r,.lid-l,.lid-r,.dp,.bp,.sf{animation:none}
+    .base-arm-right{animation:none;opacity:1}
+    .lbl-excited,.lbl-think,.lbl-wink,.lbl-deter{display:none}
+    .q-excited,.q-think,.q-wink,.q-deter{display:none}
   }
-  .ep-l{left:13px;transform:rotate(-10deg)}
-  .ep-r{right:13px;transform:rotate( 10deg)}
-
-  /* Eyes */
-  .eye-l,.eye-r{
-    position:absolute;top:35px;
-    width:19px;height:19px;background:#fff;border-radius:50%;
-    animation:blink 5.5s infinite;
-  }
-  .eye-l{left:19px}.eye-r{right:19px}
-  .eye-l::after,.eye-r::after{
-    content:'';position:absolute;width:9px;height:9px;
-    border-radius:50%;background:#1A1A1A;top:50%;left:50%;
-    transform:translate(-50%,-50%);
-  }
-  .eye-l::before,.eye-r::before{
-    content:'';position:absolute;width:4px;height:4px;
-    border-radius:50%;background:#fff;z-index:2;top:3px;right:3px;
-  }
-
-  /* Nose & mouth */
-  .p-nose{
-    position:absolute;top:62px;left:50%;transform:translateX(-50%);
-    width:20px;height:14px;background:#1A1A1A;border-radius:50% 50% 40% 40%;
-  }
-  .p-mouth{
-    position:absolute;top:76px;left:50%;transform:translateX(-50%);
-    width:34px;height:12px;
-    border-bottom:3px solid #4A2020;border-radius:0 0 17px 17px;
-  }
-
-  /* Torso row */
-  .torso-row{display:flex;align-items:flex-start;gap:5px;margin-top:-3px}
-
-  /* Body */
-  .p-body{
-    width:104px;height:115px;
-    background:#1A1A1A;border-radius:24px 24px 30px 30px;
-    position:relative;z-index:1;
-    box-shadow:0 6px 16px rgba(0,0,0,.22);
-  }
-  .p-belly{
-    position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
-    width:66px;height:78px;background:#fff;
-    border-radius:50%;border:2px solid #E0E0E0;
-  }
-
-  /* Arms */
-  .arm-l,.arm-r{
-    width:28px;height:78px;
-    background:#1A1A1A;border-radius:14px;
-    transform-origin:top center;
-  }
-  .arm-l{transform:rotate(14deg)}
-  .arm-r{animation:pointLeft 1.3s cubic-bezier(.22,1,.36,1) 1.15s both}
-
-  /* Legs + feet */
-  .legs{display:flex;gap:8px;margin-top:0}
-  .leg-l,.leg-r{
-    width:36px;height:55px;
-    background:#1A1A1A;border-radius:0 0 18px 18px;
-    box-shadow:0 4px 8px rgba(0,0,0,.18);position:relative;
-  }
-  .leg-l::after,.leg-r::after{
-    content:'';display:block;
-    width:42px;height:18px;
-    background:#1A1A1A;border-radius:0 0 22px 22px;
-    position:absolute;bottom:-10px;left:-3px;
-  }
-
-  /* ─ Respect reduced-motion preference ─ */
-  @media (prefers-reduced-motion: reduce) {
-    .po-wrap { animation: none !important; opacity: 1 !important; transform: none !important; }
-    .dust1, .dust2 { animation: none !important; display: none !important; }
-    .bubble { animation: none !important; opacity: 1 !important; }
-    .panda  { animation: none !important; }
-    .arm-r  { animation: none !important; transform: rotate(-80deg) translateX(-4px) !important; }
-    .eye-l, .eye-r { animation: none !important; }
-  }
-</style></head>
+</style>
+</head>
 <body>
-<div class="scene">
-  <div class="dust1"></div>
-  <div class="dust2"></div>
-  <div class="po-wrap">
-    <div class="bubble">Welcome! 🐼<br>Pick your path on the left —<br>I've got your back!</div>
-    <div class="panda">
-      <div class="p-head">
-        <div class="ep-l"></div><div class="ep-r"></div>
-        <div class="eye-l"></div><div class="eye-r"></div>
-        <div class="p-nose"></div><div class="p-mouth"></div>
-      </div>
-      <div class="torso-row">
-        <div class="arm-l"></div>
-        <div class="p-body"><div class="p-belly"></div></div>
-        <div class="arm-r"></div>
-      </div>
-      <div class="legs">
-        <div class="leg-l"></div><div class="leg-r"></div>
-      </div>
+<div class="wrap">
+
+  <!-- ── SVG: panda + arms + per-emotion orbital decorations ── -->
+  <div class="floater">
+  <svg viewBox="-90 0 460 310" width="330" height="292" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ═══ ORBITAL DECORATIONS (rendered behind the face) ═══ -->
+
+    <!-- 1. HAPPY orbit — soft pink hearts / sparkle ring -->
+    <g class="orbit-happy" opacity="1">
+      <g class="spin" style="transform-origin:140px 170px">
+        <circle cx="140" cy="170" r="155" fill="none" stroke="#FFB3BA" stroke-width="1.5"
+                stroke-dasharray="8 10" opacity=".55"/>
+        <circle cx="295" cy="170" r="5" fill="#FFB3BA" opacity=".8" class="dp"/>
+        <circle cx="140" cy="15"  r="4" fill="#FFB3BA" opacity=".7" class="dp" style="animation-delay:.4s"/>
+        <circle cx="-15" cy="170" r="5" fill="#FFB3BA" opacity=".8" class="dp" style="animation-delay:.8s"/>
+        <circle cx="140" cy="325" r="4" fill="#FFB3BA" opacity=".7" class="dp" style="animation-delay:1.2s"/>
+        <!-- sparkle stars -->
+        <text x="33"  y="55"  font-size="16" opacity=".7">✨</text>
+        <text x="232" y="55"  font-size="16" opacity=".7">✨</text>
+        <text x="33"  y="305" font-size="16" opacity=".6">✨</text>
+        <text x="232" y="305" font-size="16" opacity=".6">✨</text>
+      </g>
+    </g>
+
+    <!-- 2. EXCITED orbit — fast dual rings + energy circles -->
+    <g class="orbit-excited" opacity="0">
+      <g class="spin" style="transform-origin:140px 170px">
+        <circle cx="140" cy="170" r="148" fill="none" stroke="#FFB3BA" stroke-width="2"
+                stroke-dasharray="12 8" opacity=".6"/>
+        <circle cx="288" cy="170" r="6" fill="#FFB3BA" opacity=".9" class="dp"/>
+        <circle cx="140" cy="22"  r="6" fill="#FFB3BA" opacity=".9" class="dp" style="animation-delay:.3s"/>
+      </g>
+      <g class="spin-rev" style="transform-origin:140px 170px">
+        <circle cx="140" cy="170" r="162" fill="none" stroke="#FFD6A5" stroke-width="1.5"
+                stroke-dasharray="6 14" opacity=".5"/>
+        <circle cx="302" cy="170" r="5" fill="#FFD6A5" opacity=".8" class="dp" style="animation-delay:.5s"/>
+        <circle cx="140" cy="8"   r="5" fill="#FFD6A5" opacity=".7" class="dp" style="animation-delay:.9s"/>
+      </g>
+      <!-- energy burst lines -->
+      <line x1="-55" y1="80"  x2="-30" y2="95"  stroke="#FFB3BA" stroke-width="2.5" stroke-linecap="round" class="sf"/>
+      <line x1="-65" y1="110" x2="-38" y2="112" stroke="#FFD6A5" stroke-width="2"   stroke-linecap="round" class="sf" style="animation-delay:.2s"/>
+      <line x1="-55" y1="140" x2="-30" y2="128" stroke="#FFB3BA" stroke-width="2"   stroke-linecap="round" class="sf" style="animation-delay:.4s"/>
+      <line x1="335" y1="80"  x2="310" y2="95"  stroke="#FFB3BA" stroke-width="2.5" stroke-linecap="round" class="sf"/>
+      <line x1="345" y1="110" x2="318" y2="112" stroke="#FFD6A5" stroke-width="2"   stroke-linecap="round" class="sf" style="animation-delay:.3s"/>
+      <line x1="335" y1="140" x2="310" y2="128" stroke="#FFB3BA" stroke-width="2"   stroke-linecap="round" class="sf" style="animation-delay:.6s"/>
+    </g>
+
+    <!-- 3. THINK orbit — slow dashed ring + floating thought bubbles -->
+    <g class="orbit-think" opacity="0">
+      <g class="spin-rev" style="transform-origin:140px 170px;animation-duration:10s">
+        <circle cx="140" cy="170" r="152" fill="none" stroke="#A8DADC" stroke-width="1.5"
+                stroke-dasharray="4 12" opacity=".55"/>
+        <circle cx="292" cy="170" r="5" fill="#A8DADC" opacity=".8" class="dp"/>
+        <circle cx="140" cy="18"  r="4" fill="#A8DADC" opacity=".7" class="dp" style="animation-delay:.6s"/>
+        <circle cx="-12" cy="170" r="5" fill="#A8DADC" opacity=".8" class="dp" style="animation-delay:1.1s"/>
+        <circle cx="140" cy="322" r="4" fill="#A8DADC" opacity=".6" class="dp" style="animation-delay:1.6s"/>
+      </g>
+      <!-- rising thought bubbles left side -->
+      <circle cx="-42" cy="200" r="4.5" fill="#CCCCCC" opacity=".6" class="bp"/>
+      <circle cx="-55" cy="175" r="6.5" fill="#BBBBBB" opacity=".6" class="bp" style="animation-delay:.4s"/>
+      <circle cx="-45" cy="148" r="9"   fill="#AAAAAA" opacity=".6" class="bp" style="animation-delay:.8s"/>
+      <text x="-52" y="152" font-size="11" text-anchor="middle" fill="#555">💡</text>
+    </g>
+
+    <!-- 4. WINK orbit — cheeky arc + sparkles one side -->
+    <g class="orbit-wink" opacity="0">
+      <g class="spin" style="transform-origin:140px 170px;animation-duration:7s">
+        <circle cx="140" cy="170" r="150" fill="none" stroke="#B7E4C7" stroke-width="1.5"
+                stroke-dasharray="10 7" opacity=".55"/>
+        <circle cx="290" cy="170" r="5"  fill="#B7E4C7" opacity=".8" class="dp"/>
+        <circle cx="140" cy="20"  r="4"  fill="#B7E4C7" opacity=".7" class="dp" style="animation-delay:.5s"/>
+      </g>
+      <!-- cheeky wink stars right side -->
+      <text x="305" y="120" font-size="18" opacity=".75" class="bp">★</text>
+      <text x="320" y="155" font-size="13" opacity=".6"  class="bp" style="animation-delay:.3s">✦</text>
+      <text x="308" y="195" font-size="15" opacity=".65" class="bp" style="animation-delay:.6s">✨</text>
+    </g>
+
+    <!-- 5. DETERMINED orbit — heavy dashes + speed lines -->
+    <g class="orbit-deter" opacity="0">
+      <g class="spin" style="transform-origin:140px 170px;animation-duration:3s">
+        <circle cx="140" cy="170" r="150" fill="none" stroke="#1A1A1A" stroke-width="2"
+                stroke-dasharray="16 6" opacity=".2"/>
+        <circle cx="290" cy="170" r="6" fill="#1A1A1A" opacity=".35" class="dp"/>
+        <circle cx="140" cy="20"  r="6" fill="#1A1A1A" opacity=".3"  class="dp" style="animation-delay:.4s"/>
+        <circle cx="-10" cy="170" r="6" fill="#1A1A1A" opacity=".3"  class="dp" style="animation-delay:.8s"/>
+        <circle cx="140" cy="320" r="6" fill="#1A1A1A" opacity=".3"  class="dp" style="animation-delay:1.2s"/>
+      </g>
+      <!-- speed lines left -->
+      <line x1="-68" y1="140" x2="-30" y2="140" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" opacity=".35" class="sf"/>
+      <line x1="-72" y1="160" x2="-34" y2="157" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" opacity=".25" class="sf" style="animation-delay:.15s"/>
+      <line x1="-70" y1="178" x2="-32" y2="172" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" opacity=".2"  class="sf" style="animation-delay:.3s"/>
+      <!-- speed lines right -->
+      <line x1="348" y1="140" x2="310" y2="140" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round" opacity=".35" class="sf"/>
+      <line x1="352" y1="160" x2="314" y2="157" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" opacity=".25" class="sf" style="animation-delay:.2s"/>
+      <line x1="350" y1="178" x2="312" y2="172" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" opacity=".2"  class="sf" style="animation-delay:.4s"/>
+    </g>
+
+    <!-- ═══ PANDA ARMS (inside SVG, arching out left & right) ═══ -->
+    <!-- Left arm — rounded rect rotated to arch left-down -->
+    <rect x="14" y="188" width="24" height="72" rx="12"
+          fill="#1A1A1A" transform="rotate(-28 26 188)"/>
+    <!-- Left paw -->
+    <ellipse cx="5" cy="246" rx="14" ry="10" fill="#1A1A1A" transform="rotate(-28 5 246)"/>
+    <g class="base-arm-right">
+    <!-- Right arm -->
+    <rect x="242" y="188" width="24" height="72" rx="12"
+          fill="#1A1A1A" transform="rotate(28 254 188)"/>
+    <!-- Right paw -->
+    <ellipse cx="275" cy="246" rx="14" ry="10" fill="#1A1A1A" transform="rotate(28 275 246)"/>
+    </g>
+
+    <!-- ═══ DROP SHADOW ═══ -->
+    <ellipse cx="140" cy="292" rx="56" ry="6" fill="#1A1A1A" opacity=".06">
+      <animate attributeName="rx" values="56;44;56" dur="4s" begin="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".06;.03;.06" dur="4s" begin="1.4s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- ═══ PANDA HEAD ═══ -->
+    <!-- Ears -->
+    <circle cx="52"  cy="64" r="46" fill="#1A1A1A"/>
+    <circle cx="228" cy="64" r="46" fill="#1A1A1A"/>
+    <circle cx="52"  cy="64" r="28" fill="#2D2D2D" opacity=".45"/>
+    <circle cx="228" cy="64" r="28" fill="#2D2D2D" opacity=".45"/>
+    <!-- Face -->
+    <ellipse cx="140" cy="172" rx="118" ry="116" fill="#EFEFED"/>
+    <ellipse cx="140" cy="170" rx="114" ry="112" fill="#FFFFFF"/>
+    <!-- cheek shading -->
+    <ellipse cx="30"  cy="188" rx="22" ry="16" fill="#E8E8E6" opacity=".8"/>
+    <ellipse cx="250" cy="188" rx="22" ry="16" fill="#E8E8E6" opacity=".8"/>
+    <!-- Eye patches -->
+    <ellipse cx="88"  cy="138" rx="46" ry="42" fill="#1A1A1A" transform="rotate(-10 88 138)"/>
+    <ellipse cx="192" cy="138" rx="46" ry="42" fill="#1A1A1A" transform="rotate(10 192 138)"/>
+    <!-- Sclera + blink -->
+    <g class="lid-l"><ellipse cx="90"  cy="133" rx="27" ry="26" fill="#FFFFFF"/></g>
+    <g class="lid-r"><ellipse cx="190" cy="133" rx="27" ry="26" fill="#FFFFFF"/></g>
+    <!-- Pupils -->
+    <g class="pupil-l">
+      <circle cx="92"  cy="133" r="14" fill="#1A1A1A"/>
+      <circle cx="98"  cy="126" r="6"  fill="#FFFFFF"/>
+      <circle cx="87"  cy="138" r="3"  fill="#FFFFFF" opacity=".5"/>
+    </g>
+    <g class="pupil-r">
+      <circle cx="188" cy="133" r="14" fill="#1A1A1A"/>
+      <circle cx="194" cy="126" r="6"  fill="#FFFFFF"/>
+      <circle cx="183" cy="138" r="3"  fill="#FFFFFF" opacity=".5"/>
+    </g>
+    <!-- Nose -->
+    <ellipse cx="140" cy="164" rx="6" ry="8" fill="#E8E8E8"/>
+    <ellipse cx="140" cy="178" rx="17" ry="13" fill="#1A1A1A"/>
+    <ellipse cx="133" cy="174" rx="6"  ry="4"  fill="#3A3A3A" opacity=".4"/>
+    <line x1="128" y1="186" x2="140" y2="193" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="152" y1="186" x2="140" y2="193" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- ═══ EXPRESSIONS ═══ -->
+    <!-- 1. HAPPY -->
+    <g class="e-happy">
+      <path d="M 96 210 Q 140 248 184 210" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="54"  cy="204" rx="18" ry="11" fill="#FFB3BA" opacity=".45"/>
+      <ellipse cx="226" cy="204" rx="18" ry="11" fill="#FFB3BA" opacity=".45"/>
+    </g>
+    <!-- 2. EXCITED -->
+    <g class="e-excited">
+      <path d="M 88 208 Q 140 256 192 208" stroke="#1A1A1A" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M 89 209 Q 140 252 191 209 L 188 224 Q 140 252 92 224 Z" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1.2"/>
+      <line x1="115" y1="210" x2="115" y2="223" stroke="#D4D4D4" stroke-width="1.5"/>
+      <line x1="140" y1="210" x2="140" y2="224" stroke="#D4D4D4" stroke-width="1.5"/>
+      <line x1="165" y1="210" x2="165" y2="223" stroke="#D4D4D4" stroke-width="1.5"/>
+      <path d="M 54  108 Q 76  94  100 100" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <path d="M 180 100 Q 204 94  226 108" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="42"  cy="196" rx="24" ry="15" fill="#FFB3BA" opacity=".55"/>
+      <ellipse cx="238" cy="196" rx="24" ry="15" fill="#FFB3BA" opacity=".55"/>
+    </g>
+    <!-- 3. THINKING — matches 🤔: RIGHT brow raised, right paw touching chin -->
+    <g class="e-think">
+      <!-- smirk mouth -->
+      <path d="M 100 214 Q 128 230 158 212" stroke="#1A1A1A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- LEFT brow: flat / slightly lowered -->
+      <path d="M 52  112 Q 72  106 96 110"  stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <!-- RIGHT brow: raised HIGH — key 🤔 feature -->
+      <path d="M 184  96 Q 206  84 228  96" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <!-- Right arm curving from shoulder (lower-right) up to chin -->
+      <path d="M 238 292 Q 232 268 215 256 Q 200 254 178 268"
+            stroke="#1A1A1A" stroke-width="24" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Paw / fist resting at chin -->
+      <ellipse cx="168" cy="270" rx="22" ry="17" fill="#1A1A1A"/>
+      <!-- Knuckle highlights -->
+      <circle cx="160" cy="265" r="5" fill="#2D2D2D" opacity=".4"/>
+      <circle cx="171" cy="261" r="5" fill="#2D2D2D" opacity=".4"/>
+    </g>
+    <!-- 4. WINK -->
+    <g class="e-wink">
+      <ellipse cx="190" cy="133" rx="27" ry="26" fill="#1A1A1A"/>
+      <path d="M 165 133 Q 190 120 215 133" stroke="#FFFFFF" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <path d="M 165 128 Q 190 117 215 128" stroke="#1A1A1A" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M 100 212 Q 140 242 174 218" stroke="#1A1A1A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="230" cy="196" rx="21" ry="13" fill="#FFB3BA" opacity=".62"/>
+    </g>
+    <!-- 5. DETERMINED -->
+    <g class="e-deter">
+      <line x1="102" y1="218" x2="178" y2="218" stroke="#1A1A1A" stroke-width="5.5" stroke-linecap="round"/>
+      <path d="M 52  102 Q 72  95  96 104"  stroke="#1A1A1A" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M 184 104 Q 208 95 228 102"  stroke="#1A1A1A" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <line x1="96"  y1="104" x2="104" y2="112" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+      <line x1="184" y1="104" x2="176" y2="112" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+  </svg>
+  </div>
+
+  <!-- Label pill -->
+  <div class="labels">
+    <span class="lbl lbl-happy"  >😊 Happy</span>
+    <span class="lbl lbl-excited">🎉 Excited!</span>
+    <span class="lbl lbl-think"  >🤔 Thinking…</span>
+    <span class="lbl lbl-wink"   >😉 Wink</span>
+    <span class="lbl lbl-deter"  >💪 Determined</span>
+  </div>
+
+  <!-- Quote -->
+  <div class="quotebox">
+    <div class="q q-happy">
+      <span class="qtext">"Happiness is not something ready-made.<br>It comes from your own actions."</span>
+      <span class="qattr">— Dalai Lama XIV</span>
+    </div>
+    <div class="q q-excited">
+      <span class="qtext">"Nothing great in the world was accomplished without passion."</span>
+      <span class="qattr">— G. W. F. Hegel</span>
+    </div>
+    <div class="q q-think">
+      <span class="qtext">"The measure of intelligence is the ability to change."</span>
+      <span class="qattr">— Albert Einstein</span>
+    </div>
+    <div class="q q-wink">
+      <span class="qtext">"Life is too important to be taken seriously."</span>
+      <span class="qattr">— Oscar Wilde</span>
+    </div>
+    <div class="q q-deter">
+      <span class="qtext">"It does not matter how slowly you go as long as you do not stop."</span>
+      <span class="qattr">— Confucius</span>
     </div>
   </div>
+
 </div>
-</body></html>"""
+</body>
+</html>"""
 
 
-# ── Kung Fu Panda — Form-page Robot (thinking/bye states kept) ────────────────
+# ── Panda Helper — Requirements Form (welcome / thinking / bye states) ────────
 def _robot_html(state: str) -> str:
-    """Return the animated panda helper for the requirements form page."""
+    """Animated panda face helper for the requirements form page — matches landing panda style."""
     _messages = {
         "welcome": (
             "Hey! 🐼 Let's capture your<br>project requirements.<br>Fill in the form!"
@@ -520,137 +759,149 @@ def _robot_html(state: str) -> str:
         ),
     }
     msg = _messages.get(state, _messages["welcome"])
-    arm_l = "arm arm-left" + (" wave-left" if state == "bye" else "")
-    arm_r = "arm arm-right" + (" wave-right" if state in ("welcome", "bye") else "")
-    body_cls = "robot-wrap" + (" think-bob" if state == "thinking" else "")
-    mouth_cls = "mouth" + (" mouth-bye" if state == "bye" else "")
+    # Expression visibility per state
+    s_happy   = "1" if state == "welcome"  else "0"
+    s_think   = "1" if state == "thinking" else "0"
+    s_excited = "1" if state == "bye"      else "0"
+
+    wave_l     = "waveL .7s ease-in-out infinite" if state in ("welcome", "bye") else "none"
+    wave_r     = "waveR .7s ease-in-out infinite" if state in ("welcome", "bye") else "none"
+    body_anim  = "thinkBob 2s ease-in-out infinite" if state == "thinking" else "float 4s ease-in-out 1.2s infinite"
 
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <style>
   *{{box-sizing:border-box;margin:0;padding:0}}
-  body{{
-    background:transparent;
+  html,body{{
+    background:transparent;width:100%;height:100%;
     display:flex;flex-direction:column;align-items:center;
-    justify-content:flex-start;padding-top:24px;
-    font-family:'Segoe UI',system-ui,sans-serif;min-height:460px;
+    justify-content:flex-start;padding-top:18px;overflow:hidden;
+    font-family:'Segoe UI',system-ui,sans-serif;
   }}
-  .bubble{{
-    background:#fff;border:2px solid #C4541A;border-radius:18px;
-    padding:14px 20px;font-size:13.5px;color:#C4541A;
-    max-width:240px;text-align:center;line-height:1.6;
-    box-shadow:0 4px 20px rgba(196,84,26,.15);
-    animation:fadeUp .45s ease forwards;position:relative;
-    margin-bottom:20px;font-weight:600;
-  }}
-  .bubble::after{{
-    content:'';position:absolute;bottom:-13px;left:50%;
-    transform:translateX(-50%);
-    border:10px solid transparent;border-top-color:#C4541A;
-  }}
-  .{body_cls.split()[0]}{{display:flex;flex-direction:column;align-items:center;gap:0}}
-  {'.' + body_cls.split()[1] + '{{animation:thinkBob 2s ease-in-out infinite}}' if 'think-bob' in body_cls else ''}
-  .antenna-stem{{width:4px;height:22px;background:#D4AC0D;border-radius:2px;position:relative}}
-  .antenna-ball{{
-    width:14px;height:14px;
-    background:radial-gradient(circle at 35% 35%,#F4D03F,#D4AC0D);
-    border-radius:50%;position:absolute;top:-16px;left:50%;
-    transform:translateX(-50%);animation:antPulse 2s infinite;
-  }}
-  @keyframes antPulse{{0%,100%{{box-shadow:0 0 8px rgba(212,172,13,.5)}}50%{{box-shadow:0 0 20px rgba(212,172,13,.9)}}}}
-  .head{{
-    width:82px;height:70px;
-    background:linear-gradient(145deg,#1A1A1A,#333);
-    border-radius:18px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
-    box-shadow:0 6px 22px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.08);
-  }}
-  .eyes{{display:flex;gap:17px}}
-  .eye{{width:15px;height:15px;background:#fff;border-radius:50%;position:relative;animation:blink 5s infinite}}
-  .eye::after{{content:'';position:absolute;width:7px;height:7px;background:#1A1A1A;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}}
-  @keyframes blink{{0%,88%,100%{{transform:scaleY(1)}}90%{{transform:scaleY(.1)}}}}
-  .mouth{{width:28px;height:10px;border-bottom:3px solid #D4AC0D;border-radius:0 0 14px 14px;opacity:.9}}
-  .mouth-bye{{width:32px;height:14px;border-bottom:3px solid #D4AC0D;border-radius:50%}}
-  .torso{{display:flex;align-items:flex-start;gap:5px;margin-top:4px}}
-  .body-main{{
-    width:72px;height:76px;
-    background:linear-gradient(145deg,#2D2D2D,#1A1A1A);
-    border-radius:14px;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 16px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.06);
-  }}
-  .chest-led{{
-    width:22px;height:22px;
-    background:radial-gradient(circle at 35% 35%,#F4D03F,#D4AC0D);
-    border-radius:50%;border:2.5px solid rgba(255,255,255,.4);
-    animation:ledPulse 1.8s infinite;
-  }}
-  @keyframes ledPulse{{0%,100%{{box-shadow:0 0 0 0 rgba(212,172,13,.6)}}50%{{box-shadow:0 0 0 9px rgba(212,172,13,0)}}}}
-  .arm{{width:18px;height:60px;background:linear-gradient(145deg,#2D2D2D,#1A1A1A);border-radius:9px}}
-  .arm-left{{transform-origin:top center}}
-  .arm-right{{transform-origin:top center}}
-  .wave-right{{animation:waveR .65s ease-in-out infinite}}
-  .wave-left{{animation:waveL .65s ease-in-out infinite;animation-delay:.15s}}
+  @keyframes fadeUp{{from{{opacity:0;transform:translateY(-10px)}}to{{opacity:1;transform:translateY(0)}}}}
+  @keyframes float{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-10px)}}}}
+  @keyframes thinkBob{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-8px)}}}}
   @keyframes waveR{{0%,100%{{transform:rotate(-15deg)}}50%{{transform:rotate(45deg)}}}}
   @keyframes waveL{{0%,100%{{transform:rotate(15deg)}}50%{{transform:rotate(-45deg)}}}}
-  .legs{{display:flex;gap:12px;margin-top:4px}}
-  .leg{{width:22px;height:32px;background:linear-gradient(145deg,#2D2D2D,#1A1A1A);border-radius:0 0 10px 10px}}
-  .dots span{{display:inline-block;animation:dotBounce 1.2s infinite;font-size:16px;font-weight:700;color:#C4541A}}
+  @keyframes blink{{0%,85%,100%{{transform:scaleY(1)}}89%{{transform:scaleY(.06)}}}}
+  @keyframes pupilW{{0%,100%{{transform:translate(0,0)}}40%{{transform:translate(3px,2px)}}80%{{transform:translate(-3px,-2px)}}}}
+  .dots span{{display:inline-block;animation:dotBounce 1.2s infinite;font-size:15px;font-weight:700;color:#2D6A4F}}
   .dots span:nth-child(2){{animation-delay:.2s}}
   .dots span:nth-child(3){{animation-delay:.4s}}
-  @keyframes dotBounce{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-6px)}}}}
-  @keyframes thinkBob{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-10px)}}}}
-  @keyframes fadeUp{{from{{opacity:0;transform:translateY(-12px)}}to{{opacity:1;transform:translateY(0)}}}}
-  @media (prefers-reduced-motion: reduce){{
-    .bubble{{animation:none;opacity:1}}
-    .robot-wrap,.think-bob{{animation:none}}
-    .wave-right,.wave-left{{animation:none}}
-    .chest-led,.antenna-ball{{animation:none}}
-    .eye{{animation:none}}
-    .dots span{{animation:none}}
-  }}
+  @keyframes dotBounce{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-5px)}}}}
+  @media(prefers-reduced-motion:reduce){{*{{animation:none!important;opacity:1!important;transform:none!important}}}}
 </style></head>
 <body>
-  <div class="bubble">{msg}</div>
-  <div class="{body_cls}">
-    <div style="position:relative;display:flex;flex-direction:column;align-items:center">
-      <div class="antenna-stem"><div class="antenna-ball"></div></div>
-      <div class="head">
-        <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
-        <div class="{mouth_cls}"></div>
-      </div>
-      <div class="torso">
-        <div class="{arm_l}"></div>
-        <div class="body-main"><div class="chest-led"></div></div>
-        <div class="{arm_r}"></div>
-      </div>
-      <div class="legs"><div class="leg"></div><div class="leg"></div></div>
-    </div>
+  <!-- Speech bubble — bamboo green to match panda theme -->
+  <div style="
+    background:#fff;border:2.5px solid #2D6A4F;border-radius:20px;
+    padding:13px 20px;font-size:13.5px;color:#2D6A4F;
+    max-width:230px;text-align:center;line-height:1.6;
+    box-shadow:0 4px 18px rgba(45,106,79,.18);
+    position:relative;margin-bottom:16px;font-weight:600;
+    animation:fadeUp .45s ease forwards;
+  ">{msg}
+    <span style="position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);
+      border:10px solid transparent;border-top-color:#2D6A4F;"></span>
+  </div>
+  <!-- Panda face + arms -->
+  <div style="animation:{body_anim};display:flex;align-items:flex-end;">
+    <!-- Left arm -->
+    <div style="
+      width:22px;height:62px;background:#1A1A1A;border-radius:11px;
+      transform-origin:top center;animation:{wave_l};
+      align-self:flex-end;margin-bottom:14px;margin-right:-5px;
+    "></div>
+    <!-- Panda SVG (same palette as landing page) -->
+    <svg viewBox="0 0 280 290" width="195" height="203" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="140" cy="285" rx="58" ry="6.5" fill="#1A1A1A" opacity=".06"/>
+      <!-- Ears -->
+      <circle cx="52"  cy="64" r="46" fill="#1A1A1A"/>
+      <circle cx="228" cy="64" r="46" fill="#1A1A1A"/>
+      <circle cx="52"  cy="64" r="28" fill="#2D2D2D" opacity=".45"/>
+      <circle cx="228" cy="64" r="28" fill="#2D2D2D" opacity=".45"/>
+      <!-- Head -->
+      <ellipse cx="140" cy="172" rx="118" ry="116" fill="#EFEFED"/>
+      <ellipse cx="140" cy="170" rx="114" ry="112" fill="#FFFFFF"/>
+      <ellipse cx="30"  cy="188" rx="22" ry="16" fill="#E8E8E6" opacity=".8"/>
+      <ellipse cx="250" cy="188" rx="22" ry="16" fill="#E8E8E6" opacity=".8"/>
+      <!-- Eye patches -->
+      <ellipse cx="88"  cy="138" rx="46" ry="42" fill="#1A1A1A" transform="rotate(-10 88 138)"/>
+      <ellipse cx="192" cy="138" rx="46" ry="42" fill="#1A1A1A" transform="rotate(10 192 138)"/>
+      <!-- Sclera (blink) -->
+      <ellipse cx="90"  cy="133" rx="27" ry="26" fill="#FFFFFF"
+        style="transform-box:fill-box;transform-origin:50% 40%;animation:blink 5.5s ease-in-out 2s infinite"/>
+      <ellipse cx="190" cy="133" rx="27" ry="26" fill="#FFFFFF"
+        style="transform-box:fill-box;transform-origin:50% 40%;animation:blink 5.5s ease-in-out 2.5s infinite"/>
+      <!-- Pupils (wander) -->
+      <g style="transform-box:fill-box;transform-origin:center;animation:pupilW 8s ease-in-out 1s infinite">
+        <circle cx="92"  cy="133" r="14" fill="#1A1A1A"/>
+        <circle cx="98"  cy="126" r="6"  fill="#FFFFFF"/>
+        <circle cx="87"  cy="138" r="3"  fill="#FFFFFF" opacity=".5"/>
+      </g>
+      <g style="transform-box:fill-box;transform-origin:center;animation:pupilW 8s ease-in-out 2s infinite">
+        <circle cx="188" cy="133" r="14" fill="#1A1A1A"/>
+        <circle cx="194" cy="126" r="6"  fill="#FFFFFF"/>
+        <circle cx="183" cy="138" r="3"  fill="#FFFFFF" opacity=".5"/>
+      </g>
+      <!-- Nose bridge + nose -->
+      <ellipse cx="140" cy="164" rx="6" ry="8" fill="#E8E8E8"/>
+      <ellipse cx="140" cy="178" rx="17" ry="13" fill="#1A1A1A"/>
+      <ellipse cx="133" cy="174" rx="6"  ry="4"  fill="#3A3A3A" opacity=".4"/>
+      <line x1="128" y1="186" x2="140" y2="193" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="152" y1="186" x2="140" y2="193" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- WELCOME: happy smile + blush -->
+      <g opacity="{s_happy}">
+        <path d="M 96 210 Q 140 248 184 210" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="54"  cy="204" rx="18" ry="11" fill="#FFB3BA" opacity=".45"/>
+        <ellipse cx="226" cy="204" rx="18" ry="11" fill="#FFB3BA" opacity=".45"/>
+      </g>
+      <!-- THINKING: smirk + raised brow + thought bubbles -->
+      <g opacity="{s_think}">
+        <path d="M 100 214 Q 128 228 158 212" stroke="#1A1A1A" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M 52  110 Q 72  94  96 102"  stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <path d="M 184 104 Q 206 100 228 112" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <circle cx="218" cy="92"  r="5.5" fill="#CCCCCC" opacity=".75"/>
+        <circle cx="232" cy="74"  r="8"   fill="#CCCCCC" opacity=".75"/>
+        <circle cx="250" cy="52"  r="12"  fill="#CCCCCC" opacity=".75"/>
+        <text x="250" y="57" font-size="13" text-anchor="middle" font-family="'Segoe UI',sans-serif" fill="#555">💡</text>
+      </g>
+      <!-- BYE: excited grin + raised brows + big blush -->
+      <g opacity="{s_excited}">
+        <path d="M 88 208 Q 140 256 192 208" stroke="#1A1A1A" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M 89 209 Q 140 252 191 209 L 188 224 Q 140 252 92 224 Z" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1.2"/>
+        <line x1="115" y1="210" x2="115" y2="223" stroke="#D4D4D4" stroke-width="1.5"/>
+        <line x1="140" y1="210" x2="140" y2="224" stroke="#D4D4D4" stroke-width="1.5"/>
+        <line x1="165" y1="210" x2="165" y2="223" stroke="#D4D4D4" stroke-width="1.5"/>
+        <path d="M 54  108 Q 76  94  100 100" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <path d="M 180 100 Q 204 94  226 108" stroke="#1A1A1A" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="42"  cy="196" rx="24" ry="15" fill="#FFB3BA" opacity=".55"/>
+        <ellipse cx="238" cy="196" rx="24" ry="15" fill="#FFB3BA" opacity=".55"/>
+      </g>
+    </svg>
+    <!-- Right arm -->
+    <div style="
+      width:22px;height:62px;background:#1A1A1A;border-radius:11px;
+      transform-origin:top center;animation:{wave_r};
+      align-self:flex-end;margin-bottom:14px;margin-left:-5px;
+    "></div>
   </div>
 </body></html>"""
 
 
 # ── KFP Footer ────────────────────────────────────────────────────────────────
 def _footer_html() -> str:
-    """Simple Kung Fu Panda themed footer — site name, copyright, and development year."""
+    """Fixed bottom footer — panda palette."""
     return """
-<div style="
-  display:flex;align-items:center;justify-content:center;
-  padding:0.6rem 1rem;margin-top:0.8rem;
-  border-top:2px dashed #D4AC0D;
-  font-family:'Segoe UI',system-ui,sans-serif;
-">
-  <div style="text-align:center;">
-    <span style="
-      font-size:0.88rem;font-weight:800;
-      background:linear-gradient(135deg,#D4AC0D,#C4541A);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-      🐼 Learn It Here
-    </span>
-    <span style="font-size:0.82rem;color:#94A3B8;margin-left:0.8rem;">
-      © 2025 Learn It Here · Developed in 2024
-    </span>
-  </div>
+<div class="kfp-footer">
+  <span style="font-size:0.9rem;font-weight:800;
+    background:linear-gradient(135deg,#74C69D,#FFB3BA);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+    🐼 Learn It Here &mdash; Developed in 2026
+  </span>
+  <span style="font-size:0.75rem;color:#888888;">
+    Powered by Streamlit &amp; Supabase
+  </span>
 </div>
 """
 
@@ -762,44 +1013,68 @@ def save_to_supabase(data: dict) -> tuple:
 # ── Landing Page ──────────────────────────────────────────────────────────────
 def page_landing():
     """Full-width hero landing page with Po animation and two CTAs."""
-    # Top nav bar — logo on left with updated tagline
+    # Top nav bar
     st.markdown(
         """
 <div class="kfp-nav">
   <span class="kfp-nav-logo">🐼</span>
-  <div>
+  <div class="kfp-nav-text">
     <div class="kfp-nav-title">Learn It Here</div>
-    <div style="font-size:0.72rem;color:#94A3B8;">Hub to learn most important topics</div>
+    <div class="kfp-nav-tagline">Hub to learn most important topics</div>
   </div>
 </div>
 """,
         unsafe_allow_html=True,
     )
 
-    col_left, col_right = st.columns([55, 45], gap="large")
+    # ── Centered hero: equal left/right columns ─────────────────────────────
+    col_left, col_right = st.columns([1, 1], gap="medium")
 
     with col_left:
         st.markdown(
             """
-<div class="landing-desc">
-  <strong>Know before you go!</strong><br>
-  Capture your project requirements — so you always know what support you need —
-  or dive straight into our curated tech guides to master the skills your project demands.
-  Click <strong>Learn It Here →</strong> to explore all available topics.
+<h1 class="hero-headline">Know Before You Go!</h1>
+<div class="hero-bar"></div>
+<p class="hero-sub">
+  Don't start blind — know your stack upfront, capture what your project truly needs,
+  then learn <em>exactly</em> what moves it forward. No generic tutorials, no wasted time.
+</p>
+<div class="hero-features">
+  <div class="hero-feat">
+    <span class="feat-icon">📋</span>
+    <div class="feat-text">
+      <strong>Capture Requirements</strong>
+      <span>12 targeted questions that define your exact project context and tech stack</span>
+    </div>
+  </div>
+  <div class="hero-feat">
+    <span class="feat-icon">🎓</span>
+    <div class="feat-text">
+      <strong>Stack-Matched Guides</strong>
+      <span>Curated learning built around your specific versions, tools, and architecture</span>
+    </div>
+  </div>
+  <div class="hero-feat">
+    <span class="feat-icon">⚡</span>
+    <div class="feat-text">
+      <strong>Learn &amp; Ship Fast</strong>
+      <span>Hands-on, zero fluff — only the knowledge your project actually needs</span>
+    </div>
+  </div>
 </div>
 """,
             unsafe_allow_html=True,
         )
 
-        btn_col1, btn_col2 = st.columns(2, gap="medium")
-        with btn_col1:
+        bc1, bc2 = st.columns(2, gap="small")
+        with bc1:
             if st.button(
                 "📋 Fill Project Requirements",
                 type="primary",
                 use_container_width=True,
             ):
                 _nav_to("requirements")
-        with btn_col2:
+        with bc2:
             if st.button(
                 "🎓 Learn It Here →",
                 type="secondary",
@@ -808,9 +1083,15 @@ def page_landing():
                 _nav_to("learn")
 
     with col_right:
-        st.html(_panda_landing_html())
+        # Center the panda both horizontally and vertically within its column
+        st.markdown(
+            '<div style="display:flex;justify-content:center;align-items:center;height:100%;">',
+            unsafe_allow_html=True,
+        )
+        components.html(_panda_landing_html(), height=510, scrolling=False)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.html(_footer_html())
+    st.markdown(_footer_html(), unsafe_allow_html=True)
 
 
 # ── Requirements Page ─────────────────────────────────────────────────────────
@@ -825,9 +1106,9 @@ def page_requirements():
             """
 <div class="kfp-nav">
   <span class="kfp-nav-logo">🐼</span>
-  <div>
+  <div class="kfp-nav-text">
     <div class="kfp-nav-title">Learn It Here</div>
-    <div style="font-size:0.72rem;color:#94A3B8;">Project Requirements</div>
+    <div class="kfp-nav-tagline">Project Requirements</div>
   </div>
   <div class="kfp-nav-sub">📋 Step 1 of your journey</div>
 </div>
@@ -885,7 +1166,7 @@ def page_requirements():
                     for k in list(st.session_state.keys()):
                         del st.session_state[k]
                     st.rerun()
-        st.html(_footer_html())
+        st.markdown(_footer_html(), unsafe_allow_html=True)
         return
 
     # ── Two-column layout ─────────────────────────────────────────────────────
@@ -1145,7 +1426,7 @@ def page_requirements():
             st.session_state.submitted = True
             st.rerun()
 
-    st.html(_footer_html())
+    st.markdown(_footer_html(), unsafe_allow_html=True)
 
 
 # ── Learning Hub Page ─────────────────────────────────────────────────────────
@@ -1156,9 +1437,9 @@ def page_learn():
         """
 <div class="kfp-nav">
   <span class="kfp-nav-logo">🐼</span>
-  <div>
+  <div class="kfp-nav-text">
     <div class="kfp-nav-title">Learn It Here</div>
-    <div style="font-size:0.72rem;color:#94A3B8;">Developer Learning Hub</div>
+    <div class="kfp-nav-tagline">Developer Learning Hub</div>
   </div>
   <div class="kfp-nav-sub">🎓 Knowledge is your best weapon</div>
 </div>
@@ -1780,7 +2061,7 @@ git branch -d feature/my-feature-name
         )
         st.markdown("</div>", unsafe_allow_html=True)
 
-    st.html(_footer_html())
+    st.markdown(_footer_html(), unsafe_allow_html=True)
 
 
 # ── Main Routing ──────────────────────────────────────────────────────────────
@@ -1795,3 +2076,4 @@ def main():
 
 
 main()
+
