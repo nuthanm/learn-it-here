@@ -51,7 +51,7 @@ st.markdown(
   [data-testid="collapsedControl"] { display: none !important; }
 
   /* ─ Global — panda fur white/gray palette, fills full viewport ─ */
-  html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; }
+  html, body { width: 100% !important; height: 100% !important; overflow-x: hidden !important; }
   /* Override Streamlit's default blue theme root fully */
   .stApp,
   .st-emotion-cache-1nryt4l,
@@ -60,12 +60,11 @@ st.markdown(
   [data-testid="stMain"] {
     background: #F8F8F8 !important;
     color: #1A1A1A !important;
-    overflow: hidden !important;
   }
   [data-testid="stHeader"] { background: transparent !important; }
   .block-container {
     padding-top: 0.2rem !important;
-    padding-bottom: 0.2rem !important;
+    padding-bottom: 2.5rem !important;
     max-width: 100% !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
@@ -343,7 +342,7 @@ st.markdown(
   .kfp-footer-copy { font-size: 0.75rem; color: #888888; }
   /* push content above footer */
   .stMain section, [data-testid="stMainBlockContainer"] {
-    padding-bottom: 30px !important;
+    padding-bottom: 50px !important;
   }
   /* ─ Tighter global spacing ─ */
   .stVerticalBlock { gap: 0.25rem !important; }
@@ -352,6 +351,84 @@ st.markdown(
     .wf-step, .content-card, .kfp-nav { transition: none !important; }
     .hero-bar { animation: none !important; }
     .hero-eyebrow, .hero-headline, .hero-sub, .hero-stats { animation: none !important; opacity: 1 !important; }
+  }
+
+  /* ─ Mobile responsive styles ─ */
+  @media (max-width: 768px) {
+    .block-container {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
+
+    /* Center nav logo and text on mobile */
+    .kfp-nav {
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      gap: 0.5rem !important;
+      padding: 0.6rem 0 !important;
+    }
+    .kfp-nav-text { align-items: center !important; }
+    .kfp-nav-sub {
+      margin-left: 0 !important;
+      text-align: center !important;
+    }
+
+    /* Hero headline smaller on mobile */
+    .hero-headline { font-size: 1.5rem !important; }
+    .hero-sub { font-size: 0.85rem !important; }
+
+    /* Content cards padding */
+    .content-card {
+      padding: 1.2rem 1rem !important;
+      border-radius: 12px !important;
+    }
+    .form-card {
+      padding: 1.2rem 1rem !important;
+      border-radius: 12px !important;
+    }
+    .success-card {
+      padding: 1.5rem 1rem !important;
+    }
+
+    /* Feature grid single column */
+    .feature-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Platform badges stack */
+    .platform-row {
+      flex-direction: column !important;
+      gap: 0.6rem !important;
+    }
+    .platform-badge {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Code blocks smaller font on mobile */
+    .cmd-block, .json-block {
+      font-size: 0.76rem !important;
+      padding: 0.8rem 0.9rem !important;
+    }
+
+    /* Footer stacks vertically on mobile */
+    .kfp-footer {
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 2px !important;
+      padding: 8px 1rem !important;
+      text-align: center !important;
+    }
+
+    /* Shortcut table scroll on mobile */
+    .shortcut-table { font-size: 0.78rem !important; }
+    .shortcut-table th, .shortcut-table td { padding: 0.4rem 0.6rem !important; }
+
+    /* App title smaller */
+    .app-title { font-size: 1.4rem !important; }
   }
 </style>
 """,
