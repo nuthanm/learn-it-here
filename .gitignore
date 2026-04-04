@@ -17,6 +17,7 @@ build/
 
 # ─── Streamlit ────────────────────────────────────────────────────────────────
 .streamlit/secrets.toml
+nohup.out
 
 # ─── Visual Studio / C# ───────────────────────────────────────────────────────
 ## Ignore Visual Studio temporary files, build results, and
