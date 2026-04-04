@@ -1577,6 +1577,47 @@ def page_learn():
             unsafe_allow_html=True,
         )
 
+        # Real-world example
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🌍 Real-World Example — Your First Day on a Team Project</div>
+  <div class="card-body">
+    <b>Scenario:</b> You just joined a company building an online shopping website.
+    Five other developers are already working on it. Your task: <em>add a "Forgot Password" feature</em>.
+    <br><br>
+    Without Git, you would copy the entire project folder, make changes, and then try to manually
+    merge your changes back — a nightmare when five people do this at once. Git solves this entirely.
+    <br><br>
+    <b>Here's exactly what you do:</b>
+    <br><br>
+    <b>Step 1 — Get the project onto your laptop:</b>
+    <pre class="cmd-block">git clone https://github.com/mycompany/shopping-website.git
+cd shopping-website</pre>
+    Now you have a full copy of the project. Everyone else is working on their own copies too.
+    <br><br>
+    <b>Step 2 — Create your own workspace (branch) so you don't disturb others:</b>
+    <pre class="cmd-block">git checkout -b feature/forgot-password</pre>
+    Think of a branch like a personal notebook. Your changes go here without touching the main codebase.
+    <br><br>
+    <b>Step 3 — Write your code. Then save your progress:</b>
+    <pre class="cmd-block">git add .
+git commit -m "feat: add forgot password email flow"</pre>
+    A commit is like a save point in a video game — you can always go back to it.
+    <br><br>
+    <b>Step 4 — Share your work with the team:</b>
+    <pre class="cmd-block">git push origin feature/forgot-password</pre>
+    Your branch is now on GitHub/Azure DevOps. You open a <b>Pull Request</b> and a teammate reviews it.
+    After approval it gets merged into the main codebase — safely, with a full history of every change you made.
+    <br><br>
+    <b>Why this matters:</b> If your code breaks something, Git lets the team roll back to the last
+    good state in seconds. No files are ever lost.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
         # Supported platforms
         st.markdown(
             """
@@ -1725,6 +1766,45 @@ git branch -d feature/my-feature-name
 
         st.markdown("</div>", unsafe_allow_html=True)  # close content-card
 
+        # Real-world Git scenario
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🌍 Real-World Example — Fixing a Bug While Someone Else Adds a Feature</div>
+  <div class="card-body">
+    <b>Scenario:</b> Your teammate Alice is adding a new payment page. At the same time,
+    your manager calls and says "the login button is broken in production — fix it NOW!"
+    <br><br>
+    You don't want to disturb Alice's half-finished payment work. Here's how Git handles this perfectly:
+    <br><br>
+    <b>1. Get the very latest code:</b>
+    <pre class="cmd-block">git fetch origin
+git pull origin main</pre>
+    <b>2. Create a hotfix branch — completely separate from Alice's work:</b>
+    <pre class="cmd-block">git checkout -b hotfix/login-button-not-working</pre>
+    <b>3. Fix the bug in LoginController.cs, then save and share:</b>
+    <pre class="cmd-block">git add src/Controllers/LoginController.cs
+git commit -m "fix: login button now submits form correctly"
+git push origin hotfix/login-button-not-working</pre>
+    <b>4. After your hotfix is merged, get Alice's latest changes too:</b>
+    <pre class="cmd-block">git fetch origin
+git rebase origin/main</pre>
+    Both changes are now in the main codebase — no conflicts, no overwriting each other's work.
+    Git tracked every line changed by everyone, independently.
+    <br><br>
+    <b>Stash — save unfinished work temporarily:</b> Suppose while you were mid-way through a new
+    feature your boss asks you to quickly check something on another branch. Use:
+    <pre class="cmd-block">git stash          # hides your unfinished changes safely
+git checkout main  # switch to another branch
+# ... do the check ...
+git checkout feature/my-feature
+git stash pop      # bring your unfinished changes back</pre>
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
         # VS IDE Integration
         st.markdown(
             """
@@ -1781,6 +1861,65 @@ git branch -d feature/my-feature-name
     <br><br>
     Always install the <b>latest stable version</b> and keep it updated to access new C# language
     features, improved IntelliSense, and the most recent .NET SDK tooling.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        # Real-world example — VS IDE
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🌍 Real-World Example — A Typical C# Developer's Morning</div>
+  <div class="card-body">
+    <b>Scenario:</b> You're building a REST API for a hospital patient management system.
+    A third-party lab system emails you a JSON sample of the patient data they'll send you.
+    You need to create C# model classes that match it — and you have a bug to fix too.
+    <br><br>
+    <b>1. Generate C# classes from JSON in 10 seconds (Paste JSON as Classes):</b><br>
+    You receive this JSON from the lab:
+    <pre class="cmd-block">{
+  "patientId": "P-1042",
+  "fullName": "Jane Smith",
+  "dateOfBirth": "1985-04-15",
+  "testResults": [
+    { "testName": "Blood Sugar", "value": 5.4, "unit": "mmol/L" }
+  ]
+}</pre>
+    Instead of writing the C# class by hand, copy the JSON, then in Visual Studio go to:
+    <b>Edit → Paste Special → Paste JSON as Classes</b>.
+    Visual Studio instantly generates:
+    <pre class="cmd-block">public class PatientResult
+{
+    public string PatientId { get; set; }
+    public string FullName { get; set; }
+    public string DateOfBirth { get; set; }
+    public TestResult[] TestResults { get; set; }
+}
+public class TestResult
+{
+    public string TestName { get; set; }
+    public float Value { get; set; }
+    public string Unit { get; set; }
+}</pre>
+    This saves 10–15 minutes of repetitive typing on every integration.
+    <br><br>
+    <b>2. Quick Actions (Ctrl+.) — fix errors without looking anything up:</b><br>
+    You write <code>patientService.GetById(id)</code> but <code>GetById</code> doesn't exist yet.
+    The red squiggle appears. Press <b>Ctrl+.</b> → "Generate method 'GetById'" — VS creates
+    the method stub in <code>PatientService.cs</code> automatically.
+    <br><br>
+    <b>3. Debugger — understand what's going wrong:</b><br>
+    A test patient record shows the wrong age. Instead of adding <code>Console.WriteLine</code>
+    everywhere, click the grey margin next to the age calculation line to set a <b>breakpoint</b>.
+    Press <b>F5</b>. When the code hits that line, execution pauses and you can hover over any
+    variable to see its exact value — catching the off-by-one error instantly.
+    <br><br>
+    <b>4. Test Explorer — run all tests with one click:</b><br>
+    After fixing the age bug, open <b>View → Test Explorer</b> and click "Run All".
+    All 47 unit tests finish in 3 seconds. 3 tests go red — those are the areas your fix
+    might have broken. You fix them before pushing anything.
   </div>
 </div>
 """,
@@ -1988,6 +2127,51 @@ git branch -d feature/my-feature-name
             unsafe_allow_html=True,
         )
 
+        # Real-world example — VS Code
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🌍 Real-World Example — Daily Tasks Made Faster in VS Code</div>
+  <div class="card-body">
+    <b>Scenario:</b> You're a junior developer maintaining a website's front-end.
+    No heavy IDE needed — VS Code is all you need. Here's how its features help you every day:
+    <br><br>
+    <b>1. Multi-Cursor Editing — rename the same thing in 10 places at once:</b><br>
+    Your team decides to rename the CSS class <code>btn-blue</code> to <code>btn-primary</code>
+    across an HTML file. Instead of using Find &amp; Replace and carefully crafting a regex pattern,
+    click on <code>btn-blue</code> and press <b>Ctrl+Shift+L</b>.
+    Every single occurrence gets its own cursor. Type <code>btn-primary</code> — all 10 are changed
+    simultaneously in one keystroke. Done in 3 seconds.
+    <br><br>
+    <b>2. Integrated Terminal — no window switching:</b><br>
+    You're editing a Python script and want to run it. Press <b>Ctrl+`</b>.
+    A terminal opens right inside VS Code, already in the same folder as your file.
+    Type <code>python script.py</code> and see the output immediately — without switching to
+    a separate terminal window or losing your place in the code.
+    <br><br>
+    <b>3. Live Share — pair programming with a teammate in another city:</b><br>
+    Your colleague in London is stuck on a bug. Instead of screen-sharing (laggy, read-only),
+    install the <b>Live Share</b> extension, click "Share", and send her the link.
+    She now sees your file, can edit it, and you both see each other's cursors in real time —
+    just like Google Docs, but for code. No files to email, no VPN needed.
+    <br><br>
+    <b>4. Remote Development — edit code running on a server, from your laptop:</b><br>
+    Your company's Python data pipeline runs on a Linux server. Instead of SSH-ing in and
+    using <code>nano</code>, install the <b>Remote - SSH</b> extension. Connect to the server
+    with one click. VS Code opens the server's files as if they were local — with full
+    IntelliSense, syntax highlighting, and Git support. You edit, save, and run everything
+    without leaving your laptop's comfortable setup.
+    <br><br>
+    <b>5. Command Palette — find any command without memorising menus:</b><br>
+    Forgot how to format a JSON file? Press <b>Ctrl+Shift+P</b>, type "format", and
+    "Format Document" appears instantly. Press Enter. The entire file is formatted.
+    The Command Palette gives you access to literally every VS Code feature by searching for it.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
         # Key features
         st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
@@ -2178,6 +2362,112 @@ git branch -d feature/my-feature-name
     EF Core with Oracle supports Code-First migrations, LINQ queries, stored procedures,
     sequences, and most EF Core features — with some Oracle-specific conventions that
     every team member <em>must</em> follow to keep the codebase consistent and correct.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        # Real-world example — EF Core + Oracle
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🌍 Real-World Example — Building a Customer Orders System</div>
+  <div class="card-body">
+    <b>Scenario:</b> You're building a .NET 8 web API for an e-commerce company.
+    Their database is Oracle 19c. You need to store <b>customers</b> and their <b>orders</b>.
+    Here's the complete journey from zero to working code — the way it's done on a real project.
+    <br><br>
+    <b>Step 1 — Install the Oracle EF Core package:</b>
+    <pre class="cmd-block">dotnet add package Oracle.EntityFrameworkCore</pre>
+    <b>Step 2 — Define your C# entity classes (plain objects — no Oracle knowledge needed here):</b>
+    <pre class="cmd-block">public class Customer
+{
+    public long Id { get; set; }           // maps to Oracle COLUMN "ID"
+    public string FullName { get; set; }   // maps to "FULL_NAME"
+    public string Email { get; set; }      // maps to "EMAIL"
+    public ICollection&lt;Order&gt; Orders { get; set; }
+}
+
+public class Order
+{
+    public long Id { get; set; }
+    public long CustomerId { get; set; }
+    public decimal TotalAmount { get; set; }
+    public DateTime OrderDate { get; set; }
+    public Customer Customer { get; set; }
+}</pre>
+    <b>Step 3 — Configure the DbContext (this is where Oracle rules are applied):</b>
+    <pre class="cmd-block">public class AppDbContext : DbContext
+{
+    public DbSet&lt;Customer&gt; Customers { get; set; }
+    public DbSet&lt;Order&gt; Orders { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity&lt;Customer&gt;(b =&gt;
+        {
+            b.ToTable("CUSTOMERS");                        // Oracle table name MUST be UPPERCASE
+            b.HasKey(e =&gt; e.Id);
+            b.Property(e =&gt; e.Id)
+             .HasColumnName("ID")
+             .HasColumnType("NUMBER(19)")
+             .UseHiLo("SEQ_CUSTOMERS");                    // Oracle sequence for auto-increment IDs
+            b.Property(e =&gt; e.FullName)
+             .HasColumnName("FULL_NAME")
+             .HasColumnType("VARCHAR2(200)")
+             .IsRequired();
+            b.Property(e =&gt; e.Email)
+             .HasColumnName("EMAIL")
+             .HasColumnType("VARCHAR2(300)")
+             .IsRequired();
+        });
+
+        modelBuilder.Entity&lt;Order&gt;(b =&gt;
+        {
+            b.ToTable("ORDERS");
+            b.HasKey(e =&gt; e.Id);
+            b.Property(e =&gt; e.Id)
+             .HasColumnName("ID")
+             .HasColumnType("NUMBER(19)")
+             .UseHiLo("SEQ_ORDERS");
+            b.Property(e =&gt; e.TotalAmount)
+             .HasColumnName("TOTAL_AMOUNT")
+             .HasColumnType("NUMBER(18,4)");               // Always specify precision for decimals
+            b.Property(e =&gt; e.OrderDate)
+             .HasColumnName("ORDER_DATE")
+             .HasColumnType("TIMESTAMP");
+            b.Property(e =&gt; e.CustomerId)
+             .HasColumnName("CUSTOMER_ID")
+             .HasColumnType("NUMBER(19)");
+            b.HasOne(e =&gt; e.Customer)
+             .WithMany(c =&gt; c.Orders)
+             .HasForeignKey(e =&gt; e.CustomerId);
+        });
+    }
+}</pre>
+    <b>Step 4 — Create and apply the migration (this creates the Oracle tables):</b>
+    <pre class="cmd-block">dotnet ef migrations add CreateCustomersAndOrders
+dotnet ef database update</pre>
+    EF Core generates the Oracle-compatible SQL and runs it. The tables <code>CUSTOMERS</code>
+    and <code>ORDERS</code> are created in Oracle — complete with sequences and foreign keys.
+    <br><br>
+    <b>Step 5 — Query data in your API controller (plain C# — EF handles the Oracle SQL):</b>
+    <pre class="cmd-block">// Get all orders for customer ID 42, newest first
+var orders = await _context.Orders
+    .Where(o =&gt; o.CustomerId == 42)
+    .OrderByDescending(o =&gt; o.OrderDate)
+    .ToListAsync();   // In web APIs, always prefer async DB calls to avoid blocking request threads.
+
+// Add a new customer
+var newCustomer = new Customer { FullName = "Jane Smith", Email = "jane@shop.com" };
+_context.Customers.Add(newCustomer);
+await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID automatically</pre>
+    <b>Why Oracle-specific rules matter:</b> If you used the default lowercase table name
+    <code>customers</code> instead of <code>CUSTOMERS</code>, Oracle would throw
+    <em>"ORA-00942: table or view does not exist"</em> because Oracle's default behavior
+    is case-sensitive with uppercase names. Following the naming conventions above prevents
+    this class of runtime errors entirely.
   </div>
 </div>
 """,
