@@ -51,7 +51,7 @@ st.markdown(
   [data-testid="collapsedControl"] { display: none !important; }
 
   /* ─ Global — panda fur white/gray palette, fills full viewport ─ */
-  html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; }
+  html, body { width: 100% !important; height: 100% !important; }
   /* Override Streamlit's default blue theme root fully */
   .stApp,
   .st-emotion-cache-1nryt4l,
@@ -60,7 +60,6 @@ st.markdown(
   [data-testid="stMain"] {
     background: #F8F8F8 !important;
     color: #1A1A1A !important;
-    overflow: hidden !important;
   }
   [data-testid="stHeader"] { background: transparent !important; }
   .block-container {
@@ -1013,6 +1012,22 @@ def save_to_supabase(data: dict) -> tuple:
 # ── Landing Page ──────────────────────────────────────────────────────────────
 def page_landing():
     """Full-width hero landing page with Po animation and two CTAs."""
+    # Disable scroll on desktop only (≥1024 px); allow scroll on mobile/tablet
+    st.markdown(
+        """
+<style>
+  @media (min-width: 1024px) {
+    html, body { overflow: hidden !important; }
+    .stApp,
+    .st-emotion-cache-1nryt4l,
+    [data-testid="stAppViewContainer"],
+    .stMain,
+    [data-testid="stMain"] { overflow: hidden !important; }
+  }
+</style>
+""",
+        unsafe_allow_html=True,
+    )
     # Top nav bar
     st.markdown(
         """
