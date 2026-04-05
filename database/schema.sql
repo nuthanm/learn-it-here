@@ -4,21 +4,18 @@
 -- ─────────────────────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS project_requirements (
-    id               UUID        DEFAULT gen_random_uuid()   PRIMARY KEY,
-    submitted_at     TIMESTAMPTZ DEFAULT NOW()               NOT NULL,
-    version_control  TEXT,
-    ide              TEXT,
-    dotnet_csharp    TEXT,
-    ef_core          TEXT,
-    architecture     TEXT,
-    deployment       TEXT,
-    crystal_report   TEXT,
-    local_testing    TEXT,
-    logging_tools    TEXT,
-    project_mgmt     TEXT,
-    unit_testing     TEXT,
-    code_quality     TEXT,
-    additional_notes TEXT
+    id                 UUID        DEFAULT gen_random_uuid()   PRIMARY KEY,
+    submitted_at       TIMESTAMPTZ DEFAULT NOW()               NOT NULL,
+    version_control    TEXT,
+    ide                TEXT,
+    code_push          TEXT,
+    deployment         TEXT,
+    architecture       TEXT,
+    design_patterns    TEXT,
+    orm                TEXT,
+    query_interaction  TEXT,
+    databases          TEXT,
+    analytical_tools   TEXT
 );
 
 -- Enable Row Level Security (RLS)

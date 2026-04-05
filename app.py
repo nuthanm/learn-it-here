@@ -335,15 +335,16 @@ st.markdown(
   .app-title   { font-size: 1.9rem; font-weight: 700; color: #1A1A1A; margin-bottom: 0.2rem; }
   .app-subtitle { font-size: 0.92rem; color: #555555; margin-bottom: 1.8rem; }
   .q-label {
-    font-size: 0.93rem; font-weight: 600; color: #1A1A1A; margin-bottom: 2px;
+    font-size: 0.93rem; font-weight: 600; color: #1A1A1A;
+    margin-top: 0.5rem; margin-bottom: 0.25rem;
   }
   .q-hint {
-    font-size: 0.76rem; color: #888888; margin-bottom: 4px; font-style: italic;
+    font-size: 0.76rem; color: #888888; margin-bottom: 0.5rem; font-style: italic;
   }
   .section-label {
     font-size: 0.7rem; font-weight: 700; color: #40916C;
     text-transform: uppercase; letter-spacing: 1.2px;
-    margin-top: 1.4rem; margin-bottom: 2px;
+    margin-top: 1.6rem; margin-bottom: 0.4rem;
   }
 
   /* ─ Success card — panda white + bamboo accent ─ */
@@ -1242,6 +1243,111 @@ def _robot_html(state: str) -> str:
 </body></html>"""
 
 
+# ── Sitting Panda — Waiting State (Requirements Page Right Side) ──────────────
+def _sitting_panda_html() -> str:
+    """Static sitting panda — same face style as landing, no animations."""
+    return """<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{
+    background:transparent;width:100%;height:100%;
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;overflow:hidden;
+    font-family:'Segoe UI',system-ui,sans-serif;
+  }
+</style></head>
+<body>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+    <!-- Speech bubble -->
+    <div style="
+      background:#fff;border:2.5px solid #2D6A4F;border-radius:18px;
+      padding:11px 18px;font-size:13px;color:#2D6A4F;
+      max-width:210px;text-align:center;line-height:1.55;
+      box-shadow:0 4px 16px rgba(45,106,79,.15);
+      position:relative;font-weight:600;
+    ">Fill in your project<br>requirements 🐼
+      <span style="position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);
+        border:9px solid transparent;border-top-color:#2D6A4F;"></span>
+    </div>
+    <!-- Sitting panda body (static) -->
+    <div>
+      <svg viewBox="0 0 320 420" width="220" height="300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Shadow -->
+        <ellipse cx="160" cy="405" rx="70" ry="10" fill="#1A1A1A" opacity=".06"/>
+        <!-- Body (sitting torso) -->
+        <ellipse cx="160" cy="320" rx="82" ry="90" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+        <!-- Belly patch -->
+        <ellipse cx="160" cy="320" rx="52" ry="60" fill="#F5F5F5"/>
+        <!-- Legs (sitting, spread forward) -->
+        <ellipse cx="105" cy="380" rx="38" ry="22" fill="#1A1A1A"/>
+        <ellipse cx="215" cy="380" rx="38" ry="22" fill="#1A1A1A"/>
+        <!-- Feet pads -->
+        <ellipse cx="80"  cy="385" rx="16" ry="12" fill="#2D2D2D"/>
+        <ellipse cx="240" cy="385" rx="16" ry="12" fill="#2D2D2D"/>
+        <circle cx="73" cy="382" r="4" fill="#3A3A3A" opacity=".4"/>
+        <circle cx="87" cy="382" r="4" fill="#3A3A3A" opacity=".4"/>
+        <circle cx="233" cy="382" r="4" fill="#3A3A3A" opacity=".4"/>
+        <circle cx="247" cy="382" r="4" fill="#3A3A3A" opacity=".4"/>
+        <!-- Arms (resting on lap) -->
+        <ellipse cx="90"  cy="305" rx="22" ry="48" fill="#1A1A1A" transform="rotate(25 90 305)"/>
+        <ellipse cx="230" cy="305" rx="22" ry="48" fill="#1A1A1A" transform="rotate(-25 230 305)"/>
+        <!-- Hand/paw circles on lap -->
+        <circle cx="118" cy="340" r="15" fill="#1A1A1A"/>
+        <circle cx="202" cy="340" r="15" fill="#1A1A1A"/>
+        <!-- Paw pads -->
+        <circle cx="118" cy="340" r="8" fill="#2D2D2D"/>
+        <circle cx="202" cy="340" r="8" fill="#2D2D2D"/>
+        <!-- Tail (static) -->
+        <circle cx="248" cy="360" r="16" fill="#1A1A1A"/>
+
+        <!-- === HEAD (same panda face as landing) === -->
+        <!-- Ears -->
+        <circle cx="82"  cy="84" r="42" fill="#1A1A1A"/>
+        <circle cx="238" cy="84" r="42" fill="#1A1A1A"/>
+        <circle cx="82"  cy="84" r="25" fill="#2D2D2D" opacity=".45"/>
+        <circle cx="238" cy="84" r="25" fill="#2D2D2D" opacity=".45"/>
+        <!-- Head shape -->
+        <ellipse cx="160" cy="170" rx="108" ry="106" fill="#EFEFED"/>
+        <ellipse cx="160" cy="168" rx="104" ry="102" fill="#FFFFFF"/>
+        <!-- Cheek shading -->
+        <ellipse cx="58"  cy="186" rx="18" ry="13" fill="#E8E8E6" opacity=".7"/>
+        <ellipse cx="262" cy="186" rx="18" ry="13" fill="#E8E8E6" opacity=".7"/>
+        <!-- Eye patches -->
+        <ellipse cx="110" cy="140" rx="42" ry="38" fill="#1A1A1A" transform="rotate(-10 110 140)"/>
+        <ellipse cx="210" cy="140" rx="42" ry="38" fill="#1A1A1A" transform="rotate(10 210 140)"/>
+        <!-- Sclera -->
+        <ellipse cx="112" cy="136" rx="24" ry="23" fill="#FFFFFF"/>
+        <ellipse cx="208" cy="136" rx="24" ry="23" fill="#FFFFFF"/>
+        <!-- Pupils -->
+        <g>
+          <circle cx="114" cy="136" r="12" fill="#1A1A1A"/>
+          <circle cx="119" cy="130" r="5" fill="#FFFFFF"/>
+          <circle cx="109" cy="140" r="2.5" fill="#FFFFFF" opacity=".5"/>
+        </g>
+        <g>
+          <circle cx="206" cy="136" r="12" fill="#1A1A1A"/>
+          <circle cx="211" cy="130" r="5" fill="#FFFFFF"/>
+          <circle cx="201" cy="140" r="2.5" fill="#FFFFFF" opacity=".5"/>
+        </g>
+        <!-- Nose bridge + nose -->
+        <ellipse cx="160" cy="162" rx="5.5" ry="7" fill="#E8E8E8"/>
+        <ellipse cx="160" cy="175" rx="15" ry="11" fill="#1A1A1A"/>
+        <ellipse cx="154" cy="172" rx="5" ry="3.5" fill="#3A3A3A" opacity=".4"/>
+        <line x1="150" y1="183" x2="160" y2="189" stroke="#1A1A1A" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="170" y1="183" x2="160" y2="189" stroke="#1A1A1A" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Gentle smile -->
+        <path d="M 118 204 Q 160 236 202 204" stroke="#1A1A1A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- Blush -->
+        <ellipse cx="76"  cy="198" rx="16" ry="10" fill="#FFB3BA" opacity=".4"/>
+        <ellipse cx="244" cy="198" rx="16" ry="10" fill="#FFB3BA" opacity=".4"/>
+      </svg>
+    </div>
+  </div>
+</body></html>"""
+
+
 # ── KFP Footer ────────────────────────────────────────────────────────────────
 def _footer_html() -> str:
     """Fixed bottom footer — panda palette."""
@@ -1575,19 +1681,14 @@ def generate_pdf(data: dict) -> bytes:
     from fpdf.enums import XPos, YPos
 
     FIELDS = [
-        ("version_control",  "1. Version Control"),
-        ("ide",              "2. IDE / Editor"),
-        ("dotnet_csharp",    "3. .NET / C# Version"),
-        ("ef_core",          "4. EF Core Version"),
-        ("architecture",     "5. Architecture & Design Patterns"),
-        ("deployment",       "6. Deployment Process"),
-        ("crystal_report",   "7. Crystal Reports Requirement"),
-        ("local_testing",    "8. Local Testing Feasibility"),
-        ("logging_tools",    "9. Logging / Tracing Tools"),
-        ("project_mgmt",     "10. Project Management Tool"),
-        ("unit_testing",     "11. Unit Testing Framework"),
-        ("code_quality",     "12. Code Quality / Static Analysis"),
-        ("additional_notes", "Additional Notes"),
+        ("version_control",   "1. Version Control"),
+        ("ide",               "2. IDE / Editor"),
+        ("code_push",         "3. How Do You Push the Code?"),
+        ("deployment",        "4. Deployment Approaches"),
+        ("architecture",      "5. Architecture Patterns"),
+        ("design_patterns",   "6. Design Patterns"),
+        ("orm",               "7. ORM"),
+        ("additional_requirements", "8. Additional Requirements"),
     ]
 
     pdf = FPDF()
@@ -1600,7 +1701,7 @@ def generate_pdf(data: dict) -> bytes:
     pdf.set_text_color(255, 255, 255)
     pdf.set_font("Helvetica", "B", 17)
     pdf.set_xy(20, 9)
-    pdf.cell(0, 10, "Learn It Here — Project Requirements", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+    pdf.cell(0, 10, "Learn It Here - Project Requirements", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(180, 205, 230)
     ts = data.get("submitted_at", datetime.now(timezone.utc).isoformat())
@@ -1728,7 +1829,7 @@ def page_landing():
     <span class="feat-icon">📋</span>
     <div class="feat-text">
       <strong>Capture Requirements</strong>
-      <span>12 targeted questions that define your exact project context and tech stack</span>
+      <span>7 targeted questions that define your exact project context and tech stack</span>
     </div>
   </div>
   <div class="hero-feat">
@@ -1781,10 +1882,10 @@ def page_landing():
 
 # ── Requirements Page ─────────────────────────────────────────────────────────
 def page_requirements():
-    """Project requirements questionnaire — same form, KFP branding."""
+    """Project requirements questionnaire — professional layout, no sidebar."""
     cb = _on_interact
 
-    # Nav bar with back button
+    # Nav bar (logo only, no back button at top)
     st.markdown(
         """
 <div class="kfp-nav">
@@ -1801,9 +1902,6 @@ def page_requirements():
     )
     st.divider()
 
-    if st.button("← Back to Home", key="req_back"):
-        _nav_to("landing")
-
     # ── Header ──────────────────────────────────────────────────────────────
     st.markdown(
         '<div class="app-title">📋 Project Requirements</div>',
@@ -1812,7 +1910,7 @@ def page_requirements():
     st.markdown(
         '<div class="app-subtitle">'
         "Capture your project's tech-stack details. "
-        "Fill in all 12 questions and download a shareable PDF."
+        "Fill in the questions and download a shareable PDF."
         "</div>",
         unsafe_allow_html=True,
     )
@@ -1829,8 +1927,7 @@ def page_requirements():
                 unsafe_allow_html=True,
             )
             st.markdown("<br>", unsafe_allow_html=True)
-            st.html(_robot_html("bye"))
-            if st.session_state.pdf_bytes:
+            if st.session_state.get("pdf_bytes"):
                 st.download_button(
                     label="⬇️  Download Requirements as PDF",
                     data=st.session_state.pdf_bytes,
@@ -1838,6 +1935,12 @@ def page_requirements():
                     mime="application/pdf",
                     use_container_width=True,
                 )
+            else:
+                pdf_err = st.session_state.get("pdf_error", "")
+                if pdf_err:
+                    st.warning(f"PDF generation failed: {pdf_err}")
+                else:
+                    st.info("PDF could not be generated. Your requirements were still saved.")
             st.markdown("<br>", unsafe_allow_html=True)
             sc1, sc2 = st.columns(2, gap="medium")
             with sc1:
@@ -1855,262 +1958,280 @@ def page_requirements():
         components.html(_scroll_nav_html(), height=0)
         return
 
-    # ── Two-column layout ─────────────────────────────────────────────────────
-    col_form, col_anim = st.columns([3, 2], gap="large")
+    # ── Full-width form layout ─────────────────────────────────────────────
+    st.markdown('<div class="form-card">', unsafe_allow_html=True)
 
-    with col_anim:
-        st.html(_robot_html(st.session_state.animation_state))
+    # ── Q1: Version Control ───────────────────────────────────────────
+    st.markdown('<div class="section-label">Version Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="q-label">1. Version Control</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Which version control system does your team use?</div>',
+        unsafe_allow_html=True,
+    )
+    vc = st.selectbox(
+        "vc_select",
+        ["Git", "SVN (Subversion)", "TFS (Team Foundation)", "Mercurial", "Perforce", "None", "Other"],
+        index=None, placeholder="Choose an option",
+        key="version_control", label_visibility="collapsed", on_change=cb,
+    )
+    vc_other = ""
+    if vc == "Other":
+        vc_other = st.text_input("Specify version control", key="vc_other", on_change=cb)
 
-    with col_form:
-        st.markdown('<div class="form-card">', unsafe_allow_html=True)
+    # ── Q2: IDE or Editor ─────────────────────────────────────────────
+    st.markdown('<div class="section-label">Development Environment</div>', unsafe_allow_html=True)
+    st.markdown('<div class="q-label">2. IDE or Editor</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Select the IDE / editor your team primarily uses.</div>',
+        unsafe_allow_html=True,
+    )
+    ide = st.selectbox(
+        "ide_select",
+        [
+            "Visual Studio (Full IDE)",
+            "Visual Studio Code",
+            "IntelliJ IDEA",
+            "Eclipse",
+            "Rider (JetBrains)",
+            "PyCharm",
+            "WebStorm",
+            "Sublime Text",
+            "Atom",
+            "Notepad++",
+            "Vim / Neovim",
+            "Other",
+        ],
+        index=None, placeholder="Choose an option",
+        key="ide", label_visibility="collapsed", on_change=cb,
+    )
+    ide_other = ""
+    if ide == "Other":
+        ide_other = st.text_input("Specify IDE / Editor", key="ide_other", on_change=cb)
 
-        # ── Q1: Version Control ───────────────────────────────────────────────
-        st.markdown('<div class="section-label">Source Control</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">1. Version Control Platform</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">Which platform hosts your source code? (Git is used locally for all of them.)</div>',
-            unsafe_allow_html=True,
-        )
-        vc = st.radio(
-            "vc_radio", ["GitHub", "Azure DevOps", "Bitbucket", "GitLab", "Other"],
-            horizontal=True, key="version_control",
-            label_visibility="collapsed", on_change=cb,
-        )
-        vc_other = ""
-        if vc == "Other":
-            vc_other = st.text_input("Specify platform", key="vc_other", on_change=cb)
+    # ── Q3: How do you push the code ──────────────────────────────────
+    st.markdown('<div class="section-label">Code Management</div>', unsafe_allow_html=True)
+    st.markdown('<div class="q-label">3. How do you push the code?</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Which tool or method do you use to push code to the remote repository?</div>',
+        unsafe_allow_html=True,
+    )
+    code_push = st.selectbox(
+        "code_push_select",
+        [
+            "GIT CLI (Command Line)",
+            "GitHub Desktop",
+            "Visual Studio Built-in Git",
+            "VS Code Built-in Git",
+            "SourceTree",
+            "GitKraken",
+            "TortoiseGit",
+            "Azure DevOps (Web Push)",
+            "Fork (Git Client)",
+            "Other",
+        ],
+        index=None, placeholder="Choose an option",
+        key="code_push", label_visibility="collapsed", on_change=cb,
+    )
+    code_push_other = ""
+    if code_push == "Other":
+        code_push_other = st.text_input("Specify code push method", key="code_push_other", on_change=cb)
 
-        # ── Q2: IDE ───────────────────────────────────────────────────────────
-        st.markdown('<div class="section-label">Development Environment</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">2. IDE / Editor</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">Always use the latest version to leverage all features.</div>',
-            unsafe_allow_html=True,
-        )
-        ide = st.radio(
-            "ide_radio",
-            ["Visual Studio (Full IDE)", "Visual Studio Code", "Both", "Other"],
-            horizontal=True, key="ide",
-            label_visibility="collapsed", on_change=cb,
-        )
-        ide_other = ""
-        if ide == "Other":
-            ide_other = st.text_input("Specify IDE", key="ide_other", on_change=cb)
+    # ── Q4: Deployment Approaches ─────────────────────────────────────
+    st.markdown('<div class="section-label">Deployment &amp; DevOps</div>', unsafe_allow_html=True)
+    st.markdown('<div class="q-label">4. Which deployment approaches are you following?</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Select all deployment strategies that apply to your project.</div>',
+        unsafe_allow_html=True,
+    )
+    deployment = st.multiselect(
+        "deployment_select",
+        [
+            "Azure DevOps Pipelines (CI/CD)",
+            "GitHub Actions",
+            "Jenkins",
+            "AWS CodePipeline",
+            "Docker / Containers",
+            "Kubernetes (K8s)",
+            "Manual / FTP Deploy",
+            "Azure App Service",
+            "IIS Direct Deploy",
+            "Other",
+        ],
+        placeholder="Choose options",
+        key="deployment", label_visibility="collapsed", on_change=cb,
+    )
+    deployment_other = ""
+    if "Other" in deployment:
+        deployment_other = st.text_input("Specify deployment approach", key="deployment_other", on_change=cb)
 
-        # ── Q3: .NET / C# ─────────────────────────────────────────────────────
-        st.markdown('<div class="section-label">Technology Stack</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">3. .NET / C# Version</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">'
-            ".NET 9 → C# 13 &nbsp;|&nbsp; .NET 8 → C# 12 (LTS) &nbsp;|&nbsp; .NET 6/7 → C# 10/11 &nbsp;"
-            '— <a href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-versioning" '
-            'target="_blank">Official reference ↗</a>'
-            "</div>",
-            unsafe_allow_html=True,
-        )
-        dotnet = st.selectbox(
-            "dotnet_select",
-            [".NET 9 / C# 13 (Latest)", ".NET 8 / C# 12 (LTS)", ".NET 7 / C# 11",
-             ".NET 6 / C# 10 (LTS)", "Other / Not sure"],
-            key="dotnet_csharp", label_visibility="collapsed", on_change=cb,
-        )
+    # ── Q5: Architecture Patterns ─────────────────────────────────────
+    st.markdown('<div class="section-label">Architecture &amp; Design</div>', unsafe_allow_html=True)
+    st.markdown('<div class="q-label">5. Architecture Patterns</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Select the architecture patterns followed in your project.</div>',
+        unsafe_allow_html=True,
+    )
+    architecture = st.multiselect(
+        "arch_select",
+        [
+            "Clean Architecture",
+            "Microservices",
+            "Monolithic",
+            "Layered (N-Tier)",
+            "Event-Driven",
+            "Serverless",
+            "CQRS",
+            "DDD (Domain-Driven Design)",
+            "Hexagonal (Ports & Adapters)",
+            "MVC",
+            "Other",
+        ],
+        placeholder="Choose options",
+        key="architecture", label_visibility="collapsed", on_change=cb,
+    )
+    arch_other = ""
+    if "Other" in architecture:
+        arch_other = st.text_input("Specify architecture pattern", key="arch_other", on_change=cb)
 
-        # ── Q4: EF Core ───────────────────────────────────────────────────────
-        st.markdown('<div class="q-label">4. Entity Framework Core Version</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">'
-            '<a href="https://learn.microsoft.com/en-us/ef/core/what-is-new/" target="_blank">'
-            "EF Core release notes ↗</a>"
-            "</div>",
-            unsafe_allow_html=True,
-        )
-        ef = st.selectbox(
-            "ef_select",
-            ["EF Core 9.0", "EF Core 8.0 (LTS)", "EF Core 7.0",
-             "EF Core 6.0 (LTS)", "Not using EF Core", "Other"],
-            key="ef_core", label_visibility="collapsed", on_change=cb,
-        )
+    # ── Q6: Design Patterns ───────────────────────────────────────────
+    st.markdown('<div class="q-label">6. Design Patterns</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Select the design patterns commonly used in your codebase.</div>',
+        unsafe_allow_html=True,
+    )
+    design_patterns = st.multiselect(
+        "dp_select",
+        [
+            "Repository Pattern",
+            "Unit of Work",
+            "Singleton",
+            "Factory",
+            "Strategy",
+            "Observer",
+            "Mediator (MediatR)",
+            "Dependency Injection",
+            "SOLID Principles",
+            "Builder",
+            "Decorator",
+            "Other",
+        ],
+        placeholder="Choose options",
+        key="design_patterns", label_visibility="collapsed", on_change=cb,
+    )
+    dp_other = ""
+    if "Other" in design_patterns:
+        dp_other = st.text_input("Specify design pattern", key="dp_other", on_change=cb)
 
-        # ── Q5: Architecture ──────────────────────────────────────────────────
-        st.markdown('<div class="section-label">Architecture</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">5. Application Architecture &amp; Design Patterns</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">e.g., Clean Architecture, CQRS, DDD, MVC, Repository Pattern, SOLID…</div>',
-            unsafe_allow_html=True,
-        )
-        arch = st.text_area(
-            "arch_input",
-            placeholder="Describe your architecture and key design patterns…",
-            key="architecture", label_visibility="collapsed",
-            on_change=cb, height=85,
-        )
+    # ── Q7: ORM ───────────────────────────────────────────────────────
+    st.markdown('<div class="q-label">7. ORM (Object-Relational Mapping)</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Which ORM framework does your project use?</div>',
+        unsafe_allow_html=True,
+    )
+    orm = st.selectbox(
+        "orm_select",
+        [
+            "Entity Framework Core",
+            "Entity Framework 6",
+            "Dapper",
+            "NHibernate",
+            "ADO.NET (Raw)",
+            "Hibernate (Java)",
+            "SQLAlchemy (Python)",
+            "Django ORM (Python)",
+            "Sequelize (Node.js)",
+            "Prisma (Node.js)",
+            "None / Not applicable",
+            "Other",
+        ],
+        index=None, placeholder="Choose an option",
+        key="orm", label_visibility="collapsed", on_change=cb,
+    )
+    orm_other = ""
+    if orm == "Other":
+        orm_other = st.text_input("Specify ORM", key="orm_other", on_change=cb)
 
-        # ── Q6: Deployment ────────────────────────────────────────────────────
-        st.markdown('<div class="section-label">Deployment &amp; DevOps</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">6. Deployment Process</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">How does code move from local validation → staging → production?</div>',
-            unsafe_allow_html=True,
-        )
-        deploy = st.radio(
-            "deploy_radio",
-            ["Azure DevOps Pipelines", "GitHub Actions", "Manual / FTP", "Other CI/CD"],
-            horizontal=True, key="deployment",
-            label_visibility="collapsed", on_change=cb,
-        )
-        deploy_notes = st.text_input(
-            "Deployment notes",
-            placeholder="e.g., staging → UAT → prod, Azure App Service, Docker…",
-            key="deploy_notes", on_change=cb,
-        )
+    # ── Additional Requirements ─────────────────────────────────────
+    st.markdown('<div class="q-label">8. Additional Requirements</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="q-hint">Any other tools, frameworks, or notes you\'d like to mention?</div>',
+        unsafe_allow_html=True,
+    )
+    additional_requirements = st.text_area(
+        "additional_requirements",
+        placeholder="e.g. We use Docker for containerization, Redis for caching, CI/CD with GitHub Actions…",
+        height=120,
+        key="additional_requirements", label_visibility="collapsed", on_change=cb,
+    )
 
-        # ── Q7: Crystal Reports ───────────────────────────────────────────────
-        st.markdown('<div class="section-label">Reporting</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">7. Crystal Reports Requirement</div>', unsafe_allow_html=True)
-        crystal = st.radio(
-            "crystal_radio",
-            ["Yes — required", "No — not needed", "Under consideration"],
-            horizontal=True, key="crystal_report",
-            label_visibility="collapsed", on_change=cb,
-        )
+    st.markdown("</div>", unsafe_allow_html=True)  # close .form-card
 
-        # ── Q8: Local Testing ─────────────────────────────────────────────────
-        st.markdown('<div class="section-label">Testing &amp; Quality</div>', unsafe_allow_html=True)
-        st.markdown('<div class="q-label">8. Local Testing Feasibility</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">Can changes be fully tested locally, or is deployment required?</div>',
-            unsafe_allow_html=True,
-        )
-        local_test = st.radio(
-            "local_test_radio",
-            [
-                "Full local testing possible",
-                "Partial — some services need deployment",
-                "Deployment required for all testing",
-            ],
-            key="local_testing", label_visibility="collapsed", on_change=cb,
-        )
-
-        # ── Q9: Logging Tools ─────────────────────────────────────────────────
-        st.markdown('<div class="q-label">9. Logging / Tracing / Monitoring</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">Critical for debugging defects and analysing exceptions in production.</div>',
-            unsafe_allow_html=True,
-        )
-        logging_opts = st.multiselect(
-            "logging_select",
-            ["Application Insights", "Serilog", "NLog", "ELK Stack",
-             "Splunk", "Dynatrace", "Datadog", "Other"],
-            key="logging_tools", label_visibility="collapsed", on_change=cb,
-        )
-        logging_other = ""
-        if "Other" in logging_opts:
-            logging_other = st.text_input("Specify logging tool", key="logging_other", on_change=cb)
-
-        # ── Q10: Project Management ───────────────────────────────────────────
-        st.markdown('<div class="q-label">10. Project Management Tool</div>', unsafe_allow_html=True)
-        proj_mgmt = st.radio(
-            "proj_mgmt_radio",
-            ["Azure DevOps (Boards)", "JIRA", "Both", "Other"],
-            horizontal=True, key="project_mgmt",
-            label_visibility="collapsed", on_change=cb,
-        )
-
-        # ── Q11: Unit Testing ─────────────────────────────────────────────────
-        st.markdown('<div class="q-label">11. Unit Testing Framework</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">Select all that apply. xUnit is most popular for .NET.</div>',
-            unsafe_allow_html=True,
-        )
-        unit_test = st.multiselect(
-            "unit_test_select",
-            ["xUnit", "NUnit", "MSTest", "None currently", "Other"],
-            key="unit_testing", label_visibility="collapsed", on_change=cb,
-        )
-
-        # ── Q12: Code Quality ─────────────────────────────────────────────────
-        st.markdown('<div class="q-label">12. Code Quality / Static Analysis</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="q-hint">e.g., SonarQube detects code smells, bugs, and security vulnerabilities.</div>',
-            unsafe_allow_html=True,
-        )
-        code_quality = st.radio(
-            "cq_radio",
-            ["SonarQube — mandatory", "SonarQube — optional", "Other tool", "Not currently used"],
-            horizontal=True, key="code_quality",
-            label_visibility="collapsed", on_change=cb,
-        )
-        cq_other = ""
-        if code_quality == "Other tool":
-            cq_other = st.text_input("Specify code quality tool", key="cq_other", on_change=cb)
-
-        # ── Additional Notes ──────────────────────────────────────────────────
-        st.markdown("---")
-        st.markdown('<div class="q-label">Additional Notes / Context</div>', unsafe_allow_html=True)
-        notes = st.text_area(
-            "notes_input",
-            placeholder="Any other constraints, context, or information to share…",
-            key="additional_notes", label_visibility="collapsed",
-            on_change=cb, height=80,
-        )
-
-        # ── Submit Button ─────────────────────────────────────────────────────
-        st.markdown("<br>", unsafe_allow_html=True)
+    # ── Action Buttons: Submit | Back to Home ─────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    btn1, btn2 = st.columns(2, gap="medium")
+    with btn1:
         submit_clicked = st.button(
             "Submit Requirements →", type="primary", use_container_width=True
         )
+    with btn2:
+        back_clicked = st.button(
+            "← Back to Home", use_container_width=True
+        )
 
-        st.markdown("</div>", unsafe_allow_html=True)  # close .form-card
+    if back_clicked:
+        _nav_to("landing")
 
-        # ── Handle Submission ─────────────────────────────────────────────────
-        if submit_clicked:
-            vc_val = vc if vc != "Other" else (vc_other or "Other")
-            ide_val = ide if ide != "Other" else (ide_other or "Other")
+    # ── Handle Submission ─────────────────────────────────────────────
+    if submit_clicked:
+        vc_val = vc if vc != "Other" else (vc_other or "Other")
+        ide_val = ide if ide != "Other" else (ide_other or "Other")
+        cp_val = code_push if code_push != "Other" else (code_push_other or "Other")
 
-            logging_list = list(logging_opts)
-            if "Other" in logging_list and logging_other:
-                logging_list = [logging_other if x == "Other" else x for x in logging_list]
-            logging_val = ", ".join(logging_list)
+        deploy_list = list(deployment)
+        if "Other" in deploy_list and deployment_other:
+            deploy_list = [deployment_other if x == "Other" else x for x in deploy_list]
+        deploy_val = ", ".join(deploy_list)
 
-            unit_val = ", ".join(unit_test)
-            cq_val = code_quality if code_quality != "Other tool" else (cq_other or "Other tool")
+        arch_list = list(architecture)
+        if "Other" in arch_list and arch_other:
+            arch_list = [arch_other if x == "Other" else x for x in arch_list]
+        arch_val = ", ".join(arch_list)
 
-            deploy_val = deploy
-            if deploy_notes.strip():
-                deploy_val = f"{deploy} — {deploy_notes.strip()}"
+        dp_list = list(design_patterns)
+        if "Other" in dp_list and dp_other:
+            dp_list = [dp_other if x == "Other" else x for x in dp_list]
+        dp_val = ", ".join(dp_list)
 
-            record = {
-                "submitted_at":    datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "version_control": vc_val,
-                "ide":             ide_val,
-                "dotnet_csharp":   dotnet,
-                "ef_core":         ef,
-                "architecture":    arch,
-                "deployment":      deploy_val,
-                "crystal_report":  crystal,
-                "local_testing":   local_test,
-                "logging_tools":   logging_val,
-                "project_mgmt":    proj_mgmt,
-                "unit_testing":    unit_val,
-                "code_quality":    cq_val,
-                "additional_notes": notes,
-            }
+        orm_val = orm if orm != "Other" else (orm_other or "Other")
 
-            ok, db_msg = save_to_supabase(record)
-            if ok:
-                st.success(db_msg)
-            else:
-                st.info(f"ℹ️  {db_msg}")
+        record = {
+            "submitted_at":      datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "version_control":   vc_val,
+            "ide":               ide_val,
+            "code_push":         cp_val,
+            "deployment":        deploy_val,
+            "architecture":      arch_val,
+            "design_patterns":   dp_val,
+            "orm":               orm_val,
+            "additional_requirements": additional_requirements.strip(),
+        }
 
-            try:
-                st.session_state.pdf_bytes = generate_pdf(record)
-            except Exception as exc:
-                st.warning(f"PDF generation failed: {exc}")
-                st.session_state.pdf_bytes = None
+        ok, db_msg = save_to_supabase(record)
+        if ok:
+            st.success(db_msg)
+        else:
+            st.info(f"ℹ️  {db_msg}")
 
-            st.session_state.animation_state = "bye"
-            st.session_state.submitted = True
-            st.rerun()
+        try:
+            st.session_state.pdf_bytes = generate_pdf(record)
+            st.session_state.pdf_error = None
+        except Exception as exc:
+            st.session_state.pdf_bytes = None
+            st.session_state.pdf_error = str(exc)
+
+        st.session_state.animation_state = "bye"
+        st.session_state.submitted = True
+        st.rerun()
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     components.html(_scroll_nav_html(), height=0)
@@ -2367,10 +2488,10 @@ git commit -m "feat: add forgot password email flow"</pre>
             """<div class="cmd-block">
 <span class="cmd-comment"># Clone the repository to your local machine</span>
 git clone https://github.com/your-org/your-repo.git
-
+&#8203;
 <span class="cmd-comment"># Navigate into the project folder</span>
 cd your-repo
-
+&#8203;
 <span class="cmd-comment"># Check current branch and status</span>
 git status
 git branch
@@ -2384,21 +2505,21 @@ git branch
 <span class="cmd-comment"># Always pull latest changes before starting work</span>
 git fetch origin
 git pull origin main
-
+&#8203;
 <span class="cmd-comment"># Create and switch to a new feature branch</span>
 git checkout -b feature/my-feature-name
-
+&#8203;
 <span class="cmd-comment"># See what has changed</span>
 git status
 git diff
-
+&#8203;
 <span class="cmd-comment"># Stage your changes (all files, or a specific file)</span>
 git add .
 git add src/MyFile.cs
-
+&#8203;
 <span class="cmd-comment"># Commit with a clear message</span>
 git commit -m "feat: add user login endpoint"
-
+&#8203;
 <span class="cmd-comment"># Push your branch to the remote</span>
 git push origin feature/my-feature-name
 </div>""",
@@ -2411,13 +2532,13 @@ git push origin feature/my-feature-name
 <span class="cmd-comment"># Option 1: Rebase on main (keeps history clean — preferred)</span>
 git fetch origin
 git rebase origin/main
-
+&#8203;
 <span class="cmd-comment"># Option 2: Merge main into your branch</span>
 git merge origin/main
-
+&#8203;
 <span class="cmd-comment"># Undo staged changes (before commit)</span>
 git reset HEAD src/MyFile.cs
-
+&#8203;
 <span class="cmd-comment"># Temporarily stash unfinished work and come back later</span>
 git stash
 git stash pop
@@ -2430,13 +2551,13 @@ git stash pop
             """<div class="cmd-block">
 <span class="cmd-comment"># Last 10 commits on current branch</span>
 git log --oneline -10
-
+&#8203;
 <span class="cmd-comment"># See changes between your branch and main</span>
 git diff main..HEAD
-
+&#8203;
 <span class="cmd-comment"># Show all local and remote branches</span>
 git branch -a
-
+&#8203;
 <span class="cmd-comment"># Delete a local branch after merging</span>
 git branch -d feature/my-feature-name
 </div>""",
@@ -3579,10 +3700,10 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
             """
 <div class="cmd-block">
 <span class="cmd-comment">// File: Program.cs  — this is the entry point of your app</span>
-
+&#8203;
 <span class="cmd-comment">// 1. 'using' brings in a namespace so you can use its classes without full path</span>
 using System;
-
+&#8203;
 <span class="cmd-comment">// 2. 'namespace' groups your code logically (like a folder for code)</span>
 namespace MyFirstApp
 {
@@ -3594,14 +3715,14 @@ namespace MyFirstApp
         {
             <span class="cmd-comment">// 5. Console.WriteLine prints text to the screen + newline</span>
             Console.WriteLine("Hello, .NET World! 🐼");
-
+&#8203;
             <span class="cmd-comment">// 6. Variables store data — 'string' holds text</span>
             string name = "Developer";
             int age = 25;
-
+&#8203;
             <span class="cmd-comment">// 7. String interpolation — $ prefix lets you embed variables</span>
             Console.WriteLine($"Name: {name}, Age: {age}");
-
+&#8203;
             <span class="cmd-comment">// 8. Console.ReadLine() waits for user to type something</span>
             Console.Write("Press Enter to exit...");
             Console.ReadLine();
@@ -3630,17 +3751,17 @@ namespace MyFirstApp
 <div class="cmd-block">
 <span class="cmd-comment"># Check .NET is installed and see the version</span>
 dotnet --version
-
+&#8203;
 <span class="cmd-comment"># Create a new console application</span>
 dotnet new console -n MyFirstApp
 cd MyFirstApp
-
+&#8203;
 <span class="cmd-comment"># Run the app</span>
 dotnet run
-
+&#8203;
 <span class="cmd-comment"># Build without running</span>
 dotnet build
-
+&#8203;
 <span class="cmd-comment"># List all available project templates</span>
 dotnet new list
 </div>
@@ -3780,9 +3901,9 @@ public class Calculator
 <span class="cmd-comment">// ── XUNIT ────────────────────────────────────────────────────────</span>
 <span class="cmd-comment">// Install: dotnet new xunit -n MyApp.Tests</span>
 <span class="cmd-comment">// Packages: xunit, xunit.runner.visualstudio, Microsoft.NET.Test.Sdk</span>
-
+&#8203;
 using Xunit;
-
+&#8203;
 public class CalculatorTests
 {
     <span class="cmd-comment">// [Fact] = a single test with no parameters</span>
@@ -3791,14 +3912,14 @@ public class CalculatorTests
     {
         <span class="cmd-comment">// Arrange — set up what you need</span>
         var calc = new Calculator();
-
+&#8203;
         <span class="cmd-comment">// Act — call the method</span>
         int result = calc.Add(2, 3);
-
+&#8203;
         <span class="cmd-comment">// Assert — verify the result</span>
         Assert.Equal(5, result);
     }
-
+&#8203;
     [Fact]
     public void Subtract_LargerFromSmaller_ReturnsNegative()
     {
@@ -3806,7 +3927,7 @@ public class CalculatorTests
         int result = calc.Subtract(3, 10);
         Assert.Equal(-7, result);
     }
-
+&#8203;
     <span class="cmd-comment">// [Theory] + [InlineData] = parameterised test — runs once per InlineData row</span>
     [Theory]
     [InlineData(2, 3,  6)]
@@ -3817,16 +3938,16 @@ public class CalculatorTests
         var calc = new Calculator();
         Assert.Equal(expected, calc.Multiply(a, b));
     }
-
+&#8203;
     [Fact]
     public void Divide_ByZero_ThrowsDivideByZeroException()
     {
         var calc = new Calculator();
-
+&#8203;
         <span class="cmd-comment">// Assert.Throws verifies that an exception IS thrown</span>
         Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; calc.Divide(10, 0));
     }
-
+&#8203;
     [Fact]
     public void Divide_TenByTwo_ReturnsFive()
     {
@@ -3847,40 +3968,40 @@ public class CalculatorTests
 <span class="cmd-comment">// ── NUNIT ────────────────────────────────────────────────────────</span>
 <span class="cmd-comment">// Install: dotnet new nunit -n MyApp.Tests</span>
 <span class="cmd-comment">// Packages: NUnit, NUnit3TestAdapter, Microsoft.NET.Test.Sdk</span>
-
+&#8203;
 using NUnit.Framework;
-
+&#8203;
 <span class="cmd-comment">// [TestFixture] marks this class as containing tests (optional in NUnit 3+)</span>
 [TestFixture]
 public class CalculatorTests
 {
     private Calculator _calc;
-
+&#8203;
     <span class="cmd-comment">// [SetUp] runs BEFORE each test — like a constructor for setup</span>
     [SetUp]
     public void SetUp()
     {
         _calc = new Calculator();
     }
-
+&#8203;
     <span class="cmd-comment">// [Test] marks a single test method</span>
     [Test]
     public void Add_TwoPositiveNumbers_ReturnsCorrectSum()
     {
         <span class="cmd-comment">// Arrange (done in SetUp), Act, Assert</span>
         int result = _calc.Add(2, 3);
-
+&#8203;
         <span class="cmd-comment">// Assert.That is NUnit's modern assertion syntax</span>
         Assert.That(result, Is.EqualTo(5));
     }
-
+&#8203;
     [Test]
     public void Subtract_LargerFromSmaller_ReturnsNegative()
     {
         int result = _calc.Subtract(3, 10);
         Assert.That(result, Is.EqualTo(-7));
     }
-
+&#8203;
     <span class="cmd-comment">// [TestCase] = parameterised test — one attribute per set of inputs</span>
     [TestCase(2, 3,  6)]
     [TestCase(5, 4, 20)]
@@ -3889,21 +4010,21 @@ public class CalculatorTests
     {
         Assert.That(_calc.Multiply(a, b), Is.EqualTo(expected));
     }
-
+&#8203;
     [Test]
     public void Divide_ByZero_ThrowsDivideByZeroException()
     {
         <span class="cmd-comment">// Assert.Throws in NUnit</span>
         Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; _calc.Divide(10, 0));
     }
-
+&#8203;
     [Test]
     public void Divide_TenByTwo_ReturnsFive()
     {
         double result = _calc.Divide(10, 2);
         Assert.That(result, Is.EqualTo(5.0));
     }
-
+&#8203;
     <span class="cmd-comment">// [TearDown] runs AFTER each test — for cleanup</span>
     [TearDown]
     public void TearDown()
@@ -3923,39 +4044,39 @@ public class CalculatorTests
 <span class="cmd-comment">// ── MSTEST ───────────────────────────────────────────────────────</span>
 <span class="cmd-comment">// Install: dotnet new mstest -n MyApp.Tests</span>
 <span class="cmd-comment">// Packages: MSTest.TestFramework, MSTest.TestAdapter, Microsoft.NET.Test.Sdk</span>
-
+&#8203;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+&#8203;
 <span class="cmd-comment">// [TestClass] marks this class as containing tests</span>
 [TestClass]
 public class CalculatorTests
 {
     private Calculator _calc;
-
+&#8203;
     <span class="cmd-comment">// [TestInitialize] runs BEFORE each test</span>
     [TestInitialize]
     public void TestInitialize()
     {
         _calc = new Calculator();
     }
-
+&#8203;
     <span class="cmd-comment">// [TestMethod] marks a single test method</span>
     [TestMethod]
     public void Add_TwoPositiveNumbers_ReturnsCorrectSum()
     {
         int result = _calc.Add(2, 3);
-
+&#8203;
         <span class="cmd-comment">// Assert.AreEqual(expected, actual) is MSTest's style</span>
         Assert.AreEqual(5, result);
     }
-
+&#8203;
     [TestMethod]
     public void Subtract_LargerFromSmaller_ReturnsNegative()
     {
         int result = _calc.Subtract(3, 10);
         Assert.AreEqual(-7, result);
     }
-
+&#8203;
     <span class="cmd-comment">// [DataTestMethod] + [DataRow] = parameterised test</span>
     [DataTestMethod]
     [DataRow(2, 3,  6)]
@@ -3965,7 +4086,7 @@ public class CalculatorTests
     {
         Assert.AreEqual(expected, _calc.Multiply(a, b));
     }
-
+&#8203;
     [TestMethod]
     [ExpectedException(typeof(DivideByZeroException))]
     public void Divide_ByZero_ThrowsDivideByZeroException()
@@ -3973,14 +4094,14 @@ public class CalculatorTests
         <span class="cmd-comment">// [ExpectedException] tells MSTest: this test PASSES if this exception is thrown</span>
         _calc.Divide(10, 0);
     }
-
+&#8203;
     [TestMethod]
     public void Divide_TenByTwo_ReturnsFive()
     {
         double result = _calc.Divide(10, 2);
         Assert.AreEqual(5.0, result);
     }
-
+&#8203;
     <span class="cmd-comment">// [TestCleanup] runs AFTER each test</span>
     [TestCleanup]
     public void TestCleanup()
@@ -4009,16 +4130,16 @@ public class CalculatorTests
 <div class="cmd-block">
 <span class="cmd-comment"># Run all tests in the project</span>
 dotnet test
-
+&#8203;
 <span class="cmd-comment"># Run with verbose output to see each test name</span>
 dotnet test --verbosity normal
-
+&#8203;
 <span class="cmd-comment"># Run only tests whose name contains a keyword</span>
 dotnet test --filter "Add"
-
+&#8203;
 <span class="cmd-comment"># Run tests in a specific file/class</span>
 dotnet test --filter "FullyQualifiedName~CalculatorTests"
-
+&#8203;
 <span class="cmd-comment"># Generate a test results report (TRX format)</span>
 dotnet test --logger "trx;LogFileName=TestResults.trx"
 </div>
@@ -4105,27 +4226,27 @@ var students = new List&lt;Student&gt;
     new Student { Name = "Dave",  Age = 21, Grade = 60 },
     new Student { Name = "Eve",   Age = 23, Grade = 95 },
 };
-
+&#8203;
 <span class="cmd-comment">// ── STYLE 1: Query Syntax (looks like SQL) ──────────────────────</span>
 <span class="cmd-comment">//  from  [variable]  in  [source]         ← "look at each item in..."</span>
 <span class="cmd-comment">//  where [condition]                       ← "only keep items where..."</span>
 <span class="cmd-comment">//  orderby [property]                      ← "sort by..."</span>
 <span class="cmd-comment">//  select [what to return]                 ← "return this..."</span>
-
+&#8203;
 var topStudentsQuery =
     from s in students
     where s.Grade &gt;= 80
     orderby s.Grade descending
     select s.Name;
-
+&#8203;
 <span class="cmd-comment">// ── STYLE 2: Method Syntax (most common in modern C#) ──────────</span>
 <span class="cmd-comment">//  Uses chain of extension methods with lambda expressions (=&gt;)</span>
-
+&#8203;
 var topStudentsMethod = students
     .Where(s =&gt; s.Grade &gt;= 80)         <span class="cmd-comment">// filter</span>
     .OrderByDescending(s =&gt; s.Grade)   <span class="cmd-comment">// sort</span>
     .Select(s =&gt; s.Name);              <span class="cmd-comment">// transform/project</span>
-
+&#8203;
 <span class="cmd-comment">// Both give: ["Eve", "Alice", "Carol"]</span>
 foreach (var name in topStudentsMethod)
     Console.WriteLine(name);
@@ -4157,23 +4278,23 @@ var products = new List&lt;Product&gt; {
     new Product { Name = "Chair",   Price = 199,  Category = "Furniture"   },
     new Product { Name = "Monitor", Price = 399,  Category = "Electronics" },
 };
-
+&#8203;
 <span class="cmd-comment">// ── FILTERING ──────────────────────────────────────────────────</span>
 var evenNums  = numbers.Where(n =&gt; n % 2 == 0);          <span class="cmd-comment">// [4, 2, 6]</span>
 var expensive = products.Where(p =&gt; p.Price &gt; 400);       <span class="cmd-comment">// Laptop, Phone</span>
-
+&#8203;
 <span class="cmd-comment">// ── SORTING ────────────────────────────────────────────────────</span>
 var sorted    = numbers.OrderBy(n =&gt; n);                   <span class="cmd-comment">// ascending</span>
 var desc      = numbers.OrderByDescending(n =&gt; n);         <span class="cmd-comment">// descending</span>
 var multiSort = products.OrderBy(p =&gt; p.Category)
                         .ThenByDescending(p =&gt; p.Price);   <span class="cmd-comment">// category, then price</span>
-
+&#8203;
 <span class="cmd-comment">// ── PROJECTION (transform shape of data) ───────────────────────</span>
 var names     = products.Select(p =&gt; p.Name);              <span class="cmd-comment">// just names</span>
 var summaries = products.Select(p =&gt; new {                 <span class="cmd-comment">// anonymous type</span>
     p.Name, Label = $"{p.Name} - ${p.Price}"
 });
-
+&#8203;
 <span class="cmd-comment">// ── AGGREGATION ────────────────────────────────────────────────</span>
 int total     = numbers.Sum();                             <span class="cmd-comment">// 44</span>
 double avg    = numbers.Average();                         <span class="cmd-comment">// 4.0</span>
@@ -4181,25 +4302,25 @@ int max       = numbers.Max();                             <span class="cmd-comm
 int min       = numbers.Min();                             <span class="cmd-comment">// 1</span>
 int count     = numbers.Count();                           <span class="cmd-comment">// 11</span>
 decimal total2 = products.Sum(p =&gt; p.Price);               <span class="cmd-comment">// 2545</span>
-
+&#8203;
 <span class="cmd-comment">// ── GROUPING ───────────────────────────────────────────────────</span>
 var byCategory = products.GroupBy(p =&gt; p.Category);
 foreach (var group in byCategory) {
     Console.WriteLine($"{group.Key}: {group.Count()} items");
 }
 <span class="cmd-comment">// Output: Electronics: 3 items  |  Furniture: 2 items</span>
-
+&#8203;
 <span class="cmd-comment">// ── ELEMENT OPERATIONS ─────────────────────────────────────────</span>
 var first  = products.First(p =&gt; p.Price &gt; 300);           <span class="cmd-comment">// throws if none</span>
 var firstN = products.FirstOrDefault(p =&gt; p.Price &gt; 9000); <span class="cmd-comment">// null if none — safer!</span>
 var single = products.Single(p =&gt; p.Name == "Desk");       <span class="cmd-comment">// throws if 0 or 2+</span>
 var last   = products.Last();
-
+&#8203;
 <span class="cmd-comment">// ── CHECKING ───────────────────────────────────────────────────</span>
 bool anyExp  = products.Any(p =&gt; p.Price &gt; 900);           <span class="cmd-comment">// true</span>
 bool allExp  = products.All(p =&gt; p.Price &gt; 100);           <span class="cmd-comment">// true</span>
 bool hasDesk = products.Any(p =&gt; p.Name == "Desk");        <span class="cmd-comment">// true</span>
-
+&#8203;
 <span class="cmd-comment">// ── DISTINCT / SKIP / TAKE ─────────────────────────────────────</span>
 var unique   = numbers.Distinct();                         <span class="cmd-comment">// [3,1,4,5,9,2,6]</span>
 var page1    = products.Skip(0).Take(2);                   <span class="cmd-comment">// pagination: first 2</span>
@@ -4229,16 +4350,16 @@ var page2    = products.Skip(2).Take(2);                   <span class="cmd-comm
 <div class="cmd-block">
 <span class="cmd-comment">// DEFERRED execution — query defined but NOT run yet</span>
 var query = students.Where(s =&gt; s.Grade &gt;= 80);  <span class="cmd-comment">// ← no DB/loop hit here</span>
-
+&#8203;
 students.Add(new Student { Name = "Frank", Age = 20, Grade = 92 });  <span class="cmd-comment">// add after query</span>
-
+&#8203;
 <span class="cmd-comment">// Query runs HERE — Frank IS included because execution is now</span>
 foreach (var s in query)
     Console.WriteLine(s.Name);   <span class="cmd-comment">// Alice, Carol, Eve, Frank ← Frank appears!</span>
-
+&#8203;
 <span class="cmd-comment">// IMMEDIATE execution — use ToList(), ToArray(), Count(), First() etc.</span>
 var snapshot = students.Where(s =&gt; s.Grade &gt;= 80).ToList(); <span class="cmd-comment">// runs NOW, Frank included</span>
-
+&#8203;
 <span class="cmd-comment">// Rule of thumb:</span>
 <span class="cmd-comment">// • Add .ToList() when you want a fixed snapshot of results</span>
 <span class="cmd-comment">// • Add .ToList() to avoid running the query multiple times</span>
@@ -4375,54 +4496,54 @@ var snapshot = students.Where(s =&gt; s.Grade &gt;= 80).ToList(); <span class="c
             """
 <div class="cmd-block">
 <span class="cmd-comment">&lt;!-- File: Counter.razor — a simple counter component --&gt;</span>
-
+&#8203;
 <span class="cmd-comment">&lt;!-- ① @page directive — URL route for this component --&gt;</span>
 @page "/counter"
-
+&#8203;
 <span class="cmd-comment">&lt;!-- ② @using / @inject — import namespaces or inject services --&gt;</span>
 @using MyApp.Services
 @inject ILogger&lt;Counter&gt; Logger
-
+&#8203;
 <span class="cmd-comment">&lt;!-- ③ HTML template — standard HTML + Razor syntax --&gt;</span>
 &lt;h1&gt;🔢 Counter&lt;/h1&gt;
-
+&#8203;
 &lt;p&gt;Current count: &lt;strong&gt;@currentCount&lt;/strong&gt;&lt;/p&gt;
-
+&#8203;
 <span class="cmd-comment">&lt;!-- ④ @onclick — event binding — calls C# method on click --&gt;</span>
 &lt;button class="btn btn-primary" @onclick="IncrementCount"&gt;
     Click me!
 &lt;/button&gt;
-
+&#8203;
 &lt;button class="btn btn-secondary" @onclick="ResetCount"&gt;
     Reset
 &lt;/button&gt;
-
+&#8203;
 <span class="cmd-comment">&lt;!-- ⑤ @code block — C# code lives here --&gt;</span>
 @code {
     <span class="cmd-comment">// ⑥ Private field — holds state for this component</span>
     private int currentCount = 0;
-
+&#8203;
     <span class="cmd-comment">// ⑦ [Parameter] — accepts values from a parent component</span>
     [Parameter]
     public int StartValue { get; set; } = 0;
-
+&#8203;
     <span class="cmd-comment">// ⑧ OnInitialized — lifecycle method, runs when component first loads</span>
     protected override void OnInitialized()
     {
         currentCount = StartValue;
         Logger.LogInformation("Counter initialized at {Value}", StartValue);
     }
-
+&#8203;
     <span class="cmd-comment">// ⑨ Event handler method</span>
     private void IncrementCount()
     {
         currentCount++;
         Logger.LogInformation("Count incremented to {Value}", currentCount);
     }
-
+&#8203;
     private void ResetCount() =&gt; currentCount = StartValue;
 }
-
+&#8203;
 <span class="cmd-comment">&lt;!-- ⑩ Optional: scoped CSS — in Counter.razor.css file --&gt;</span>
 <span class="cmd-comment">&lt;!-- h1 { color: #1A1A1A; } /* only applies to this component */ --&gt;</span>
 </div>
@@ -4449,14 +4570,14 @@ var snapshot = students.Where(s =&gt; s.Grade &gt;= 80).ToList(); <span class="c
                 """
 <div class="cmd-block">
 <span class="cmd-comment"># ── Blazor Web App — Recommended for .NET 8+ (unified model) ──</span>
-
+&#8203;
 <span class="cmd-comment"># Create new Blazor Web App</span>
 dotnet new blazor -n MyBlazorApp
 cd MyBlazorApp
-
+&#8203;
 <span class="cmd-comment"># Run the app (opens in browser at https://localhost:5001)</span>
 dotnet run
-
+&#8203;
 <span class="cmd-comment"># Run with hot reload (auto-refreshes on file save)</span>
 dotnet watch run
 </div>
@@ -4464,22 +4585,22 @@ dotnet watch run
 <div class="cmd-block">
 <span class="cmd-comment">// Program.cs — the startup file (.NET 8 Blazor Web App)</span>
 var builder = WebApplication.CreateBuilder(args);
-
+&#8203;
 <span class="cmd-comment">// Add Blazor services — InteractiveServer enables server-side interactivity</span>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()      <span class="cmd-comment">// for server render mode</span>
     .AddInteractiveWebAssemblyComponents(); <span class="cmd-comment">// for WASM render mode</span>
-
+&#8203;
 var app = builder.Build();
-
+&#8203;
 app.UseStaticFiles();
 app.UseAntiforgery();
-
+&#8203;
 <span class="cmd-comment">// Map Razor components — App.razor is the root component</span>
 app.MapRazorComponents&lt;App&gt;()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode();
-
+&#8203;
 app.Run();
 </div>
 """,
@@ -4491,7 +4612,7 @@ app.Run();
                 """
 <div class="cmd-block">
 <span class="cmd-comment"># ── Blazor Server (.NET 6/7 style) ──────────────────────────────</span>
-
+&#8203;
 dotnet new blazorserver -n MyBlazorServer
 cd MyBlazorServer
 dotnet run
@@ -4500,22 +4621,22 @@ dotnet run
 <div class="cmd-block">
 <span class="cmd-comment">// Program.cs — Blazor Server (.NET 6/7)</span>
 var builder = WebApplication.CreateBuilder(args);
-
+&#8203;
 <span class="cmd-comment">// AddServerSideBlazor registers SignalR + Blazor rendering pipeline</span>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-
+&#8203;
 <span class="cmd-comment">// Register your own services here</span>
 builder.Services.AddSingleton&lt;WeatherForecastService&gt;();
-
+&#8203;
 var app = builder.Build();
-
+&#8203;
 app.UseStaticFiles();
 app.UseRouting();
-
+&#8203;
 app.MapBlazorHub();              <span class="cmd-comment">// SignalR endpoint for Blazor</span>
 app.MapFallbackToPage("/_Host"); <span class="cmd-comment">// fallback to _Host.cshtml</span>
-
+&#8203;
 app.Run();
 </div>
 """,
@@ -4527,11 +4648,11 @@ app.Run();
                 """
 <div class="cmd-block">
 <span class="cmd-comment"># ── Blazor WebAssembly (standalone, .NET 6/7 style) ─────────────</span>
-
+&#8203;
 dotnet new blazorwasm -n MyBlazorWasm
 cd MyBlazorWasm
 dotnet run
-
+&#8203;
 <span class="cmd-comment"># Hosted (with ASP.NET Core back-end API)</span>
 dotnet new blazorwasm --hosted -n MyBlazorWasmHosted
 </div>
@@ -4540,18 +4661,18 @@ dotnet new blazorwasm --hosted -n MyBlazorWasmHosted
 <span class="cmd-comment">// Program.cs — Blazor WASM (runs in browser)</span>
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-
+&#8203;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
-
+&#8203;
 <span class="cmd-comment">// App is the root component; #app is the HTML element it renders into</span>
 builder.RootComponents.Add&lt;App&gt;("#app");
 builder.RootComponents.Add&lt;HeadOutlet&gt;("head::after");
-
+&#8203;
 <span class="cmd-comment">// HttpClient for calling APIs — base address is the current host</span>
 builder.Services.AddScoped(sp =&gt; new HttpClient {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 });
-
+&#8203;
 await builder.Build().RunAsync();
 </div>
 """,
