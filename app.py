@@ -387,9 +387,15 @@ st.markdown(
     font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px;
     text-transform: uppercase; color: #1A1A1A;
     background: #FFFFFF;
-    padding: 0.6rem 1rem 0.35rem;
+    padding: 0.6rem 1rem 0.45rem;
     border-left: 3px solid #2D6A4F;
-    margin: 0 0 0.1rem;
+    border-bottom: 1px solid #E0E0E0;
+    margin: 0 0 0;
+  }
+  /* Sidebar separator between topic list and action buttons */
+  .sidebar-divider {
+    border: none; border-top: 1px solid #E5E5E5;
+    margin: 0.5rem 0 0.4rem;
   }
   /* Style st.radio inside the sidebar to look like a vertical nav list */
   div[data-testid="stRadio"] > label { display: none !important; }
@@ -408,7 +414,7 @@ st.markdown(
     font-size: 0.88rem !important; font-weight: 600 !important; color: #444444 !important;
     display: flex !important; align-items: center !important;
   }
-  div[data-testid="stRadio"] > div > label:first-child { border-top: none !important; }
+  div[data-testid="stRadio"] > div > label:first-child { border-top: 1px solid #E0E0E0 !important; }
   div[data-testid="stRadio"] > div > label:hover {
     background: #F5FAF7 !important; color: #2D6A4F !important;
     border-left-color: #74C69D !important;
@@ -448,7 +454,7 @@ st.markdown(
   .new-topic-banner {
     display: flex; align-items: center; justify-content: space-between;
     background: linear-gradient(90deg, #1A1A1A 0%, #2D6A4F 100%);
-    border-radius: 10px; padding: 0.55rem 1rem;
+    border-radius: 10px; padding: 0.45rem 0.85rem;
     margin-bottom: 0.9rem;
     color: #FFFFFF; font-size: 0.83rem; font-weight: 600;
     box-shadow: 0 3px 12px rgba(0,0,0,0.18);
@@ -460,6 +466,19 @@ st.markdown(
     font-size: 0.65rem; font-weight: 800; letter-spacing: 1px;
     text-transform: uppercase; border-radius: 20px;
     padding: 2px 9px; margin-right: 8px;
+  }
+  .banner-dismiss-btn {
+    display: inline-flex; align-items: center;
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+    padding: 0.22rem 0.65rem;
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 6px;
+    margin-left: 1rem; flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .banner-dismiss-btn:hover {
+    background: rgba(255,255,255,0.18); color: #FFFFFF;
+    text-decoration: none;
   }
 
   /* ─ Suggest-topic dialog note ─ */
@@ -1913,6 +1932,11 @@ def _suggest_topic_dialog():
 # ── Learning Hub Page ─────────────────────────────────────────────────────────
 def page_learn():
     """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
+    # ── Handle banner dismiss via query param ─────────────────────────────────
+    if st.query_params.get("banner_dismissed") == "1":
+        st.session_state.learn_banner_dismissed = True
+        del st.query_params["banner_dismissed"]
+
     # ── Nav bar (logo + banner/breadcrumbs) ───────────────────────────────────
     section = st.session_state.get("learn_section", "GIT")
 
@@ -1934,8 +1958,8 @@ def page_learn():
     )
 
     if not st.session_state.get("learn_banner_dismissed", False):
-        # Row 1: Logo (left) | Banner (middle) | Dismiss button (right)
-        logo_col, banner_col, dismiss_col = st.columns([2, 7, 1])
+        # Row 1: Logo (left) | Banner with inline dismiss (right)
+        logo_col, banner_col = st.columns([2, 8])
         with logo_col:
             st.markdown(_LOGO_HTML, unsafe_allow_html=True)
         with banner_col:
@@ -1943,13 +1967,10 @@ def page_learn():
                 f'<div class="new-topic-banner">'
                 f'<span><span class="new-topic-badge">NEW</span>'
                 f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
+                f'<a href="?banner_dismissed=1" class="banner-dismiss-btn" aria-label="Dismiss banner">✕ Dismiss</a>'
                 f"</div>",
                 unsafe_allow_html=True,
             )
-        with dismiss_col:
-            if st.button("Dismiss", key="banner_dismiss", help="Dismiss this banner"):
-                st.session_state.learn_banner_dismissed = True
-                st.rerun()
         # Row 2: Empty (left) | Breadcrumb (right)
         _, bc_col = st.columns([2, 8])
         with bc_col:
@@ -1978,7 +1999,7 @@ def page_learn():
             key="learn_section",
             label_visibility="collapsed",
         )
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<hr class="sidebar-divider">', unsafe_allow_html=True)
         if st.button(
             "Add your suggested topic",
             key="suggest_topic_btn",
