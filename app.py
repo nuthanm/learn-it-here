@@ -453,6 +453,40 @@ st.markdown(
     border-left: 3px solid #2D6A4F; padding: 0.5rem 0.8rem;
     background: #F5FAF7; border-radius: 0 8px 8px 0;
     margin-top: 0.6rem; line-height: 1.6;
+  }
+
+  /* ─ Hide empty Streamlit containers created by split-div pattern ─ */
+  [data-testid="stMarkdownContainer"]:empty { display: none !important; }
+  [data-testid="stMarkdownContainer"] > .content-card:empty,
+  [data-testid="stMarkdownContainer"] > .form-card:empty { display: none !important; }
+
+  /* ─ Scroll-to-top / scroll-to-bottom floating buttons ─ */
+  .scroll-nav-btn {
+    position: fixed;
+    right: 1.2rem;
+    width: 2.4rem; height: 2.4rem;
+    border-radius: 50%;
+    background: #1A1A1A;
+    color: #74C69D;
+    border: 2px solid #2D6A4F;
+    cursor: pointer;
+    font-size: 1.2rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.35);
+    z-index: 9997;
+    transition: opacity 0.2s, transform 0.15s, background 0.15s;
+    opacity: 0; pointer-events: none;
+    font-family: system-ui, sans-serif;
+    line-height: 1;
+  }
+  .scroll-nav-btn.snb-visible { opacity: 0.82; pointer-events: auto; }
+  .scroll-nav-btn:hover {
+    opacity: 1 !important; transform: scale(1.1);
+    background: #2D6A4F; color: #FFFFFF;
+  }
+  #snb-top { bottom: 5.6rem; }
+  #snb-bot { bottom: 3.1rem; }
+
   /* ─ Mobile responsive ─ */
   @media (max-width: 768px) {
     /* Allow vertical scrolling */
@@ -534,6 +568,42 @@ st.markdown(
 
     /* Panda iframe: cap height when stacked below hero */
     iframe { max-height: 340px !important; }
+
+    /* Scroll nav buttons — closer to edge on mobile */
+    #snb-top { bottom: 6.4rem; right: 0.65rem; }
+    #snb-bot { bottom: 3.9rem; right: 0.65rem; }
+    .scroll-nav-btn { width: 2rem; height: 2rem; font-size: 1rem; }
+
+    /* Learn sidebar — horizontal scrollable tab strip on mobile */
+    div[data-testid="stRadio"] > div {
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding-bottom: 4px !important;
+      scrollbar-width: none !important;
+    }
+    div[data-testid="stRadio"] > div::-webkit-scrollbar { display: none !important; }
+    div[data-testid="stRadio"] > div > label {
+      min-width: max-content !important;
+      border-left: none !important;
+      border-right: 1px solid #F0F0F0 !important;
+      border-top: none !important;
+      border-bottom: 3px solid transparent !important;
+      white-space: nowrap !important;
+    }
+    div[data-testid="stRadio"] > div > label:has(input:checked) {
+      border-left: none !important;
+      border-bottom: 3px solid #1A1A1A !important;
+    }
+
+    /* Requirements page: hide robot animation column on small screens */
+    [data-testid="stHorizontalBlock"] > [data-testid="stColumn"]:last-child:has(iframe) {
+      display: none !important;
+    }
+
+    /* Content cards: reduce side padding further on very small screens */
+    .content-card { padding: 1rem 0.75rem !important; }
   }
 </style>
 """,
@@ -1090,6 +1160,61 @@ def _footer_html() -> str:
 """
 
 
+def _scroll_nav_html() -> str:
+    """Return HTML/JS for GitHub-style scroll navigation buttons.
+
+    Renders two fixed-position circular buttons (↑ top, ↓ bottom) using the
+    panda theme palette. Each button is hidden (opacity 0) by default and only
+    becomes visible when there is scrollable content in the relevant direction.
+    JavaScript attaches to the Streamlit main container's scroll event and
+    toggles the ``snb-visible`` class accordingly.
+    """
+    return """
+<button type="button" class="scroll-nav-btn" id="snb-top" title="Scroll to top" aria-label="Scroll to top">&#8679;</button>
+<button type="button" class="scroll-nav-btn" id="snb-bot" title="Scroll to bottom" aria-label="Scroll to bottom">&#8681;</button>
+<script>
+(function(){
+  var topBtn = document.getElementById('snb-top');
+  var botBtn = document.getElementById('snb-bot');
+  if (!topBtn || !botBtn) return;
+
+  function getEl() {
+    return (
+      document.querySelector('[data-testid="stMain"]') ||
+      document.querySelector('section.main') ||
+      document.documentElement
+    );
+  }
+
+  function update() {
+    var el = getEl();
+    var st = el.scrollTop || window.pageYOffset || 0;
+    var sh = el.scrollHeight || document.body.scrollHeight;
+    var ch = el.clientHeight || window.innerHeight;
+    topBtn.classList.toggle('snb-visible', st > 80);
+    botBtn.classList.toggle('snb-visible', st + ch < sh - 80);
+  }
+
+  topBtn.addEventListener('click', function() {
+    var el = getEl();
+    el.scrollTo ? el.scrollTo({top: 0, behavior: 'smooth'}) : (el.scrollTop = 0);
+  });
+
+  botBtn.addEventListener('click', function() {
+    var el = getEl();
+    var t = el.scrollHeight || document.body.scrollHeight;
+    el.scrollTo ? el.scrollTo({top: t, behavior: 'smooth'}) : (el.scrollTop = t);
+  });
+
+  var el = getEl();
+  el.addEventListener('scroll', update, {passive: true});
+  window.addEventListener('scroll', update, {passive: true});
+  update();
+})();
+</script>
+"""
+
+
 # ── PDF Generation ────────────────────────────────────────────────────────────
 def _safe(text) -> str:
     """Strip characters outside Latin-1 for built-in PDF fonts."""
@@ -1367,6 +1492,7 @@ def page_requirements():
                         del st.session_state[k]
                     st.rerun()
         st.markdown(_footer_html(), unsafe_allow_html=True)
+        st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
         return
 
     # ── Two-column layout ─────────────────────────────────────────────────────
@@ -1627,6 +1753,7 @@ def page_requirements():
             st.rerun()
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
+    st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
 
 
 # ── Suggest-topic dialog (module-level so the decorator is stable) ────────────
@@ -2969,6 +3096,7 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
+    st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
 
 
 # ── Main Routing ──────────────────────────────────────────────────────────────
