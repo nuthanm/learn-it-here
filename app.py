@@ -78,7 +78,7 @@ st.markdown(
     color: #1A1A1A !important;
     overflow-y: auto !important;
   }
-  [data-testid="stHeader"] { background: transparent !important; }
+  [data-testid="stHeader"] { background: transparent !important; pointer-events: none !important; }
   .block-container {
     padding-top: 0.2rem !important;
     padding-bottom: 0.2rem !important;
@@ -87,12 +87,15 @@ st.markdown(
     padding-right: 2rem !important;
   }
 
+  .stAppToolbar { display: none !important; }
+._terminalButton_rix23_138 { display: none !important; }
   /* ─ Top nav bar ─ */
   .kfp-nav {
     display: flex; align-items: center; gap: 1.2rem;
-    padding: 0.3rem 0; margin-bottom: 0.4rem;
+    padding: 0.3rem 0; margin-bottom: 0;
     background: transparent;
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
   .kfp-nav-logo  {
     font-size: 1.85rem; line-height: 1; align-self: center;
@@ -112,6 +115,7 @@ st.markdown(
     display: flex; align-items: center; gap: 1.2rem;
     text-decoration: none; cursor: pointer;
   }
+  .kfp-nav-brand, .kfp-nav-brand * { text-decoration: none !important; }
   .kfp-nav-brand:hover .kfp-nav-title { opacity: 0.75; }
   .kfp-nav-brand:hover .kfp-nav-logo  { opacity: 0.88; }
 
@@ -231,6 +235,7 @@ st.markdown(
 
   /* ─ Content cards — panda white ─ */
   .content-card {
+    border-left: 4px solid rgb(64, 145, 108) !important;
     background: #FFFFFF; border-radius: 18px;
     padding: 2rem 2.4rem; margin-bottom: 1.5rem;
     border: 1px solid #D0D0D0;
@@ -397,13 +402,13 @@ st.markdown(
   }
   /* "Topics" heading — visible on desktop, hidden on mobile */
   .topics-heading {
-    font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px;
-    text-transform: uppercase; color: #1A1A1A;
-    background: #FFFFFF;
-    padding: 0.6rem 1rem 0.45rem;
-    border-left: 3px solid #2D6A4F;
-    border-bottom: 1px solid #E0E0E0;
-    margin: 0 0 0;
+    font-size: 0.82rem; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #888888;
+    background: transparent;
+    padding: 0.25rem 1rem 0.25rem;
+    border: none;
+    margin: 0;
+    line-height: 1.6;
   }
   /* Sidebar separator between topic list and action buttons */
   .sidebar-divider {
@@ -427,7 +432,7 @@ st.markdown(
     font-size: 0.88rem !important; font-weight: 600 !important; color: #444444 !important;
     display: flex !important; align-items: center !important;
   }
-  div[data-testid="stRadio"] > div > label:first-child { border-top: 1px solid #E0E0E0 !important; }
+  div[data-testid="stRadio"] > div > label:first-child { border-top: none !important; }
   div[data-testid="stRadio"] > div > label:hover {
     background: #F5FAF7 !important; color: #2D6A4F !important;
     border-left-color: #74C69D !important;
@@ -438,7 +443,7 @@ st.markdown(
   }
   /* Selected radio item */
   div[data-testid="stRadio"] > div > label:has(input:checked) {
-    background: #F0F7F4 !important; color: #1A1A1A !important;
+    background: transparent !important; color: #1A1A1A !important;
     border-left-color: #1A1A1A !important; font-weight: 700 !important;
   }
   /* Suggest topic button in sidebar */
@@ -456,8 +461,10 @@ st.markdown(
   .breadcrumb {
     display: flex; align-items: center; gap: 0.4rem;
     font-size: 0.8rem; color: #888888;
-    padding: 0.35rem 0 0.7rem;
+    padding: 0.25rem 0 0.5rem;
     flex-wrap: wrap;
+    line-height: 1.6;
+    margin-bottom: 1.0rem;
   }
   .breadcrumb-sep { color: #CCCCCC; }
   .breadcrumb-link { color: #2D6A4F; font-weight: 600; cursor: pointer; }
@@ -468,10 +475,11 @@ st.markdown(
     display: flex; align-items: center; gap: 1rem;
     background: linear-gradient(90deg, #1A1A1A 0%, #2D6A4F 100%);
     border-radius: 10px; padding: 0.45rem 0.85rem;
-    margin-bottom: 0.9rem; margin-right: 200px; /* avoid Streamlit's fixed header toolbar */
+    margin: 0; margin-left: auto;
     color: #FFFFFF; font-size: 0.83rem; font-weight: 600;
     box-shadow: 0 3px 12px rgba(0,0,0,0.18);
     animation: headlineIn .5s ease both;
+    flex: 1 1 0; min-width: 0;
   }
   .new-topic-badge {
     display: inline-block;
@@ -482,16 +490,18 @@ st.markdown(
   }
   .banner-dismiss-btn {
     display: inline-flex; align-items: center;
-    color: rgba(255,255,255,0.85); text-decoration: none;
+    color: #FFFFFF !important; text-decoration: none !important;
     font-size: 0.75rem; font-weight: 700; white-space: nowrap;
     padding: 0.22rem 0.65rem;
-    border: 1px solid rgba(255,255,255,0.35); border-radius: 6px;
-    margin-left: 1rem; flex-shrink: 0;
-    transition: background 0.15s, color 0.15s;
+    background: transparent; border: 1px solid rgba(255,255,255,0.5); border-radius: 6px;
+    margin-left: auto; flex-shrink: 0;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    cursor: pointer; position: relative; z-index: 10;
   }
   .banner-dismiss-btn:hover {
-    background: rgba(255,255,255,0.18); color: #FFFFFF;
-    text-decoration: none;
+    background: #FFB3BA !important; color: #1A1A1A !important;
+    border-color: #FFB3BA !important;
+    text-decoration: none !important;
   }
 
   /* ─ Suggest-topic dialog note ─ */
@@ -598,8 +608,9 @@ st.markdown(
       padding: 0.8rem 0.8rem !important;
     }
 
-    /* Banner — reduce right margin on mobile */
-    .new-topic-banner { margin-right: 0 !important; }
+    /* Banner — stack below logo on mobile */
+    .kfp-nav { flex-direction: column !important; align-items: flex-start !important; gap: 0.5rem !important; }
+    .new-topic-banner { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
 
     /* Shortcut table — tighter cells */
     .shortcut-table th, .shortcut-table td {
@@ -619,8 +630,8 @@ st.markdown(
     .stMain section,
     [data-testid="stMainBlockContainer"] { padding-bottom: 70px !important; }
 
-    /* Panda iframe: cap height when stacked below hero */
-    iframe { max-height: 340px !important; }
+    /* Panda iframe: allow enough height for animation + quotes on mobile */
+    iframe { max-height: 520px !important; }
 
     /* Scroll nav buttons — closer to edge on mobile */
     #snb-top { bottom: 6.4rem; right: 0.65rem; }
@@ -645,14 +656,49 @@ st.markdown(
       border-bottom: 3px solid transparent !important;
       white-space: nowrap !important;
     }
+    div[data-testid="stRadio"] > div > label:first-child {
+      border-top: none !important;
+    }
     div[data-testid="stRadio"] > div > label:has(input:checked) {
+      background: transparent !important;
       border-left: none !important;
       border-bottom: 3px solid #1A1A1A !important;
     }
 
-    /* Requirements page: hide robot animation column on small screens */
+    /* Mobile menu scroll arrows — match menu item height */
+    .menu-scroll-arrow {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 28px;
+      height: 100%;
+      border-radius: 0;
+      background: rgba(248,248,248,0.95);
+      color: #1A1A1A;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 700;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+      transition: opacity 0.2s, background 0.15s;
+      line-height: 1;
+      padding: 0;
+    }
+    .menu-scroll-left { left: 0; box-shadow: 4px 0 8px -2px rgba(0,0,0,0.08); }
+    .menu-scroll-right { right: 0; box-shadow: -4px 0 8px -2px rgba(0,0,0,0.08); }
+    .menu-scroll-arrow:hover { background: #F0F0F0; }
+
+    /* Requirements page: show robot animation column on small screens */
     [data-testid="stHorizontalBlock"] > [data-testid="stColumn"]:last-child:has(iframe) {
-      display: none !important;
+      display: block !important;
+    }
+    [data-testid="stHorizontalBlock"] > [data-testid="stColumn"]:last-child:has(iframe) iframe {
+      max-height: 380px !important;
     }
 
     /* Content cards: reduce side padding further on very small screens */
@@ -1219,6 +1265,7 @@ def _scroll_nav_html() -> str:
     Creates scroll-to-top / scroll-to-bottom buttons directly in the parent
     Streamlit page via ``window.parent.document`` so that ``position:fixed``
     is anchored to the viewport and the panda-theme CSS classes apply.
+    Also creates mobile menu scroll arrows for horizontal radio strips.
     """
     return """<!DOCTYPE html>
 <html>
@@ -1231,6 +1278,7 @@ def _scroll_nav_html() -> str:
   var pdoc = window.parent ? window.parent.document : document;
   var pwin = window.parent ? window.parent : window;
 
+  /* ── Scroll-to-top / scroll-to-bottom buttons ── */
   function getOrCreate(id, content, bottom) {
     var btn = pdoc.getElementById(id);
     if (!btn) {
@@ -1250,12 +1298,20 @@ def _scroll_nav_html() -> str:
   var topBtn = getOrCreate('snb-top', '&#8679;', '5.6rem');
   var botBtn = getOrCreate('snb-bot', '&#8681;', '3.1rem');
 
-  function getActiveEl() {
-    var el = (
-      pdoc.querySelector('[data-testid="stMain"]') ||
+  function findScrollEl() {
+    var candidates = [
+      pdoc.querySelector('[data-testid="stMain"]'),
+      pdoc.querySelector('section.stMain'),
       pdoc.querySelector('section.main')
-    );
-    if (el && el.scrollHeight > el.clientHeight) return el;
+    ];
+    for (var i = 0; i < candidates.length; i++) {
+      var el = candidates[i];
+      if (el && el.scrollHeight > el.clientHeight + 10) return el;
+    }
+    /* Return first existing candidate even if not yet scrollable */
+    for (var j = 0; j < candidates.length; j++) {
+      if (candidates[j]) return candidates[j];
+    }
     return pdoc.documentElement;
   }
 
@@ -1272,7 +1328,7 @@ def _scroll_nav_html() -> str:
   }
 
   function update() {
-    var el = getActiveEl();
+    var el = findScrollEl();
     var st = getScrollTop(el);
     var sh = el.scrollHeight || 0;
     var ch = getClientHeight(el);
@@ -1281,7 +1337,7 @@ def _scroll_nav_html() -> str:
   }
 
   function scrollPage(top) {
-    var el = getActiveEl();
+    var el = findScrollEl();
     var opts = {top: top, behavior: 'smooth'};
     if (el === pdoc.documentElement) {
       try { pwin.scrollTo(opts); } catch(e) { pdoc.documentElement.scrollTop = top; pdoc.body.scrollTop = top; }
@@ -1293,7 +1349,7 @@ def _scroll_nav_html() -> str:
   /* Replace buttons with fresh clones to clear any stale listeners */
   function refreshBtn(old) {
     var fresh = old.cloneNode(true);
-    old.parentNode.replaceChild(fresh, old);
+    if (old.parentNode) old.parentNode.replaceChild(fresh, old);
     return fresh;
   }
   topBtn = refreshBtn(topBtn);
@@ -1301,14 +1357,132 @@ def _scroll_nav_html() -> str:
 
   topBtn.addEventListener('click', function() { scrollPage(0); });
   botBtn.addEventListener('click', function() {
-    var el = getActiveEl();
+    var el = findScrollEl();
     scrollPage(el.scrollHeight - getClientHeight(el));
   });
 
-  var el = getActiveEl();
-  el.addEventListener('scroll', update, {passive: true});
+  /* Attach scroll listeners broadly to catch all possible containers */
+  var _listeningEls = {};
+  function attachScrollListeners() {
+    var el = findScrollEl();
+    var elId = el.getAttribute('data-testid') || el.tagName || 'root';
+    if (!_listeningEls[elId]) {
+      el.addEventListener('scroll', update, {passive: true});
+      _listeningEls[elId] = true;
+    }
+  }
+  attachScrollListeners();
   pwin.addEventListener('scroll', update, {passive: true});
   update();
+
+  /* Re-check periodically in case content loads late */
+  var _retries = 0;
+  var _interval = setInterval(function() {
+    attachScrollListeners();
+    update();
+    _retries++;
+    if (_retries > 15) clearInterval(_interval);
+  }, 1000);
+
+  /* Also watch for DOM changes */
+  var _snbDebounce;
+  var _snbObserver = new MutationObserver(function() {
+    clearTimeout(_snbDebounce);
+    _snbDebounce = setTimeout(function() {
+      attachScrollListeners();
+      update();
+    }, 300);
+  });
+  _snbObserver.observe(pdoc.body, { childList: true, subtree: true });
+
+  /* ── Mobile menu scroll arrows ── */
+  function setupMenuArrows() {
+    if (pwin.innerWidth > 768) return;
+    var radioContainers = pdoc.querySelectorAll('div[data-testid="stRadio"]');
+    radioContainers.forEach(function(radio) {
+      var stripDiv = radio.querySelector(':scope > div:last-child');
+      if (!stripDiv || stripDiv.dataset.arrowsSetup) return;
+      stripDiv.dataset.arrowsSetup = '1';
+
+      var wrapper = radio;
+      wrapper.style.position = 'relative';
+
+      function makeArrow(dir) {
+        var a = pdoc.createElement('button');
+        a.type = 'button';
+        a.className = 'menu-scroll-arrow menu-scroll-' + dir;
+        a.innerHTML = dir === 'left' ? '&#8249;' : '&#8250;';
+        a.setAttribute('aria-label', 'Scroll menu ' + dir);
+        a.style.display = 'none';
+        wrapper.appendChild(a);
+        return a;
+      }
+
+      var arrowL = makeArrow('left');
+      var arrowR = makeArrow('right');
+
+      function updateArrows() {
+        var sl = stripDiv.scrollLeft;
+        var sw = stripDiv.scrollWidth;
+        var cw = stripDiv.clientWidth;
+        if (sw <= cw + 5) {
+          arrowL.style.display = 'none';
+          arrowR.style.display = 'none';
+          return;
+        }
+        arrowL.style.display = sl > 5 ? 'flex' : 'none';
+        arrowR.style.display = sl + cw < sw - 5 ? 'flex' : 'none';
+      }
+
+      arrowL.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        stripDiv.scrollBy({ left: -140, behavior: 'smooth' });
+      });
+      arrowR.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        stripDiv.scrollBy({ left: 140, behavior: 'smooth' });
+      });
+
+      stripDiv.addEventListener('scroll', updateArrows, { passive: true });
+      updateArrows();
+      setTimeout(updateArrows, 500);
+    });
+  }
+
+  setupMenuArrows();
+  var _maDebounce;
+  var _maObserver = new MutationObserver(function() {
+    clearTimeout(_maDebounce);
+    _maDebounce = setTimeout(setupMenuArrows, 300);
+  });
+  _maObserver.observe(pdoc.body, { childList: true, subtree: true });
+
+  /* Re-run on resize so arrows appear when switching to mobile resolution */
+  var _maResizeDebounce;
+  pwin.addEventListener('resize', function() {
+    clearTimeout(_maResizeDebounce);
+    _maResizeDebounce = setTimeout(function() {
+      /* Reset arrows setup flags so they can be re-created */
+      var radios = pdoc.querySelectorAll('div[data-testid="stRadio"]');
+      radios.forEach(function(radio) {
+        var stripDiv = radio.querySelector(':scope > div:last-child');
+        if (stripDiv) {
+          /* Remove existing arrows if switching to desktop */
+          if (pwin.innerWidth > 768) {
+            radio.querySelectorAll('.menu-scroll-arrow').forEach(function(a) { a.remove(); });
+            delete stripDiv.dataset.arrowsSetup;
+          } else {
+            /* If switching to mobile and not yet set up */
+            if (!stripDiv.dataset.arrowsSetup) {
+              setupMenuArrows();
+            }
+          }
+        }
+      });
+      if (pwin.innerWidth <= 768) setupMenuArrows();
+    }, 250);
+  });
+
 })();
 </script>
 </body>
@@ -1525,7 +1699,7 @@ def page_landing():
     st.markdown(
         """
 <div class="kfp-nav">
-  <a href="?go=home" class="kfp-nav-brand">
+  <a href="?go=home" target="_self" class="kfp-nav-brand">
     <span class="kfp-nav-logo">🐼</span>
     <div class="kfp-nav-text">
       <div class="kfp-nav-title">Learn It Here</div>
@@ -1611,23 +1785,21 @@ def page_requirements():
     cb = _on_interact
 
     # Nav bar with back button
-    nav_col, _ = st.columns([6, 1])
-    with nav_col:
-        st.markdown(
-            """
+    st.markdown(
+        """
 <div class="kfp-nav">
-  <a href="?go=home" class="kfp-nav-brand">
+  <a href="?go=home" target="_self" class="kfp-nav-brand">
     <span class="kfp-nav-logo">🐼</span>
     <div class="kfp-nav-text">
       <div class="kfp-nav-title">Learn It Here</div>
       <div class="kfp-nav-tagline">Project Requirements</div>
     </div>
   </a>
-  <div class="kfp-nav-sub">📋 Step 1 of your journey</div>
 </div>
 """,
-            unsafe_allow_html=True,
-        )
+        unsafe_allow_html=True,
+    )
+    st.divider()
 
     if st.button("← Back to Home", key="req_back"):
         _nav_to("landing")
@@ -1985,7 +2157,7 @@ def page_learn():
 
     _LOGO_HTML = """
 <div class="kfp-nav">
-  <a href="?go=home" class="kfp-nav-brand">
+  <a href="?go=home" target="_self" class="kfp-nav-brand">
     <span class="kfp-nav-logo">🐼</span>
     <div class="kfp-nav-text">
       <div class="kfp-nav-title">Learn It Here</div>
@@ -1995,7 +2167,7 @@ def page_learn():
 </div>
 """
     _BC_HTML = (
-        f'<div class="breadcrumb" style="padding-top:0.85rem;">'
+        f'<div class="breadcrumb">'
         f'<span>Home</span><span class="breadcrumb-sep">›</span>'
         f'<span>Developer Learning Hub</span><span class="breadcrumb-sep">›</span>'
         f'<span class="breadcrumb-current">{section}</span>'
@@ -2003,30 +2175,32 @@ def page_learn():
     )
 
     if not st.session_state.get("learn_banner_dismissed", False):
-        # Row 1: Logo (left) | Banner with inline dismiss (right)
-        logo_col, banner_col = st.columns([2, 8])
-        with logo_col:
-            st.markdown(_LOGO_HTML, unsafe_allow_html=True)
-        with banner_col:
-            st.markdown(
-                f'<div class="new-topic-banner">'
-                f'<span><span class="new-topic-badge">NEW</span>'
-                f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
-                f'<a href="?banner_dismissed=1" class="banner-dismiss-btn" aria-label="Dismiss banner">✕ Dismiss</a>'
-                f"</div>",
-                unsafe_allow_html=True,
-            )
-        # Row 2: Empty (left) | Breadcrumb (right)
-        _, bc_col = st.columns([2, 8])
-        with bc_col:
-            st.markdown(_BC_HTML, unsafe_allow_html=True)
+        # Logo + Banner on same row
+        st.markdown(
+            f'<div class="kfp-nav">'
+            f'<a href="?go=home" target="_self" class="kfp-nav-brand">'
+            f'<span class="kfp-nav-logo">🐼</span>'
+            f'<div class="kfp-nav-text">'
+            f'<div class="kfp-nav-title">Learn It Here</div>'
+            f'<div class="kfp-nav-tagline">Developer Learning Hub</div>'
+            f'</div></a>'
+            f'<div class="new-topic-banner">'
+            f'<span><span class="new-topic-badge">NEW</span>'
+            f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
+            f'<a href="?banner_dismissed=1" class="banner-dismiss-btn" aria-label="Dismiss banner">✕ Dismiss</a>'
+            f'</div></div>',
+            unsafe_allow_html=True,
+        )
     else:
-        # Banner dismissed: Logo (left) | Breadcrumb (right)
-        nav_logo_col, nav_bc_col = st.columns([2, 8])
-        with nav_logo_col:
-            st.markdown(_LOGO_HTML, unsafe_allow_html=True)
-        with nav_bc_col:
-            st.markdown(_BC_HTML, unsafe_allow_html=True)
+        # Logo only
+        st.markdown(_LOGO_HTML, unsafe_allow_html=True)
+
+    st.divider()
+
+    # Row 2: Breadcrumb (right-aligned with content column)
+    _, bc_col = st.columns([2, 8], gap="medium")
+    with bc_col:
+        st.markdown(_BC_HTML, unsafe_allow_html=True)
 
     # ── Two-column layout: sidebar (2) + content (8) ──────────────────────────
     nav_col, content_col = st.columns([2, 8], gap="medium")
@@ -2037,7 +2211,6 @@ def page_learn():
             '<div class="learn-sidebar"></div>',
             unsafe_allow_html=True,
         )
-        st.markdown('<div class="topics-heading">Topics</div>', unsafe_allow_html=True)
         st.radio(
             "Topics",
             options=LEARN_MENU_ITEMS,
