@@ -101,7 +101,6 @@ st.markdown(
     letter-spacing: -0.3px; line-height: 1.2; margin: 0; padding: 0;
   }
   .kfp-nav-tagline { font-size: 0.72rem; color: #40916C; margin: 0; padding: 0; line-height: 1.3; }
-  .kfp-nav-sub { font-size: 0.78rem; color: #40916C; margin-left: auto; }
 
   /* ─ Landing hero section ─ */
   .hero-eyebrow {
@@ -383,6 +382,14 @@ st.markdown(
     background: transparent;
     overflow: hidden;
   }
+  /* "Topics" heading — visible on desktop, hidden on mobile */
+  .topics-heading {
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #2D6A4F;
+    padding: 0.6rem 1rem 0.35rem;
+    border-left: 3px solid #2D6A4F;
+    margin: 0 0 0.1rem;
+  }
   /* Style st.radio inside the sidebar to look like a vertical nav list */
   div[data-testid="stRadio"] > label { display: none !important; }
   div[data-testid="stRadio"] > div {
@@ -524,10 +531,11 @@ st.markdown(
     /* Shrink hero headline */
     .hero-headline { font-size: 1.5rem !important; }
 
-    /* Hide non-essential nav sub-text */
-    .kfp-nav-sub { display: none !important; }
+    /* Nav text sizing */
     .kfp-nav-title { font-size: 1.15rem !important; }
     .kfp-nav-tagline { font-size: 0.68rem !important; }
+    /* Hide Topics heading in sidebar on mobile */
+    .topics-heading { display: none !important; }
 
     /* Reduce page title */
     .app-title { font-size: 1.4rem !important; }
@@ -1911,20 +1919,50 @@ def _suggest_topic_dialog():
 # ── Learning Hub Page ─────────────────────────────────────────────────────────
 def page_learn():
     """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
-    # Nav bar
-    st.markdown(
-        """
+    # ── Nav bar (logo + title; Home button right-aligned) ─────────────────────
+    section = st.session_state.get("learn_section", "GIT")
+    nav_logo_col, nav_bc_col, nav_home_col = st.columns([4, 5, 1])
+    with nav_logo_col:
+        st.markdown(
+            """
 <div class="kfp-nav">
   <span class="kfp-nav-logo">🐼</span>
   <div class="kfp-nav-text">
     <div class="kfp-nav-title">Learn It Here</div>
     <div class="kfp-nav-tagline">Developer Learning Hub</div>
   </div>
-  <div class="kfp-nav-sub">Knowledge is your best weapon</div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
+    with nav_bc_col:
+        st.markdown(
+            f'<div class="breadcrumb" style="padding-top:0.85rem;">'
+            f'<span>Home</span><span class="breadcrumb-sep">›</span>'
+            f'<span>Developer Learning Hub</span><span class="breadcrumb-sep">›</span>'
+            f'<span class="breadcrumb-current">{section}</span>'
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+    with nav_home_col:
+        if st.button("← Home", key="learn_back", use_container_width=True):
+            _nav_to("landing")
+
+    # ── New-topic banner (header area, before sidebar+content) ────────────────
+    if not st.session_state.get("learn_banner_dismissed", False):
+        banner_col, dismiss_col = st.columns([9, 1])
+        with banner_col:
+            st.markdown(
+                f'<div class="new-topic-banner">'
+                f'<span><span class="new-topic-badge">NEW</span>'
+                f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
+        with dismiss_col:
+            if st.button("Dismiss", key="banner_dismiss", help="Dismiss this banner"):
+                st.session_state.learn_banner_dismissed = True
+                st.rerun()
 
     # ── Two-column layout: sidebar (2) + content (8) ──────────────────────────
     nav_col, content_col = st.columns([2, 8], gap="medium")
@@ -1935,6 +1973,7 @@ def page_learn():
             '<div class="learn-sidebar"></div>',
             unsafe_allow_html=True,
         )
+        st.markdown('<div class="topics-heading">Topics</div>', unsafe_allow_html=True)
         st.radio(
             "Topics",
             options=LEARN_MENU_ITEMS,
@@ -1951,40 +1990,6 @@ def page_learn():
 
     # ── Main content area ─────────────────────────────────────────────────────
     with content_col:
-        # Back + breadcrumb row
-        bc1, bc2 = st.columns([1, 7])
-        with bc1:
-            if st.button("← Home", key="learn_back"):
-                _nav_to("landing")
-        with bc2:
-            section = st.session_state.learn_section
-            st.markdown(
-                f'<div class="breadcrumb">'
-                f'<span>Home</span>'
-                f'<span class="breadcrumb-sep">›</span>'
-                f'<span>Developer Learning Hub</span>'
-                f'<span class="breadcrumb-sep">›</span>'
-                f'<span class="breadcrumb-current">{section}</span>'
-                f"</div>",
-                unsafe_allow_html=True,
-            )
-
-        # ── New-topic banner (shown until dismissed within the session) ───────
-        if not st.session_state.get("learn_banner_dismissed", False):
-            banner_col, dismiss_col = st.columns([9, 1])
-            with banner_col:
-                st.markdown(
-                    f'<div class="new-topic-banner">'
-                    f'<span><span class="new-topic-badge">NEW</span>'
-                    f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
-                    f"</div>",
-                    unsafe_allow_html=True,
-                )
-            with dismiss_col:
-                if st.button("Dismiss", key="banner_dismiss", help="Dismiss this banner"):
-                    st.session_state.learn_banner_dismissed = True
-                    st.rerun()
-
         section = st.session_state.learn_section
 
     # ══════════════════════════════════════════════════════════════════════════
