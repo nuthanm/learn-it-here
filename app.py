@@ -1912,9 +1912,9 @@ def _suggest_topic_dialog():
 # ── Learning Hub Page ─────────────────────────────────────────────────────────
 def page_learn():
     """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
-    # ── Nav bar (logo + title; Home button right-aligned) ─────────────────────
+    # ── Nav bar (logo + breadcrumbs) ──────────────────────────────────────────
     section = st.session_state.get("learn_section", "GIT")
-    nav_logo_col, nav_bc_col, nav_home_col = st.columns([4, 5, 1])
+    nav_logo_col, nav_bc_col = st.columns([4, 6])
     with nav_logo_col:
         st.markdown(
             """
@@ -1937,9 +1937,6 @@ def page_learn():
             f"</div>",
             unsafe_allow_html=True,
         )
-    with nav_home_col:
-        if st.button("← Home", key="learn_back", use_container_width=True):
-            _nav_to("landing")
 
     # ── New-topic banner (header area, before sidebar+content) ────────────────
     if not st.session_state.get("learn_banner_dismissed", False):
@@ -1980,6 +1977,9 @@ def page_learn():
             use_container_width=True,
         ):
             _suggest_topic_dialog()
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("← Home", key="learn_back", use_container_width=True):
+            _nav_to("landing")
 
     # ── Main content area ─────────────────────────────────────────────────────
     with content_col:
