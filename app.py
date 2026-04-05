@@ -60,7 +60,7 @@ st.markdown(
   [data-testid="collapsedControl"] { display: none !important; }
 
   /* ─ Global — panda fur white/gray palette, fills full viewport ─ */
-  html, body { width: 100% !important; height: 100% !important; }
+  html, body { width: 100% !important; min-height: 100% !important; overflow-y: auto !important; }
   /* Override Streamlit's default blue theme root fully */
   .stApp,
   .st-emotion-cache-1nryt4l,
@@ -69,6 +69,7 @@ st.markdown(
   [data-testid="stMain"] {
     background: #F8F8F8 !important;
     color: #1A1A1A !important;
+    overflow-y: auto !important;
   }
   [data-testid="stHeader"] { background: transparent !important; }
   .block-container {
@@ -1186,29 +1187,60 @@ def _scroll_nav_html() -> str:
     );
   }
 
-  function update() {
+  /* Returns the current scroll position across all possible scroll containers */
+  function getScrollTop() {
     var el = getEl();
-    var st = el.scrollTop || window.pageYOffset || 0;
-    var sh = el.scrollHeight || document.body.scrollHeight;
-    var ch = el.clientHeight || window.innerHeight;
+    return Math.max(el.scrollTop || 0, window.pageYOffset || window.scrollY || 0);
+  }
+
+  /* Returns the total scrollable height across all possible scroll containers */
+  function getScrollHeight() {
+    var el = getEl();
+    return Math.max(
+      el.scrollHeight || 0,
+      document.documentElement.scrollHeight || 0,
+      document.body.scrollHeight || 0
+    );
+  }
+
+  /* Returns the visible (client) height */
+  function getClientHeight() {
+    return window.innerHeight || document.documentElement.clientHeight || 0;
+  }
+
+  function update() {
+    var st = getScrollTop();
+    var sh = getScrollHeight();
+    var ch = getClientHeight();
     topBtn.classList.toggle('snb-visible', st > 80);
     botBtn.classList.toggle('snb-visible', st + ch < sh - 80);
   }
 
-  topBtn.addEventListener('click', function() {
+  /* Scroll to a given position in whichever container is currently scrolling */
+  function scrollPage(top) {
     var el = getEl();
-    el.scrollTo ? el.scrollTo({top: 0, behavior: 'smooth'}) : (el.scrollTop = 0);
-  });
+    var opts = {top: top, behavior: 'smooth'};
+    /* Try the Streamlit container first */
+    if (el && el !== document.documentElement && el.scrollHeight > el.clientHeight) {
+      try { el.scrollTo(opts); } catch(e) { el.scrollTop = top; }
+    } else {
+      /* Fall back to window / documentElement for desktop layouts */
+      if (window.scrollTo) {
+        try { window.scrollTo(opts); } catch(e) {}
+      }
+      document.documentElement.scrollTop = top;
+      document.body.scrollTop = top;
+    }
+  }
 
-  botBtn.addEventListener('click', function() {
-    var el = getEl();
-    var t = el.scrollHeight || document.body.scrollHeight;
-    el.scrollTo ? el.scrollTo({top: t, behavior: 'smooth'}) : (el.scrollTop = t);
-  });
+  topBtn.addEventListener('click', function() { scrollPage(0); });
+  botBtn.addEventListener('click', function() { scrollPage(getScrollHeight()); });
 
+  /* Listen on all possible scroll containers so the buttons react on every resolution */
   var el = getEl();
   el.addEventListener('scroll', update, {passive: true});
   window.addEventListener('scroll', update, {passive: true});
+  document.addEventListener('scroll', update, {passive: true});
   update();
 })();
 </script>
