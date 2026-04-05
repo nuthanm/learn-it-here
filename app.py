@@ -1920,7 +1920,7 @@ def _suggest_topic_dialog():
 def page_learn():
     """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
     # ── Nav bar (logo + title; Home button right-aligned) ─────────────────────
-    section = st.session_state.learn_section
+    section = st.session_state.get("learn_section", "GIT")
     nav_logo_col, nav_bc_col, nav_home_col = st.columns([4, 5, 1])
     with nav_logo_col:
         st.markdown(
@@ -1938,10 +1938,8 @@ def page_learn():
     with nav_bc_col:
         st.markdown(
             f'<div class="breadcrumb" style="padding-top:0.85rem;">'
-            f'<span>Home</span>'
-            f'<span class="breadcrumb-sep">›</span>'
-            f'<span>Developer Learning Hub</span>'
-            f'<span class="breadcrumb-sep">›</span>'
+            f'<span>Home</span><span class="breadcrumb-sep">›</span>'
+            f'<span>Developer Learning Hub</span><span class="breadcrumb-sep">›</span>'
             f'<span class="breadcrumb-current">{section}</span>'
             f"</div>",
             unsafe_allow_html=True,
