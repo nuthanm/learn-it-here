@@ -1935,8 +1935,7 @@ def page_learn():
     # ── Handle banner dismiss via query param ─────────────────────────────────
     if st.query_params.get("banner_dismissed") == "1":
         st.session_state.learn_banner_dismissed = True
-        if "banner_dismissed" in st.query_params:
-            del st.query_params["banner_dismissed"]
+        del st.query_params["banner_dismissed"]
 
     # ── Nav bar (logo + banner/breadcrumbs) ───────────────────────────────────
     section = st.session_state.get("learn_section", "GIT")
@@ -1968,7 +1967,7 @@ def page_learn():
                 f'<div class="new-topic-banner">'
                 f'<span><span class="new-topic-badge">NEW</span>'
                 f'<strong>{LATEST_NEW_TOPIC}</strong> has been added to the learning hub — check it out!</span>'
-                f'<a href="?banner_dismissed=1" class="banner-dismiss-btn">✕ Dismiss</a>'
+                f'<a href="?banner_dismissed=1" class="banner-dismiss-btn" aria-label="Dismiss banner">✕ Dismiss</a>'
                 f"</div>",
                 unsafe_allow_html=True,
             )
