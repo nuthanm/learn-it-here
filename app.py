@@ -88,7 +88,7 @@ st.markdown(
   }
 
   .stAppToolbar { display: none !important; }
-._terminalButton_rix23_138 { display: none !important; }
+  [class*="terminalButton"] { display: none !important; }
   /* ─ Top nav bar ─ */
   .kfp-nav {
     display: flex; align-items: center; gap: 1.2rem;
