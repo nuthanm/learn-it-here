@@ -1334,6 +1334,14 @@ def page_landing():
     .stMain,
     [data-testid="stMain"] { overflow: hidden !important; }
   }
+  @media (max-width: 1023px) {
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100% !important; }
+    .stApp,
+    [data-testid="stAppViewContainer"],
+    .stMain,
+    [data-testid="stMain"],
+    [data-testid="stMainBlockContainer"] { overflow-y: auto !important; height: auto !important; }
+  }
 </style>
 """,
         unsafe_allow_html=True,
@@ -1417,6 +1425,7 @@ def page_landing():
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
+    st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
 
 
 # ── Requirements Page ─────────────────────────────────────────────────────────
