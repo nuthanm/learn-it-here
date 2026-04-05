@@ -385,7 +385,8 @@ st.markdown(
   /* "Topics" heading — visible on desktop, hidden on mobile */
   .topics-heading {
     font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px;
-    text-transform: uppercase; color: #2D6A4F;
+    text-transform: uppercase; color: #1A1A1A;
+    background: #FFFFFF;
     padding: 0.6rem 1rem 0.35rem;
     border-left: 3px solid #2D6A4F;
     margin: 0 0 0.1rem;
@@ -1912,12 +1913,10 @@ def _suggest_topic_dialog():
 # ── Learning Hub Page ─────────────────────────────────────────────────────────
 def page_learn():
     """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
-    # ── Nav bar (logo + breadcrumbs) ──────────────────────────────────────────
+    # ── Nav bar (logo + banner/breadcrumbs) ───────────────────────────────────
     section = st.session_state.get("learn_section", "GIT")
-    nav_logo_col, nav_bc_col = st.columns([4, 6])
-    with nav_logo_col:
-        st.markdown(
-            """
+
+    _LOGO_HTML = """
 <div class="kfp-nav">
   <span class="kfp-nav-logo">🐼</span>
   <div class="kfp-nav-text">
@@ -1925,22 +1924,20 @@ def page_learn():
     <div class="kfp-nav-tagline">Developer Learning Hub</div>
   </div>
 </div>
-""",
-            unsafe_allow_html=True,
-        )
-    with nav_bc_col:
-        st.markdown(
-            f'<div class="breadcrumb" style="padding-top:0.85rem;">'
-            f'<span>Home</span><span class="breadcrumb-sep">›</span>'
-            f'<span>Developer Learning Hub</span><span class="breadcrumb-sep">›</span>'
-            f'<span class="breadcrumb-current">{section}</span>'
-            f"</div>",
-            unsafe_allow_html=True,
-        )
+"""
+    _BC_HTML = (
+        f'<div class="breadcrumb" style="padding-top:0.85rem;">'
+        f'<span>Home</span><span class="breadcrumb-sep">›</span>'
+        f'<span>Developer Learning Hub</span><span class="breadcrumb-sep">›</span>'
+        f'<span class="breadcrumb-current">{section}</span>'
+        f"</div>"
+    )
 
-    # ── New-topic banner (header area, before sidebar+content) ────────────────
     if not st.session_state.get("learn_banner_dismissed", False):
-        banner_col, dismiss_col = st.columns([9, 1])
+        # Row 1: Logo (left) | Banner (middle) | Dismiss button (right)
+        logo_col, banner_col, dismiss_col = st.columns([2, 7, 1])
+        with logo_col:
+            st.markdown(_LOGO_HTML, unsafe_allow_html=True)
         with banner_col:
             st.markdown(
                 f'<div class="new-topic-banner">'
@@ -1953,6 +1950,17 @@ def page_learn():
             if st.button("Dismiss", key="banner_dismiss", help="Dismiss this banner"):
                 st.session_state.learn_banner_dismissed = True
                 st.rerun()
+        # Row 2: Empty (left) | Breadcrumb (right)
+        _, bc_col = st.columns([2, 8])
+        with bc_col:
+            st.markdown(_BC_HTML, unsafe_allow_html=True)
+    else:
+        # Banner dismissed: Logo (left) | Breadcrumb (right)
+        nav_logo_col, nav_bc_col = st.columns([2, 8])
+        with nav_logo_col:
+            st.markdown(_LOGO_HTML, unsafe_allow_html=True)
+        with nav_bc_col:
+            st.markdown(_BC_HTML, unsafe_allow_html=True)
 
     # ── Two-column layout: sidebar (2) + content (8) ──────────────────────────
     nav_col, content_col = st.columns([2, 8], gap="medium")
