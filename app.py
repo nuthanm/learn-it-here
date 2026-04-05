@@ -37,6 +37,13 @@ for _k, _v in _DEFAULTS.items():
     if _k not in st.session_state:
         st.session_state[_k] = _v
 
+# ── Logo-click navigation (query param set by the clickable logo anchor) ──────
+if st.query_params.get("go") == "home":
+    del st.query_params["go"]
+    if st.session_state.get("page") != "landing":
+        st.session_state.page = "landing"
+        st.rerun()
+
 
 def _on_interact():
     """Switch robot from 'welcome' to 'thinking' on first form interaction."""
@@ -101,6 +108,12 @@ st.markdown(
     letter-spacing: -0.3px; line-height: 1.2; margin: 0; padding: 0;
   }
   .kfp-nav-tagline { font-size: 0.72rem; color: #40916C; margin: 0; padding: 0; line-height: 1.3; }
+  .kfp-nav-brand {
+    display: flex; align-items: center; gap: 1.2rem;
+    text-decoration: none; cursor: pointer;
+  }
+  .kfp-nav-brand:hover .kfp-nav-title { opacity: 0.75; }
+  .kfp-nav-brand:hover .kfp-nav-logo  { opacity: 0.88; }
 
   /* ─ Landing hero section ─ */
   .hero-eyebrow {
@@ -144,7 +157,7 @@ st.markdown(
   /* ─ hero feature highlights ─ */
   .hero-features {
     display: flex; flex-direction: column; gap: 0.5rem;
-    margin-bottom: 14px;
+    margin-bottom: 1.4rem;
     animation: headlineIn .65s ease .50s both;
   }
   .hero-feat {
@@ -452,10 +465,10 @@ st.markdown(
 
   /* ─ New-topic announcement banner ─ */
   .new-topic-banner {
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; gap: 1rem;
     background: linear-gradient(90deg, #1A1A1A 0%, #2D6A4F 100%);
     border-radius: 10px; padding: 0.45rem 0.85rem;
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.9rem; margin-right: 200px; /* avoid Streamlit's fixed header toolbar */
     color: #FFFFFF; font-size: 0.83rem; font-weight: 600;
     box-shadow: 0 3px 12px rgba(0,0,0,0.18);
     animation: headlineIn .5s ease both;
@@ -584,6 +597,9 @@ st.markdown(
       font-size: 0.75rem !important;
       padding: 0.8rem 0.8rem !important;
     }
+
+    /* Banner — reduce right margin on mobile */
+    .new-topic-banner { margin-right: 0 !important; }
 
     /* Shortcut table — tighter cells */
     .shortcut-table th, .shortcut-table td {
@@ -1198,47 +1214,60 @@ def _footer_html() -> str:
 
 
 def _scroll_nav_html() -> str:
-    """Return HTML/JS for GitHub-style scroll navigation buttons.
+    """Return a full HTML document for components.html(height=0).
 
-    Renders two fixed-position circular buttons (↑ top, ↓ bottom) using the
-    panda theme palette. Each button is hidden (opacity 0) by default and only
-    becomes visible when there is scrollable content in the relevant direction.
-    JavaScript attaches to the Streamlit main container's scroll event and
-    toggles the ``snb-visible`` class accordingly.
+    Creates scroll-to-top / scroll-to-bottom buttons directly in the parent
+    Streamlit page via ``window.parent.document`` so that ``position:fixed``
+    is anchored to the viewport and the panda-theme CSS classes apply.
     """
-    return """
-<button type="button" class="scroll-nav-btn" id="snb-top" title="Scroll to top" aria-label="Scroll to top">&#8679;</button>
-<button type="button" class="scroll-nav-btn" id="snb-bot" title="Scroll to bottom" aria-label="Scroll to bottom">&#8681;</button>
+    return """<!DOCTYPE html>
+<html>
+<head>
+<style>html,body{margin:0;padding:0;height:0;overflow:hidden;background:transparent}</style>
+</head>
+<body>
 <script>
 (function(){
-  var topBtn = document.getElementById('snb-top');
-  var botBtn = document.getElementById('snb-bot');
-  if (!topBtn || !botBtn) return;
+  var pdoc = window.parent ? window.parent.document : document;
+  var pwin = window.parent ? window.parent : window;
 
-  /*
-   * Identifies the active scroll container so that scroll position reads and
-   * scroll commands all target the same element regardless of resolution.
-   * On desktop Streamlit the stMain element is typically scrollable; on some
-   * layouts the window / documentElement handles scrolling instead.
-   */
+  function getOrCreate(id, content, bottom) {
+    var btn = pdoc.getElementById(id);
+    if (!btn) {
+      btn = pdoc.createElement('button');
+      btn.id = id;
+      btn.type = 'button';
+      btn.className = 'scroll-nav-btn';
+      btn.title = id === 'snb-top' ? 'Scroll to top' : 'Scroll to bottom';
+      btn.setAttribute('aria-label', btn.title);
+      btn.innerHTML = content;
+      btn.style.bottom = bottom;
+      pdoc.body.appendChild(btn);
+    }
+    return btn;
+  }
+
+  var topBtn = getOrCreate('snb-top', '&#8679;', '5.6rem');
+  var botBtn = getOrCreate('snb-bot', '&#8681;', '3.1rem');
+
   function getActiveEl() {
     var el = (
-      document.querySelector('[data-testid="stMain"]') ||
-      document.querySelector('section.main')
+      pdoc.querySelector('[data-testid="stMain"]') ||
+      pdoc.querySelector('section.main')
     );
     if (el && el.scrollHeight > el.clientHeight) return el;
-    return document.documentElement;
+    return pdoc.documentElement;
   }
 
   function getScrollTop(el) {
-    return el === document.documentElement
-      ? (window.pageYOffset || window.scrollY || el.scrollTop || 0)
+    return el === pdoc.documentElement
+      ? (pwin.pageYOffset || pwin.scrollY || el.scrollTop || 0)
       : (el.scrollTop || 0);
   }
 
   function getClientHeight(el) {
-    return el === document.documentElement
-      ? (window.innerHeight || el.clientHeight || 0)
+    return el === pdoc.documentElement
+      ? (pwin.innerHeight || el.clientHeight || 0)
       : (el.clientHeight || 0);
   }
 
@@ -1251,18 +1280,24 @@ def _scroll_nav_html() -> str:
     botBtn.classList.toggle('snb-visible', st + ch < sh - 80);
   }
 
-  /* Scroll the active container to the given position */
   function scrollPage(top) {
     var el = getActiveEl();
     var opts = {top: top, behavior: 'smooth'};
-    if (el === document.documentElement) {
-      if (window.scrollTo) { try { window.scrollTo(opts); } catch(e) {} }
-      else { document.documentElement.scrollTop = top; document.body.scrollTop = top; }
+    if (el === pdoc.documentElement) {
+      try { pwin.scrollTo(opts); } catch(e) { pdoc.documentElement.scrollTop = top; pdoc.body.scrollTop = top; }
     } else {
-      if (el.scrollTo) { try { el.scrollTo(opts); } catch(e) { el.scrollTop = top; } }
-      else { el.scrollTop = top; }
+      try { el.scrollTo(opts); } catch(e) { el.scrollTop = top; }
     }
   }
+
+  /* Replace buttons with fresh clones to clear any stale listeners */
+  function refreshBtn(old) {
+    var fresh = old.cloneNode(true);
+    old.parentNode.replaceChild(fresh, old);
+    return fresh;
+  }
+  topBtn = refreshBtn(topBtn);
+  botBtn = refreshBtn(botBtn);
 
   topBtn.addEventListener('click', function() { scrollPage(0); });
   botBtn.addEventListener('click', function() {
@@ -1270,36 +1305,42 @@ def _scroll_nav_html() -> str:
     scrollPage(el.scrollHeight - getClientHeight(el));
   });
 
-  /* Listen on all possible scroll containers so the buttons react on every resolution */
   var el = getActiveEl();
   el.addEventListener('scroll', update, {passive: true});
-  window.addEventListener('scroll', update, {passive: true});
-  document.addEventListener('scroll', update, {passive: true});
+  pwin.addEventListener('scroll', update, {passive: true});
   update();
 })();
 </script>
+</body>
+</html>
 """
 
 
 def _copy_buttons_html() -> str:
-    """Return HTML/JS that injects a 'Copy' button into every code block.
+    """Return a full HTML document for components.html(height=0).
 
-    Finds all ``.cmd-block`` and ``.json-block`` elements, wraps each in a
-    relatively-positioned container, then appends a button that writes the
-    block's text to the clipboard. A MutationObserver re-runs the injection
-    whenever Streamlit re-renders content.
+    Injects a 'Copy' button into every ``.cmd-block`` and ``.json-block``
+    in the parent Streamlit page via ``window.parent.document``. A
+    MutationObserver re-runs the injection whenever Streamlit re-renders.
     """
-    return """
+    return """<!DOCTYPE html>
+<html>
+<head>
+<style>html,body{margin:0;padding:0;height:0;overflow:hidden;background:transparent}</style>
+</head>
+<body>
 <script>
 (function(){
+  var pdoc = window.parent ? window.parent.document : document;
+
   function addCopyButtons() {
-    document.querySelectorAll('.cmd-block, .json-block').forEach(function(block) {
+    pdoc.querySelectorAll('.cmd-block, .json-block').forEach(function(block) {
       if (block.parentNode && block.parentNode.classList.contains('code-block-wrapper')) return;
-      var wrapper = document.createElement('div');
+      var wrapper = pdoc.createElement('div');
       wrapper.className = 'code-block-wrapper';
       block.parentNode.insertBefore(wrapper, block);
       wrapper.appendChild(block);
-      var btn = document.createElement('button');
+      var btn = pdoc.createElement('button');
       btn.className = 'copy-code-btn';
       btn.textContent = 'Copy';
       btn.type = 'button';
@@ -1321,33 +1362,31 @@ def _copy_buttons_html() -> str:
   }
 
   function fallbackCopy(text, btn) {
-    var ta = document.createElement('textarea');
+    var ta = pdoc.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
-    document.body.appendChild(ta);
+    pdoc.body.appendChild(ta);
     ta.focus();
     ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
-    document.body.removeChild(ta);
+    try { pdoc.execCommand('copy'); } catch(e) {}
+    pdoc.body.removeChild(ta);
     btn.textContent = 'Copied!';
     btn.classList.add('copied');
     setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
   }
 
-  if (document.readyState !== 'loading') {
-    addCopyButtons();
-  } else {
-    document.addEventListener('DOMContentLoaded', addCopyButtons);
-  }
+  addCopyButtons();
 
   var debounceTimer;
   var observer = new MutationObserver(function() {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(addCopyButtons, 100);
+    debounceTimer = setTimeout(addCopyButtons, 150); /* 150ms gives React time to finish re-rendering */
   });
-  observer.observe(document.body, { childList: true, subtree: true });
+  observer.observe(pdoc.body, { childList: true, subtree: true });
 })();
 </script>
+</body>
+</html>
 """
 
 
@@ -1486,11 +1525,13 @@ def page_landing():
     st.markdown(
         """
 <div class="kfp-nav">
-  <span class="kfp-nav-logo">🐼</span>
-  <div class="kfp-nav-text">
-    <div class="kfp-nav-title">Learn It Here</div>
-    <div class="kfp-nav-tagline">Hub to learn most important topics</div>
-  </div>
+  <a href="?go=home" class="kfp-nav-brand">
+    <span class="kfp-nav-logo">🐼</span>
+    <div class="kfp-nav-text">
+      <div class="kfp-nav-title">Learn It Here</div>
+      <div class="kfp-nav-tagline">Hub to learn most important topics</div>
+    </div>
+  </a>
 </div>
 """,
         unsafe_allow_html=True,
@@ -1535,7 +1576,7 @@ def page_landing():
             unsafe_allow_html=True,
         )
 
-        bc1, bc2 = st.columns(2, gap="small")
+        bc1, bc2 = st.columns(2, gap="medium")
         with bc1:
             if st.button(
                 "📋 Fill Project Requirements",
@@ -1561,7 +1602,7 @@ def page_landing():
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
-    st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
+    components.html(_scroll_nav_html(), height=0)
 
 
 # ── Requirements Page ─────────────────────────────────────────────────────────
@@ -1575,11 +1616,13 @@ def page_requirements():
         st.markdown(
             """
 <div class="kfp-nav">
-  <span class="kfp-nav-logo">🐼</span>
-  <div class="kfp-nav-text">
-    <div class="kfp-nav-title">Learn It Here</div>
-    <div class="kfp-nav-tagline">Project Requirements</div>
-  </div>
+  <a href="?go=home" class="kfp-nav-brand">
+    <span class="kfp-nav-logo">🐼</span>
+    <div class="kfp-nav-text">
+      <div class="kfp-nav-title">Learn It Here</div>
+      <div class="kfp-nav-tagline">Project Requirements</div>
+    </div>
+  </a>
   <div class="kfp-nav-sub">📋 Step 1 of your journey</div>
 </div>
 """,
@@ -1637,7 +1680,7 @@ def page_requirements():
                         del st.session_state[k]
                     st.rerun()
         st.markdown(_footer_html(), unsafe_allow_html=True)
-        st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
+        components.html(_scroll_nav_html(), height=0)
         return
 
     # ── Two-column layout ─────────────────────────────────────────────────────
@@ -1898,8 +1941,8 @@ def page_requirements():
             st.rerun()
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
-    st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
-    st.markdown(_copy_buttons_html(), unsafe_allow_html=True)
+    components.html(_scroll_nav_html(), height=0)
+    components.html(_copy_buttons_html(), height=0)
 
 
 # ── Suggest-topic dialog (module-level so the decorator is stable) ────────────
@@ -1942,11 +1985,13 @@ def page_learn():
 
     _LOGO_HTML = """
 <div class="kfp-nav">
-  <span class="kfp-nav-logo">🐼</span>
-  <div class="kfp-nav-text">
-    <div class="kfp-nav-title">Learn It Here</div>
-    <div class="kfp-nav-tagline">Developer Learning Hub</div>
-  </div>
+  <a href="?go=home" class="kfp-nav-brand">
+    <span class="kfp-nav-logo">🐼</span>
+    <div class="kfp-nav-text">
+      <div class="kfp-nav-title">Learn It Here</div>
+      <div class="kfp-nav-tagline">Developer Learning Hub</div>
+    </div>
+  </a>
 </div>
 """
     _BC_HTML = (
@@ -4389,8 +4434,8 @@ await builder.Build().RunAsync();
         )
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
-    st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
-    st.markdown(_copy_buttons_html(), unsafe_allow_html=True)
+    components.html(_scroll_nav_html(), height=0)
+    components.html(_copy_buttons_html(), height=0)
 
 
 # ── Main Routing ──────────────────────────────────────────────────────────────
