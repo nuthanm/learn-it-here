@@ -4,6 +4,8 @@ A **professional, single-page Streamlit web app** that captures all key tech-sta
 questions before a project kicks off. Responses are stored in **Supabase (PostgreSQL)**
 and can be exported as a **PDF report** with a single click.
 
+<img width="958" height="412" alt="image" src="https://github.com/user-attachments/assets/7bf54542-d385-45a5-99f5-52a64b917bc4" />
+
 ---
 
 ## ✨ Features
