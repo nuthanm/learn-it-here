@@ -1320,17 +1320,10 @@ def _copy_buttons_html() -> str:
     document.addEventListener('DOMContentLoaded', addCopyButtons);
   }
 
-  var observer = new MutationObserver(function(mutations) {
-    var needsUpdate = mutations.some(function(m) {
-      return Array.from(m.addedNodes).some(function(n) {
-        return n.nodeType === 1 && (
-          n.classList.contains('cmd-block') ||
-          n.classList.contains('json-block') ||
-          (n.querySelector && (n.querySelector('.cmd-block, .json-block')))
-        );
-      });
-    });
-    if (needsUpdate) addCopyButtons();
+  var debounceTimer;
+  var observer = new MutationObserver(function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(addCopyButtons, 100);
   });
   observer.observe(document.body, { childList: true, subtree: true });
 })();
