@@ -277,22 +277,37 @@ st.markdown(
 
   /* ─ Command blocks — panda black bg, bamboo text ─ */
   .cmd-block {
-    background: #1A1A1A; color: #74C69D;
+    background: #1A1A1A !important; color: #74C69D;
     border-radius: 12px; padding: 1.1rem 1.5rem;
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
-    overflow-x: auto;
+    overflow-x: auto; white-space: pre-wrap;
   }
   .cmd-comment { color: #888888; font-style: italic; }
 
   /* ─ Settings / JSON blocks — deep panda black ─ */
   .json-block {
-    background: #0D0D0D; color: #B7E4C7;
+    background: #0D0D0D !important; color: #B7E4C7;
     border-radius: 12px; padding: 1.1rem 1.5rem;
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
-    overflow-x: auto;
+    overflow-x: auto; white-space: pre-wrap;
   }
+
+  /* ─ Code block copy button ─ */
+  .code-block-wrapper { position: relative; }
+  .copy-code-btn {
+    position: absolute; top: 0.5rem; right: 0.5rem;
+    background: rgba(45,106,79,0.88); color: #FFFFFF;
+    border: none; border-radius: 6px;
+    padding: 0.2rem 0.65rem;
+    font-size: 0.72rem; font-weight: 700;
+    cursor: pointer; transition: background 0.2s, opacity 0.2s;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    z-index: 10; opacity: 0.75;
+  }
+  .copy-code-btn:hover { background: rgba(45,106,79,1); opacity: 1; }
+  .copy-code-btn.copied { background: rgba(26,26,26,0.9); opacity: 1; }
 
   /* ─ Requirements form card ─ */
   .form-card {
@@ -365,17 +380,8 @@ st.markdown(
 
   /* ─ Learn-hub sidebar navigation ─ */
   .learn-sidebar {
-    background: #FFFFFF; border-radius: 14px;
-    border: 1px solid #E0E0E0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    background: transparent;
     overflow: hidden;
-  }
-  .learn-sidebar-title {
-    font-size: 0.68rem; font-weight: 800; color: #40916C;
-    text-transform: uppercase; letter-spacing: 1.3px;
-    padding: 0.55rem 1rem;
-    border-bottom: 1px solid #F0F0F0;
-    background: #FAFAFA;
   }
   /* Style st.radio inside the sidebar to look like a vertical nav list */
   div[data-testid="stRadio"] > label { display: none !important; }
@@ -460,6 +466,8 @@ st.markdown(
   [data-testid="stMarkdownContainer"]:empty { display: none !important; }
   [data-testid="stMarkdownContainer"] > .content-card:empty,
   [data-testid="stMarkdownContainer"] > .form-card:empty { display: none !important; }
+  /* Prevent Streamlit markdown wrapper from adding a white background above code blocks */
+  [data-testid="stMarkdownContainer"] { background: transparent !important; }
 
   /* ─ Scroll-to-top / scroll-to-bottom floating buttons ─ */
   .scroll-nav-btn {
@@ -1245,7 +1253,84 @@ def _scroll_nav_html() -> str:
 """
 
 
-# ── PDF Generation ────────────────────────────────────────────────────────────
+def _copy_buttons_html() -> str:
+    """Return HTML/JS that injects a 'Copy' button into every code block.
+
+    Finds all ``.cmd-block`` and ``.json-block`` elements, wraps each in a
+    relatively-positioned container, then appends a button that writes the
+    block's text to the clipboard. A MutationObserver re-runs the injection
+    whenever Streamlit re-renders content.
+    """
+    return """
+<script>
+(function(){
+  function addCopyButtons() {
+    document.querySelectorAll('.cmd-block, .json-block').forEach(function(block) {
+      if (block.parentNode && block.parentNode.classList.contains('code-block-wrapper')) return;
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+      block.parentNode.insertBefore(wrapper, block);
+      wrapper.appendChild(block);
+      var btn = document.createElement('button');
+      btn.className = 'copy-code-btn';
+      btn.textContent = 'Copy';
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Copy code');
+      btn.addEventListener('click', function() {
+        var text = block.innerText || block.textContent || '';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+          }).catch(function() { fallbackCopy(text, btn); });
+        } else {
+          fallbackCopy(text, btn);
+        }
+      });
+      wrapper.appendChild(btn);
+    });
+  }
+
+  function fallbackCopy(text, btn) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }
+
+  if (document.readyState !== 'loading') {
+    addCopyButtons();
+  } else {
+    document.addEventListener('DOMContentLoaded', addCopyButtons);
+  }
+
+  var observer = new MutationObserver(function(mutations) {
+    var needsUpdate = mutations.some(function(m) {
+      return Array.from(m.addedNodes).some(function(n) {
+        return n.nodeType === 1 && (
+          n.classList.contains('cmd-block') ||
+          n.classList.contains('json-block') ||
+          (n.querySelector && (n.querySelector('.cmd-block, .json-block')))
+        );
+      });
+    });
+    if (needsUpdate) addCopyButtons();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+"""
+
+
+
 def _safe(text) -> str:
     """Strip characters outside Latin-1 for built-in PDF fonts."""
     return str(text or "").encode("latin-1", "replace").decode("latin-1")
@@ -1793,6 +1878,7 @@ def page_requirements():
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
+    st.markdown(_copy_buttons_html(), unsafe_allow_html=True)
 
 
 # ── Suggest-topic dialog (module-level so the decorator is stable) ────────────
@@ -1846,9 +1932,7 @@ def page_learn():
     # ── Sidebar nav ───────────────────────────────────────────────────────────
     with nav_col:
         st.markdown(
-            '<div class="learn-sidebar">'
-            '<div class="learn-sidebar-title">Topics</div>'
-            "</div>",
+            '<div class="learn-sidebar"></div>',
             unsafe_allow_html=True,
         )
         st.radio(
@@ -4279,6 +4363,7 @@ await builder.Build().RunAsync();
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
+    st.markdown(_copy_buttons_html(), unsafe_allow_html=True)
 
 
 # ── Main Routing ──────────────────────────────────────────────────────────────
