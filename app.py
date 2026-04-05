@@ -29,10 +29,10 @@ _DEFAULTS = {
 
 # ── Learn-hub menu definitions ─────────────────────────────────────────────────
 # To add a new menu item, append to this list and update LATEST_NEW_TOPIC.
-LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle"]
+LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle", ".NET", "Unit Testing", "LINQ", "Blazor"]
 # LATEST_NEW_TOPIC is the item that triggers the "new menu" banner.
 # Update this string whenever a brand-new item is added to LEARN_MENU_ITEMS.
-LATEST_NEW_TOPIC = "EF Core + Oracle"
+LATEST_NEW_TOPIC = "Blazor"
 for _k, _v in _DEFAULTS.items():
     if _k not in st.session_state:
         st.session_state[_k] = _v
@@ -3133,6 +3133,1149 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # .NET SECTION
+    # ══════════════════════════════════════════════════════════════════════════
+      elif section == ".NET":
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">🟣 What is .NET? (For Complete Beginners)</div>
+  <div class="card-body">
+    <b>.NET</b> (pronounced "dot net") is a <em>free, open-source developer platform</em> created by
+    Microsoft. Think of it as a powerful toolbox that lets you build all kinds of software —
+    websites, mobile apps, desktop apps, games, cloud services, and more — using a common set
+    of tools and languages (mainly <b>C#</b>, F#, and VB.NET).<br><br>
+    <b>Why should you learn it?</b><br>
+    ✅ Used by millions of developers worldwide<br>
+    ✅ Backed by Microsoft and a huge open-source community<br>
+    ✅ Runs on Windows, macOS, and Linux<br>
+    ✅ Excellent performance — one of the fastest web frameworks in the world<br>
+    ✅ Great job market demand<br><br>
+    <b>Simple analogy:</b> If programming is like cooking, .NET is the professional kitchen
+    (with all utensils, ovens, and recipes) — C# is the chef who works in that kitchen.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📜 .NET Release History &amp; Associated C# Versions</div>
+  <div class="card-body">
+    Every version of .NET comes paired with a version of C# — the primary language used to write .NET apps.
+    Here's the full picture from the very beginning:<br><br>
+    <table class="shortcut-table">
+      <tr><th>.NET Version</th><th>Release Year</th><th>C# Version</th><th>Support Type</th><th>Key Highlights</th></tr>
+      <tr><td>.NET Framework 1.0</td><td>2002</td><td>C# 1.0</td><td>End of Life</td><td>The very first .NET — Windows only, introduced CLR &amp; BCL</td></tr>
+      <tr><td>.NET Framework 1.1</td><td>2003</td><td>C# 1.2</td><td>End of Life</td><td>Bug fixes, ASP.NET improvements</td></tr>
+      <tr><td>.NET Framework 2.0</td><td>2005</td><td>C# 2.0</td><td>End of Life</td><td>Generics, anonymous methods, nullable types</td></tr>
+      <tr><td>.NET Framework 3.0</td><td>2006</td><td>C# 2.0</td><td>End of Life</td><td>WPF, WCF, WF introduced</td></tr>
+      <tr><td>.NET Framework 3.5</td><td>2007</td><td>C# 3.0</td><td>End of Life</td><td>LINQ, lambda expressions, extension methods</td></tr>
+      <tr><td>.NET Framework 4.0</td><td>2010</td><td>C# 4.0</td><td>End of Life</td><td>TPL (Task Parallel Library), dynamic keyword</td></tr>
+      <tr><td>.NET Framework 4.5</td><td>2012</td><td>C# 5.0</td><td>End of Life</td><td>async/await introduced</td></tr>
+      <tr><td>.NET Framework 4.6</td><td>2015</td><td>C# 6.0</td><td>End of Life</td><td>RyuJIT compiler, string interpolation</td></tr>
+      <tr><td>.NET Framework 4.7</td><td>2017</td><td>C# 7.x</td><td>End of Life</td><td>Tuples, pattern matching, local functions</td></tr>
+      <tr><td>.NET Framework 4.8</td><td>2019</td><td>C# 7.3</td><td>Maintenance</td><td>Last ever .NET Framework — still supported on Windows</td></tr>
+      <tr><td><b>.NET Core 1.0</b></td><td>2016</td><td>C# 6.0</td><td>End of Life</td><td>First cross-platform .NET — Linux/macOS support!</td></tr>
+      <tr><td>.NET Core 2.0</td><td>2017</td><td>C# 7.1</td><td>End of Life</td><td>.NET Standard 2.0 support, massive API expansion</td></tr>
+      <tr><td>.NET Core 2.1</td><td>2018</td><td>C# 7.3</td><td>End of Life</td><td>LTS release, Span&lt;T&gt;, SignalR</td></tr>
+      <tr><td>.NET Core 3.0</td><td>2019</td><td>C# 8.0</td><td>End of Life</td><td>WPF/WinForms on Core, Blazor Server</td></tr>
+      <tr><td>.NET Core 3.1</td><td>2019</td><td>C# 8.0</td><td>End of Life (2022)</td><td>LTS — most used Core version; gRPC support</td></tr>
+      <tr><td><b>.NET 5</b></td><td>2020</td><td>C# 9.0</td><td>End of Life</td><td>Unified .NET — merged Core + Framework vision; no "Core" branding</td></tr>
+      <tr><td><b>.NET 6</b></td><td>2021</td><td>C# 10.0</td><td>End of Life (2024)</td><td>LTS — minimal APIs, .NET MAUI preview, hot reload</td></tr>
+      <tr><td>.NET 7</td><td>2022</td><td>C# 11.0</td><td>End of Life</td><td>STS — rate limiting, output caching, regex improvements</td></tr>
+      <tr><td><b>.NET 8</b></td><td>2023</td><td>C# 12.0</td><td><b>LTS ✅ Current</b></td><td>Native AOT, Blazor United, primary constructors, collection expressions</td></tr>
+      <tr><td>.NET 9</td><td>2024</td><td>C# 13.0</td><td>STS</td><td>LINQ improvements, params spans, Task.WhenEach</td></tr>
+      <tr><td><b>.NET 10</b></td><td>2025 (Nov)</td><td>C# 14.0</td><td><b>LTS (Upcoming)</b></td><td>In development — next long-term support release</td></tr>
+    </table>
+    <br>
+    <b>LTS</b> = Long-Term Support (3 years). <b>STS</b> = Standard-Term Support (18 months).
+    <b>Rule of thumb:</b> Use an LTS version for production apps — currently <b>.NET 8</b>.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">⚖️ .NET Framework vs .NET Standard vs .NET (Core / 5+)</div>
+  <div class="card-body">
+    This is one of the most confusing things for beginners — three names that all say ".NET"!
+    Let's break it down with plain English and a comparison table.<br><br>
+    <b>Think of it this way:</b><br>
+    🏠 <b>.NET Framework</b> = An old house (Windows-only, comfy but can't be moved)<br>
+    📐 <b>.NET Standard</b> = A set of blueprints (a contract that different .NETs agree to follow)<br>
+    🚀 <b>.NET (Core / 5+)</b> = The new modern building (cross-platform, fast, the future)<br><br>
+    <table class="shortcut-table">
+      <tr><th>Feature</th><th>.NET Framework</th><th>.NET Standard</th><th>.NET (Core / 5+)</th></tr>
+      <tr><td>What it is</td><td>Original full Windows .NET</td><td>A specification/interface (not a runtime)</td><td>Modern, unified cross-platform .NET</td></tr>
+      <tr><td>Runs on</td><td>Windows only</td><td>N/A — it's a standard, not a runtime</td><td>Windows, macOS, Linux</td></tr>
+      <tr><td>Status</td><td>Maintenance (no new features)</td><td>Superseded by .NET 5+ (still used in libraries)</td><td>Active — all future development here</td></tr>
+      <tr><td>Latest version</td><td>4.8.1</td><td>2.1</td><td>.NET 9 (LTS: .NET 8)</td></tr>
+      <tr><td>Who should use it</td><td>Legacy apps that can't migrate</td><td>Library authors targeting multiple runtimes</td><td>Everyone building new apps</td></tr>
+      <tr><td>Performance</td><td>Good</td><td>N/A</td><td>Excellent (much faster)</td></tr>
+      <tr><td>Open Source</td><td>Partially</td><td>Yes</td><td>Yes (fully open source)</td></tr>
+      <tr><td>WinForms / WPF</td><td>✅ Full support</td><td>❌ Not a runtime</td><td>✅ Supported since .NET Core 3.0</td></tr>
+      <tr><td>ASP.NET / Web API</td><td>✅ ASP.NET 4.x</td><td>❌ Not a runtime</td><td>✅ ASP.NET Core (much faster)</td></tr>
+      <tr><td>NuGet packages</td><td>Targets net4x</td><td>Targets netstandard2.x</td><td>Targets net6, net7, net8 etc.</td></tr>
+    </table>
+    <br>
+    <b>When do you see .NET Standard today?</b> When you look at a NuGet library that says
+    <code>netstandard2.0</code> — it means that library works in both .NET Framework AND .NET Core/5+.
+    It's a compatibility bridge. For <em>new libraries</em>, target .NET 8 directly.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🏗️ Anatomy of a .NET Console Program</div>
+  <div class="card-body">
+    Here's the simplest possible .NET program (.NET 6+ with top-level statements), with every line explained:
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment">// File: Program.cs  — this is the entry point of your app</span>
+
+<span class="cmd-comment">// 1. 'using' brings in a namespace so you can use its classes without full path</span>
+using System;
+
+<span class="cmd-comment">// 2. 'namespace' groups your code logically (like a folder for code)</span>
+namespace MyFirstApp
+{
+    <span class="cmd-comment">// 3. 'class' is a blueprint for objects</span>
+    class Program
+    {
+        <span class="cmd-comment">// 4. Main() is where your program starts running</span>
+        static void Main(string[] args)
+        {
+            <span class="cmd-comment">// 5. Console.WriteLine prints text to the screen + newline</span>
+            Console.WriteLine("Hello, .NET World! 🐼");
+
+            <span class="cmd-comment">// 6. Variables store data — 'string' holds text</span>
+            string name = "Developer";
+            int age = 25;
+
+            <span class="cmd-comment">// 7. String interpolation — $ prefix lets you embed variables</span>
+            Console.WriteLine($"Name: {name}, Age: {age}");
+
+            <span class="cmd-comment">// 8. Console.ReadLine() waits for user to type something</span>
+            Console.Write("Press Enter to exit...");
+            Console.ReadLine();
+        }
+    }
+}
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">🚀 How to Create &amp; Run Your First .NET App</div>
+  <div class="card-body">
+    <b>Step 1 — Install the .NET SDK:</b> Download from <a href="https://dotnet.microsoft.com/download" target="_blank">dotnet.microsoft.com/download</a><br>
+    After installing, open a terminal and verify:
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment"># Check .NET is installed and see the version</span>
+dotnet --version
+
+<span class="cmd-comment"># Create a new console application</span>
+dotnet new console -n MyFirstApp
+cd MyFirstApp
+
+<span class="cmd-comment"># Run the app</span>
+dotnet run
+
+<span class="cmd-comment"># Build without running</span>
+dotnet build
+
+<span class="cmd-comment"># List all available project templates</span>
+dotnet new list
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📋 Quick Reference — What to Use When</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>Situation</th><th>Use This</th></tr>
+      <tr><td>Building a new web API or website</td><td>ASP.NET Core (.NET 8)</td></tr>
+      <tr><td>Building a Windows desktop app</td><td>WPF or WinForms on .NET 8</td></tr>
+      <tr><td>Building a cross-platform desktop app</td><td>.NET MAUI</td></tr>
+      <tr><td>Building a browser app in C#</td><td>Blazor WebAssembly</td></tr>
+      <tr><td>Maintaining an old Windows-only app</td><td>.NET Framework 4.8 (maintenance mode)</td></tr>
+      <tr><td>Creating a NuGet library for broad compatibility</td><td>Target netstandard2.0 or net8</td></tr>
+      <tr><td>Cloud / microservices</td><td>.NET 8 with Docker</td></tr>
+    </table>
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # UNIT TESTING SECTION
+    # ══════════════════════════════════════════════════════════════════════════
+      elif section == "Unit Testing":
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">🧪 What is Unit Testing? (For Complete Beginners)</div>
+  <div class="card-body">
+    <b>Unit testing</b> means writing small, automated pieces of code that verify a tiny,
+    isolated piece (a "unit") of your application works correctly — <em>before a human ever
+    clicks a button</em>.<br><br>
+    <b>Think of it like this:</b> Imagine you built a calculator. A unit test would
+    automatically check: "Does 2 + 2 really return 4?" — and it checks that <em>every single
+    time</em> you change any code. If you accidentally break the addition logic later, the
+    test immediately shouts "FAILED!" and saves you from shipping a broken calculator.<br><br>
+    <b>Why should every developer write unit tests?</b><br>
+    ✅ <b>Catch bugs early</b> — find problems in seconds, not in production<br>
+    ✅ <b>Refactor confidently</b> — change code without fear; tests tell you if you broke something<br>
+    ✅ <b>Living documentation</b> — tests show exactly how code is supposed to behave<br>
+    ✅ <b>Faster debugging</b> — failing test pinpoints exactly which unit broke<br>
+    ✅ <b>Required in most professional teams</b> — companies expect developers to write tests<br><br>
+    <b>The 3A Pattern (Arrange-Act-Assert)</b> — Every unit test follows this structure:<br>
+    🔵 <b>Arrange</b> — Set up the data and objects you need<br>
+    🟢 <b>Act</b> — Call the method/function you are testing<br>
+    🔴 <b>Assert</b> — Verify the result is what you expected
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">⚖️ xUnit vs NUnit vs MSTest — Complete Comparison</div>
+  <div class="card-body">
+    There are three major unit testing frameworks for .NET. All three do the same job — the
+    differences are syntax, features, and community preference. Here's everything you need to know:<br><br>
+    <table class="shortcut-table">
+      <tr><th>Feature</th><th>xUnit</th><th>NUnit</th><th>MSTest</th></tr>
+      <tr><td>Created by</td><td>James Newkirk &amp; Brad Wilson (ex-NUnit creators)</td><td>Open-source community</td><td>Microsoft</td></tr>
+      <tr><td>First released</td><td>2007</td><td>2000 (oldest!)</td><td>2005</td></tr>
+      <tr><td>Current version</td><td>xUnit 2.x / 3.x</td><td>NUnit 3.x / 4.x</td><td>MSTest v2 / v3</td></tr>
+      <tr><td>Preferred by</td><td>.NET Core / modern teams</td><td>Enterprise / Java-background devs</td><td>Visual Studio / Microsoft teams</td></tr>
+      <tr><td>Test marker attribute</td><td>[Fact] / [Theory]</td><td>[Test] / [TestCase]</td><td>[TestMethod] / [DataTestMethod]</td></tr>
+      <tr><td>Test class attribute</td><td>None needed</td><td>[TestFixture]</td><td>[TestClass]</td></tr>
+      <tr><td>Setup method</td><td>Constructor</td><td>[SetUp]</td><td>[TestInitialize]</td></tr>
+      <tr><td>Teardown method</td><td>IDisposable.Dispose()</td><td>[TearDown]</td><td>[TestCleanup]</td></tr>
+      <tr><td>One-time setup</td><td>IClassFixture&lt;T&gt;</td><td>[OneTimeSetUp]</td><td>[ClassInitialize]</td></tr>
+      <tr><td>Parameterised tests</td><td>[Theory] + [InlineData]</td><td>[TestCase(...)]</td><td>[DataTestMethod] + [DataRow]</td></tr>
+      <tr><td>Assertion library</td><td>Assert.Equal / Throws etc.</td><td>Assert.That / Classic Assert</td><td>Assert.AreEqual / ThrowsException</td></tr>
+      <tr><td>Parallel test execution</td><td>✅ By default (per class)</td><td>✅ Configurable</td><td>⚠️ Limited (opt-in)</td></tr>
+      <tr><td>IDE integration</td><td>Excellent (VS, Rider, VS Code)</td><td>Excellent</td><td>Best in Visual Studio</td></tr>
+      <tr><td>dotnet test support</td><td>✅ Native</td><td>✅ Native</td><td>✅ Native</td></tr>
+      <tr><td>NuGet package</td><td>xunit, xunit.runner.visualstudio</td><td>NUnit, NUnit3TestAdapter</td><td>MSTest.TestFramework, MSTest.TestAdapter</td></tr>
+      <tr><td>Install template</td><td>dotnet new xunit</td><td>dotnet new nunit</td><td>dotnet new mstest</td></tr>
+      <tr><td>Community popularity (2024)</td><td>🥇 Most popular in .NET Core</td><td>🥈 Very popular (esp. legacy)</td><td>🥉 Common in MS-heavy shops</td></tr>
+      <tr><td>Learning curve</td><td>Easy</td><td>Easy (familiar to JUnit devs)</td><td>Easy</td></tr>
+      <tr><td>Best for</td><td>New .NET projects, open-source</td><td>Teams coming from Java/JUnit</td><td>Teams deep in Visual Studio ecosystem</td></tr>
+    </table>
+    <br>
+    <b>🏆 Bottom line for beginners:</b> Pick <b>xUnit</b> for new projects — it's the de facto
+    standard in modern .NET. Use NUnit if your team already uses it or if you're from a Java
+    background. Use MSTest if you're in a pure Microsoft environment.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🧮 Same Example in All Three Frameworks — Calculator Tests</div>
+  <div class="card-body">
+    We'll test this simple <b>Calculator</b> class in xUnit, NUnit, and MSTest — so you can see exactly
+    how the same test looks in each framework. The business logic never changes, only the test attributes do.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment">// ── The class we are testing (Calculator.cs) — same for all three frameworks</span>
+public class Calculator
+{
+    public int Add(int a, int b)      =&gt; a + b;
+    public int Subtract(int a, int b) =&gt; a - b;
+    public int Multiply(int a, int b) =&gt; a * b;
+    public double Divide(int a, int b)
+    {
+        if (b == 0) throw new DivideByZeroException("Cannot divide by zero.");
+        return (double)a / b;
+    }
+}
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        tabs_ut = st.tabs(["xUnit", "NUnit", "MSTest"])
+
+        with tabs_ut[0]:
+            st.markdown(
+                """
+<div class="cmd-block">
+<span class="cmd-comment">// ── XUNIT ────────────────────────────────────────────────────────</span>
+<span class="cmd-comment">// Install: dotnet new xunit -n MyApp.Tests</span>
+<span class="cmd-comment">// Packages: xunit, xunit.runner.visualstudio, Microsoft.NET.Test.Sdk</span>
+
+using Xunit;
+
+public class CalculatorTests
+{
+    <span class="cmd-comment">// [Fact] = a single test with no parameters</span>
+    [Fact]
+    public void Add_TwoPositiveNumbers_ReturnsCorrectSum()
+    {
+        <span class="cmd-comment">// Arrange — set up what you need</span>
+        var calc = new Calculator();
+
+        <span class="cmd-comment">// Act — call the method</span>
+        int result = calc.Add(2, 3);
+
+        <span class="cmd-comment">// Assert — verify the result</span>
+        Assert.Equal(5, result);
+    }
+
+    [Fact]
+    public void Subtract_LargerFromSmaller_ReturnsNegative()
+    {
+        var calc = new Calculator();
+        int result = calc.Subtract(3, 10);
+        Assert.Equal(-7, result);
+    }
+
+    <span class="cmd-comment">// [Theory] + [InlineData] = parameterised test — runs once per InlineData row</span>
+    [Theory]
+    [InlineData(2, 3,  6)]
+    [InlineData(5, 4, 20)]
+    [InlineData(0, 9,  0)]
+    public void Multiply_ValidInputs_ReturnsProduct(int a, int b, int expected)
+    {
+        var calc = new Calculator();
+        Assert.Equal(expected, calc.Multiply(a, b));
+    }
+
+    [Fact]
+    public void Divide_ByZero_ThrowsDivideByZeroException()
+    {
+        var calc = new Calculator();
+
+        <span class="cmd-comment">// Assert.Throws verifies that an exception IS thrown</span>
+        Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; calc.Divide(10, 0));
+    }
+
+    [Fact]
+    public void Divide_TenByTwo_ReturnsFive()
+    {
+        var calc = new Calculator();
+        double result = calc.Divide(10, 2);
+        Assert.Equal(5.0, result);
+    }
+}
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with tabs_ut[1]:
+            st.markdown(
+                """
+<div class="cmd-block">
+<span class="cmd-comment">// ── NUNIT ────────────────────────────────────────────────────────</span>
+<span class="cmd-comment">// Install: dotnet new nunit -n MyApp.Tests</span>
+<span class="cmd-comment">// Packages: NUnit, NUnit3TestAdapter, Microsoft.NET.Test.Sdk</span>
+
+using NUnit.Framework;
+
+<span class="cmd-comment">// [TestFixture] marks this class as containing tests (optional in NUnit 3+)</span>
+[TestFixture]
+public class CalculatorTests
+{
+    private Calculator _calc;
+
+    <span class="cmd-comment">// [SetUp] runs BEFORE each test — like a constructor for setup</span>
+    [SetUp]
+    public void SetUp()
+    {
+        _calc = new Calculator();
+    }
+
+    <span class="cmd-comment">// [Test] marks a single test method</span>
+    [Test]
+    public void Add_TwoPositiveNumbers_ReturnsCorrectSum()
+    {
+        <span class="cmd-comment">// Arrange (done in SetUp), Act, Assert</span>
+        int result = _calc.Add(2, 3);
+
+        <span class="cmd-comment">// Assert.That is NUnit's modern assertion syntax</span>
+        Assert.That(result, Is.EqualTo(5));
+    }
+
+    [Test]
+    public void Subtract_LargerFromSmaller_ReturnsNegative()
+    {
+        int result = _calc.Subtract(3, 10);
+        Assert.That(result, Is.EqualTo(-7));
+    }
+
+    <span class="cmd-comment">// [TestCase] = parameterised test — one attribute per set of inputs</span>
+    [TestCase(2, 3,  6)]
+    [TestCase(5, 4, 20)]
+    [TestCase(0, 9,  0)]
+    public void Multiply_ValidInputs_ReturnsProduct(int a, int b, int expected)
+    {
+        Assert.That(_calc.Multiply(a, b), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void Divide_ByZero_ThrowsDivideByZeroException()
+    {
+        <span class="cmd-comment">// Assert.Throws in NUnit</span>
+        Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; _calc.Divide(10, 0));
+    }
+
+    [Test]
+    public void Divide_TenByTwo_ReturnsFive()
+    {
+        double result = _calc.Divide(10, 2);
+        Assert.That(result, Is.EqualTo(5.0));
+    }
+
+    <span class="cmd-comment">// [TearDown] runs AFTER each test — for cleanup</span>
+    [TearDown]
+    public void TearDown()
+    {
+        <span class="cmd-comment">// dispose resources if needed</span>
+    }
+}
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with tabs_ut[2]:
+            st.markdown(
+                """
+<div class="cmd-block">
+<span class="cmd-comment">// ── MSTEST ───────────────────────────────────────────────────────</span>
+<span class="cmd-comment">// Install: dotnet new mstest -n MyApp.Tests</span>
+<span class="cmd-comment">// Packages: MSTest.TestFramework, MSTest.TestAdapter, Microsoft.NET.Test.Sdk</span>
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+<span class="cmd-comment">// [TestClass] marks this class as containing tests</span>
+[TestClass]
+public class CalculatorTests
+{
+    private Calculator _calc;
+
+    <span class="cmd-comment">// [TestInitialize] runs BEFORE each test</span>
+    [TestInitialize]
+    public void TestInitialize()
+    {
+        _calc = new Calculator();
+    }
+
+    <span class="cmd-comment">// [TestMethod] marks a single test method</span>
+    [TestMethod]
+    public void Add_TwoPositiveNumbers_ReturnsCorrectSum()
+    {
+        int result = _calc.Add(2, 3);
+
+        <span class="cmd-comment">// Assert.AreEqual(expected, actual) is MSTest's style</span>
+        Assert.AreEqual(5, result);
+    }
+
+    [TestMethod]
+    public void Subtract_LargerFromSmaller_ReturnsNegative()
+    {
+        int result = _calc.Subtract(3, 10);
+        Assert.AreEqual(-7, result);
+    }
+
+    <span class="cmd-comment">// [DataTestMethod] + [DataRow] = parameterised test</span>
+    [DataTestMethod]
+    [DataRow(2, 3,  6)]
+    [DataRow(5, 4, 20)]
+    [DataRow(0, 9,  0)]
+    public void Multiply_ValidInputs_ReturnsProduct(int a, int b, int expected)
+    {
+        Assert.AreEqual(expected, _calc.Multiply(a, b));
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(DivideByZeroException))]
+    public void Divide_ByZero_ThrowsDivideByZeroException()
+    {
+        <span class="cmd-comment">// [ExpectedException] tells MSTest: this test PASSES if this exception is thrown</span>
+        _calc.Divide(10, 0);
+    }
+
+    [TestMethod]
+    public void Divide_TenByTwo_ReturnsFive()
+    {
+        double result = _calc.Divide(10, 2);
+        Assert.AreEqual(5.0, result);
+    }
+
+    <span class="cmd-comment">// [TestCleanup] runs AFTER each test</span>
+    [TestCleanup]
+    public void TestCleanup()
+    {
+        <span class="cmd-comment">// cleanup resources if needed</span>
+    }
+}
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">▶️ How to Run Your Tests</div>
+  <div class="card-body">
+    All three frameworks work with the same CLI commands:
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment"># Run all tests in the project</span>
+dotnet test
+
+<span class="cmd-comment"># Run with verbose output to see each test name</span>
+dotnet test --verbosity normal
+
+<span class="cmd-comment"># Run only tests whose name contains a keyword</span>
+dotnet test --filter "Add"
+
+<span class="cmd-comment"># Run tests in a specific file/class</span>
+dotnet test --filter "FullyQualifiedName~CalculatorTests"
+
+<span class="cmd-comment"># Generate a test results report (TRX format)</span>
+dotnet test --logger "trx;LogFileName=TestResults.trx"
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📋 Unit Testing Quick Reference &amp; Best Practices</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>#</th><th>Practice</th><th>Why It Matters</th></tr>
+      <tr><td>1</td><td>Name tests as: MethodName_Scenario_ExpectedResult</td><td>Instantly clear what failed and why</td></tr>
+      <tr><td>2</td><td>One assertion per test (ideally)</td><td>Pinpoints exactly what broke</td></tr>
+      <tr><td>3</td><td>Never test framework code (string.Length, DateTime.Now)</td><td>You trust the framework; test YOUR logic</td></tr>
+      <tr><td>4</td><td>Use mocks for external dependencies (DB, API, file system)</td><td>Tests stay fast and isolated</td></tr>
+      <tr><td>5</td><td>Keep tests independent — no shared state between tests</td><td>Test order should never matter</td></tr>
+      <tr><td>6</td><td>Aim for 80%+ code coverage on business logic</td><td>Good safety net for refactoring</td></tr>
+      <tr><td>7</td><td>Run tests on every commit (CI/CD)</td><td>Catch breaks before they reach main branch</td></tr>
+      <tr><td>8</td><td>Tests should be FAST (milliseconds each)</td><td>Slow tests get skipped</td></tr>
+    </table>
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # LINQ SECTION
+    # ══════════════════════════════════════════════════════════════════════════
+      elif section == "LINQ":
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">🔍 What is LINQ? (For Complete Beginners)</div>
+  <div class="card-body">
+    <b>LINQ</b> stands for <b>Language Integrated Query</b>. It's a powerful C# feature that lets
+    you query and manipulate collections of data (lists, arrays, databases, XML, etc.) using
+    a clean, readable syntax — right inside your C# code, without switching to SQL or
+    another language.<br><br>
+    <b>Simple analogy:</b> Imagine you have a big box of coloured Lego bricks. LINQ is like
+    having a magic wand that lets you say:<br>
+    🪄 "Give me all the <b>red</b> bricks" → <code>.Where(b =&gt; b.Color == "Red")</code><br>
+    🪄 "Sort them by <b>size</b>" → <code>.OrderBy(b =&gt; b.Size)</code><br>
+    🪄 "Just tell me <b>how many</b> there are" → <code>.Count()</code><br><br>
+    <b>Why should you learn LINQ?</b><br>
+    ✅ It's built into C# — no extra packages needed<br>
+    ✅ Makes data manipulation code 5–10x shorter and more readable<br>
+    ✅ Works on in-memory collections AND databases (via Entity Framework)<br>
+    ✅ Helps you avoid messy for-loops for filtering/sorting<br>
+    ✅ Essential knowledge for every C# developer<br><br>
+    <b>Where can you use LINQ?</b><br>
+    📦 <b>LINQ to Objects</b> — query any C# collection (List, Array, Dictionary)<br>
+    🗄️ <b>LINQ to SQL / LINQ to Entities</b> — query databases through EF Core<br>
+    📄 <b>LINQ to XML</b> — query and transform XML documents
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🏗️ Anatomy of a LINQ Query — Two Styles</div>
+  <div class="card-body">
+    LINQ has two syntax styles — both do the same thing. Learn both because you'll see both
+    in the real world:
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment">// Our sample data — a list of students</span>
+var students = new List&lt;Student&gt;
+{
+    new Student { Name = "Alice", Age = 22, Grade = 90 },
+    new Student { Name = "Bob",   Age = 19, Grade = 72 },
+    new Student { Name = "Carol", Age = 25, Grade = 85 },
+    new Student { Name = "Dave",  Age = 21, Grade = 60 },
+    new Student { Name = "Eve",   Age = 23, Grade = 95 },
+};
+
+<span class="cmd-comment">// ── STYLE 1: Query Syntax (looks like SQL) ──────────────────────</span>
+<span class="cmd-comment">//  from  [variable]  in  [source]         ← "look at each item in..."</span>
+<span class="cmd-comment">//  where [condition]                       ← "only keep items where..."</span>
+<span class="cmd-comment">//  orderby [property]                      ← "sort by..."</span>
+<span class="cmd-comment">//  select [what to return]                 ← "return this..."</span>
+
+var topStudentsQuery =
+    from s in students
+    where s.Grade &gt;= 80
+    orderby s.Grade descending
+    select s.Name;
+
+<span class="cmd-comment">// ── STYLE 2: Method Syntax (most common in modern C#) ──────────</span>
+<span class="cmd-comment">//  Uses chain of extension methods with lambda expressions (=&gt;)</span>
+
+var topStudentsMethod = students
+    .Where(s =&gt; s.Grade &gt;= 80)         <span class="cmd-comment">// filter</span>
+    .OrderByDescending(s =&gt; s.Grade)   <span class="cmd-comment">// sort</span>
+    .Select(s =&gt; s.Name);              <span class="cmd-comment">// transform/project</span>
+
+<span class="cmd-comment">// Both give: ["Eve", "Alice", "Carol"]</span>
+foreach (var name in topStudentsMethod)
+    Console.WriteLine(name);
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📚 Essential LINQ Methods — With Examples</div>
+  <div class="card-body">
+    Here are the most important LINQ methods every developer uses daily:
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment">// Sample data</span>
+var numbers = new List&lt;int&gt; { 3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5 };
+var products = new List&lt;Product&gt; {
+    new Product { Name = "Laptop",  Price = 999,  Category = "Electronics" },
+    new Product { Name = "Phone",   Price = 699,  Category = "Electronics" },
+    new Product { Name = "Desk",    Price = 249,  Category = "Furniture"   },
+    new Product { Name = "Chair",   Price = 199,  Category = "Furniture"   },
+    new Product { Name = "Monitor", Price = 399,  Category = "Electronics" },
+};
+
+<span class="cmd-comment">// ── FILTERING ──────────────────────────────────────────────────</span>
+var evenNums  = numbers.Where(n =&gt; n % 2 == 0);          <span class="cmd-comment">// [4, 2, 6]</span>
+var expensive = products.Where(p =&gt; p.Price &gt; 400);       <span class="cmd-comment">// Laptop, Phone</span>
+
+<span class="cmd-comment">// ── SORTING ────────────────────────────────────────────────────</span>
+var sorted    = numbers.OrderBy(n =&gt; n);                   <span class="cmd-comment">// ascending</span>
+var desc      = numbers.OrderByDescending(n =&gt; n);         <span class="cmd-comment">// descending</span>
+var multiSort = products.OrderBy(p =&gt; p.Category)
+                        .ThenByDescending(p =&gt; p.Price);   <span class="cmd-comment">// category, then price</span>
+
+<span class="cmd-comment">// ── PROJECTION (transform shape of data) ───────────────────────</span>
+var names     = products.Select(p =&gt; p.Name);              <span class="cmd-comment">// just names</span>
+var summaries = products.Select(p =&gt; new {                 <span class="cmd-comment">// anonymous type</span>
+    p.Name, Label = $"{p.Name} - ${p.Price}"
+});
+
+<span class="cmd-comment">// ── AGGREGATION ────────────────────────────────────────────────</span>
+int total     = numbers.Sum();                             <span class="cmd-comment">// 44</span>
+double avg    = numbers.Average();                         <span class="cmd-comment">// 4.0</span>
+int max       = numbers.Max();                             <span class="cmd-comment">// 9</span>
+int min       = numbers.Min();                             <span class="cmd-comment">// 1</span>
+int count     = numbers.Count();                           <span class="cmd-comment">// 11</span>
+decimal total2 = products.Sum(p =&gt; p.Price);               <span class="cmd-comment">// 2545</span>
+
+<span class="cmd-comment">// ── GROUPING ───────────────────────────────────────────────────</span>
+var byCategory = products.GroupBy(p =&gt; p.Category);
+foreach (var group in byCategory) {
+    Console.WriteLine($"{group.Key}: {group.Count()} items");
+}
+<span class="cmd-comment">// Output: Electronics: 3 items  |  Furniture: 2 items</span>
+
+<span class="cmd-comment">// ── ELEMENT OPERATIONS ─────────────────────────────────────────</span>
+var first  = products.First(p =&gt; p.Price &gt; 300);           <span class="cmd-comment">// throws if none</span>
+var firstN = products.FirstOrDefault(p =&gt; p.Price &gt; 9000); <span class="cmd-comment">// null if none — safer!</span>
+var single = products.Single(p =&gt; p.Name == "Desk");       <span class="cmd-comment">// throws if 0 or 2+</span>
+var last   = products.Last();
+
+<span class="cmd-comment">// ── CHECKING ───────────────────────────────────────────────────</span>
+bool anyExp  = products.Any(p =&gt; p.Price &gt; 900);           <span class="cmd-comment">// true</span>
+bool allExp  = products.All(p =&gt; p.Price &gt; 100);           <span class="cmd-comment">// true</span>
+bool hasDesk = products.Any(p =&gt; p.Name == "Desk");        <span class="cmd-comment">// true</span>
+
+<span class="cmd-comment">// ── DISTINCT / SKIP / TAKE ─────────────────────────────────────</span>
+var unique   = numbers.Distinct();                         <span class="cmd-comment">// [3,1,4,5,9,2,6]</span>
+var page1    = products.Skip(0).Take(2);                   <span class="cmd-comment">// pagination: first 2</span>
+var page2    = products.Skip(2).Take(2);                   <span class="cmd-comment">// pagination: next 2</span>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">⚡ Deferred vs Immediate Execution — Critical Concept!</div>
+  <div class="card-body">
+    <b>This is the #1 thing beginners misunderstand about LINQ.</b><br><br>
+    Most LINQ queries are <b>deferred</b> — they don't actually run until you iterate the results
+    (with <code>foreach</code>, <code>.ToList()</code>, <code>.ToArray()</code> etc.).<br><br>
+    Think of a LINQ query as a <em>recipe</em>, not a cooked meal. The query describes WHAT to
+    do — but the cooking (execution) only happens when you actually ask for the food.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment">// DEFERRED execution — query defined but NOT run yet</span>
+var query = students.Where(s =&gt; s.Grade &gt;= 80);  <span class="cmd-comment">// ← no DB/loop hit here</span>
+
+students.Add(new Student { Name = "Frank", Age = 20, Grade = 92 });  <span class="cmd-comment">// add after query</span>
+
+<span class="cmd-comment">// Query runs HERE — Frank IS included because execution is now</span>
+foreach (var s in query)
+    Console.WriteLine(s.Name);   <span class="cmd-comment">// Alice, Carol, Eve, Frank ← Frank appears!</span>
+
+<span class="cmd-comment">// IMMEDIATE execution — use ToList(), ToArray(), Count(), First() etc.</span>
+var snapshot = students.Where(s =&gt; s.Grade &gt;= 80).ToList(); <span class="cmd-comment">// runs NOW, Frank included</span>
+
+<span class="cmd-comment">// Rule of thumb:</span>
+<span class="cmd-comment">// • Add .ToList() when you want a fixed snapshot of results</span>
+<span class="cmd-comment">// • Add .ToList() to avoid running the query multiple times</span>
+<span class="cmd-comment">// • In EF Core: always .ToListAsync() to execute DB queries</span>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📋 LINQ Quick-Reference Cheat Sheet</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>Method</th><th>What it does</th><th>Example</th></tr>
+      <tr><td>Where</td><td>Filter items</td><td>.Where(x =&gt; x.Age &gt; 18)</td></tr>
+      <tr><td>Select</td><td>Transform/project items</td><td>.Select(x =&gt; x.Name)</td></tr>
+      <tr><td>OrderBy / OrderByDescending</td><td>Sort ascending / descending</td><td>.OrderBy(x =&gt; x.Name)</td></tr>
+      <tr><td>GroupBy</td><td>Group items by key</td><td>.GroupBy(x =&gt; x.Category)</td></tr>
+      <tr><td>First / FirstOrDefault</td><td>Get first match (or null)</td><td>.FirstOrDefault(x =&gt; x.Id == 1)</td></tr>
+      <tr><td>Single / SingleOrDefault</td><td>Exactly one match expected</td><td>.Single(x =&gt; x.Email == email)</td></tr>
+      <tr><td>Any</td><td>Does any item match?</td><td>.Any(x =&gt; x.IsActive)</td></tr>
+      <tr><td>All</td><td>Do ALL items match?</td><td>.All(x =&gt; x.Age &gt;= 18)</td></tr>
+      <tr><td>Count</td><td>How many items?</td><td>.Count(x =&gt; x.IsActive)</td></tr>
+      <tr><td>Sum / Average / Min / Max</td><td>Math aggregates</td><td>.Sum(x =&gt; x.Price)</td></tr>
+      <tr><td>Distinct</td><td>Remove duplicates</td><td>.Distinct()</td></tr>
+      <tr><td>Skip / Take</td><td>Pagination</td><td>.Skip(10).Take(5)</td></tr>
+      <tr><td>ToList / ToArray</td><td>Execute immediately</td><td>.ToList()</td></tr>
+      <tr><td>SelectMany</td><td>Flatten nested collections</td><td>.SelectMany(x =&gt; x.Tags)</td></tr>
+      <tr><td>Join</td><td>Join two collections</td><td>.Join(other, x =&gt; x.Id, y =&gt; y.Id, ...)</td></tr>
+    </table>
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # BLAZOR SECTION
+    # ══════════════════════════════════════════════════════════════════════════
+      elif section == "Blazor":
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">🔥 What is Blazor? (For Complete Beginners)</div>
+  <div class="card-body">
+    <b>Blazor</b> is Microsoft's framework that lets you build <em>interactive web UIs using C#</em>
+    instead of JavaScript. With Blazor, the same C# skills you use for back-end development can
+    now power your front-end web experience.<br><br>
+    <b>Simple analogy:</b> Normally, web browsers only speak "JavaScript". Blazor gives you a
+    translator (WebAssembly) so the browser can now also understand C# — letting you write
+    web apps entirely in the language you already know.<br><br>
+    <b>Why should you learn Blazor?</b><br>
+    ✅ Write full-stack web apps in pure C# — no JavaScript required<br>
+    ✅ Share code between front-end and back-end (same models, same validation)<br>
+    ✅ Backed by Microsoft — integrated into .NET 8<br>
+    ✅ Component-based architecture (similar to React/Angular concepts)<br>
+    ✅ Huge growth in adoption — more and more companies use it
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📜 Blazor History — From Beginning to Today</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>Year</th><th>Milestone</th><th>What Changed</th></tr>
+      <tr><td>2017</td><td>Steve Sanderson's experimental prototype</td><td>Proof-of-concept: C# running in browser via WebAssembly</td></tr>
+      <tr><td>2018</td><td>Blazor announced at NDC Oslo</td><td>Microsoft officially backs the project</td></tr>
+      <tr><td>2019 (.NET Core 3.0)</td><td><b>Blazor Server released</b> (production-ready)</td><td>First official Blazor model — runs on server via SignalR</td></tr>
+      <tr><td>2020 (.NET 5)</td><td><b>Blazor WebAssembly released</b> (production-ready)</td><td>C# runs directly in the browser — no server needed for UI</td></tr>
+      <tr><td>2022 (.NET 6)</td><td>Blazor improvements</td><td>Hot reload, better performance, .NET MAUI Blazor hybrid</td></tr>
+      <tr><td>2023 (.NET 7)</td><td>Enhanced navigation, streaming rendering</td><td>Better UX, improved SEO, empty Blazor WASM template</td></tr>
+      <tr><td>2023 (.NET 8)</td><td><b>Blazor United / Full-Stack Blazor</b></td><td>Merged Server + WASM into one model with render mode selection per component</td></tr>
+      <tr><td>2024 (.NET 9)</td><td>Blazor Web App enhancements</td><td>Reconnection UI, improved form handling, faster WASM startup</td></tr>
+    </table>
+    <br>
+    <b>What replaced what?</b><br>
+    🔴 <b>Web Forms (ASP.NET)</b> → replaced by <b>Blazor Server</b> (for server-side interactive UIs)<br>
+    🔴 <b>Silverlight / Flash</b> → replaced by <b>Blazor WebAssembly</b> (for rich browser apps without plugins)<br>
+    🔴 <b>JavaScript SPA frameworks (React/Angular/Vue)</b> → Blazor WASM is the C# alternative
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">⚖️ Blazor Server vs Blazor WebAssembly — Side-by-Side</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>Feature</th><th>Blazor Server</th><th>Blazor WebAssembly (WASM)</th></tr>
+      <tr><td>Where does C# run?</td><td>On the <b>server</b></td><td>In the <b>browser</b> (via WebAssembly)</td></tr>
+      <tr><td>How UI updates reach browser</td><td>SignalR (WebSocket) connection</td><td>Direct DOM updates in browser</td></tr>
+      <tr><td>Initial load time</td><td>⚡ Very fast (small download)</td><td>🐢 Slower (downloads .NET runtime)</td></tr>
+      <tr><td>Works offline?</td><td>❌ No — needs server connection</td><td>✅ Yes — once downloaded</td></tr>
+      <tr><td>Server scalability</td><td>⚠️ One connection per user</td><td>✅ Stateless — scales easily</td></tr>
+      <tr><td>Access to server resources</td><td>✅ Direct DB/file access</td><td>❌ Must call an API</td></tr>
+      <tr><td>Latency for interactions</td><td>⚠️ Small delay (network round-trip)</td><td>✅ Instant (local execution)</td></tr>
+      <tr><td>Security</td><td>✅ Code stays on server (not exposed)</td><td>⚠️ Code runs in browser (decompilable)</td></tr>
+      <tr><td>Best for</td><td>Internal tools, admin panels, dashboards</td><td>Public apps, PWAs, offline scenarios</td></tr>
+      <tr><td>.NET template</td><td>dotnet new blazorserver</td><td>dotnet new blazorwasm</td></tr>
+    </table>
+    <br>
+    <b>.NET 8 Blazor Web App</b> — the new default template merges both! You can choose the
+    rendering mode <em>per page or per component</em>: Static SSR, Interactive Server, Interactive WASM,
+    or Auto (tries WASM, falls back to Server). This is the recommended way for new projects.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card" style="border-left: 4px solid #40916C;">
+  <div class="card-title">🏗️ Anatomy of a Blazor Component</div>
+  <div class="card-body">
+    A Blazor component is a <code>.razor</code> file that combines HTML markup, C# code, and CSS styling
+    in one place. Here's every part explained:
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+<div class="cmd-block">
+<span class="cmd-comment">&lt;!-- File: Counter.razor — a simple counter component --&gt;</span>
+
+<span class="cmd-comment">&lt;!-- ① @page directive — URL route for this component --&gt;</span>
+@page "/counter"
+
+<span class="cmd-comment">&lt;!-- ② @using / @inject — import namespaces or inject services --&gt;</span>
+@using MyApp.Services
+@inject ILogger&lt;Counter&gt; Logger
+
+<span class="cmd-comment">&lt;!-- ③ HTML template — standard HTML + Razor syntax --&gt;</span>
+&lt;h1&gt;🔢 Counter&lt;/h1&gt;
+
+&lt;p&gt;Current count: &lt;strong&gt;@currentCount&lt;/strong&gt;&lt;/p&gt;
+
+<span class="cmd-comment">&lt;!-- ④ @onclick — event binding — calls C# method on click --&gt;</span>
+&lt;button class="btn btn-primary" @onclick="IncrementCount"&gt;
+    Click me!
+&lt;/button&gt;
+
+&lt;button class="btn btn-secondary" @onclick="ResetCount"&gt;
+    Reset
+&lt;/button&gt;
+
+<span class="cmd-comment">&lt;!-- ⑤ @code block — C# code lives here --&gt;</span>
+@code {
+    <span class="cmd-comment">// ⑥ Private field — holds state for this component</span>
+    private int currentCount = 0;
+
+    <span class="cmd-comment">// ⑦ [Parameter] — accepts values from a parent component</span>
+    [Parameter]
+    public int StartValue { get; set; } = 0;
+
+    <span class="cmd-comment">// ⑧ OnInitialized — lifecycle method, runs when component first loads</span>
+    protected override void OnInitialized()
+    {
+        currentCount = StartValue;
+        Logger.LogInformation("Counter initialized at {Value}", StartValue);
+    }
+
+    <span class="cmd-comment">// ⑨ Event handler method</span>
+    private void IncrementCount()
+    {
+        currentCount++;
+        Logger.LogInformation("Count incremented to {Value}", currentCount);
+    }
+
+    private void ResetCount() =&gt; currentCount = StartValue;
+}
+
+<span class="cmd-comment">&lt;!-- ⑩ Optional: scoped CSS — in Counter.razor.css file --&gt;</span>
+<span class="cmd-comment">&lt;!-- h1 { color: #1A1A1A; } /* only applies to this component */ --&gt;</span>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">🚀 How to Create &amp; Run a Blazor App</div>
+  <div class="card-body">
+    <b>Prerequisites:</b> .NET 8 SDK installed (<code>dotnet --version</code> to check)
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        tabs_blazor = st.tabs(["Blazor Web App (.NET 8)", "Blazor Server (.NET 7-)", "Blazor WASM (.NET 7-)"])
+
+        with tabs_blazor[0]:
+            st.markdown(
+                """
+<div class="cmd-block">
+<span class="cmd-comment"># ── Blazor Web App — Recommended for .NET 8+ (unified model) ──</span>
+
+<span class="cmd-comment"># Create new Blazor Web App</span>
+dotnet new blazor -n MyBlazorApp
+cd MyBlazorApp
+
+<span class="cmd-comment"># Run the app (opens in browser at https://localhost:5001)</span>
+dotnet run
+
+<span class="cmd-comment"># Run with hot reload (auto-refreshes on file save)</span>
+dotnet watch run
+</div>
+<br>
+<div class="cmd-block">
+<span class="cmd-comment">// Program.cs — the startup file (.NET 8 Blazor Web App)</span>
+var builder = WebApplication.CreateBuilder(args);
+
+<span class="cmd-comment">// Add Blazor services — InteractiveServer enables server-side interactivity</span>
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()      <span class="cmd-comment">// for server render mode</span>
+    .AddInteractiveWebAssemblyComponents(); <span class="cmd-comment">// for WASM render mode</span>
+
+var app = builder.Build();
+
+app.UseStaticFiles();
+app.UseAntiforgery();
+
+<span class="cmd-comment">// Map Razor components — App.razor is the root component</span>
+app.MapRazorComponents&lt;App&gt;()
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode();
+
+app.Run();
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with tabs_blazor[1]:
+            st.markdown(
+                """
+<div class="cmd-block">
+<span class="cmd-comment"># ── Blazor Server (.NET 6/7 style) ──────────────────────────────</span>
+
+dotnet new blazorserver -n MyBlazorServer
+cd MyBlazorServer
+dotnet run
+</div>
+<br>
+<div class="cmd-block">
+<span class="cmd-comment">// Program.cs — Blazor Server (.NET 6/7)</span>
+var builder = WebApplication.CreateBuilder(args);
+
+<span class="cmd-comment">// AddServerSideBlazor registers SignalR + Blazor rendering pipeline</span>
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+
+<span class="cmd-comment">// Register your own services here</span>
+builder.Services.AddSingleton&lt;WeatherForecastService&gt;();
+
+var app = builder.Build();
+
+app.UseStaticFiles();
+app.UseRouting();
+
+app.MapBlazorHub();              <span class="cmd-comment">// SignalR endpoint for Blazor</span>
+app.MapFallbackToPage("/_Host"); <span class="cmd-comment">// fallback to _Host.cshtml</span>
+
+app.Run();
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        with tabs_blazor[2]:
+            st.markdown(
+                """
+<div class="cmd-block">
+<span class="cmd-comment"># ── Blazor WebAssembly (standalone, .NET 6/7 style) ─────────────</span>
+
+dotnet new blazorwasm -n MyBlazorWasm
+cd MyBlazorWasm
+dotnet run
+
+<span class="cmd-comment"># Hosted (with ASP.NET Core back-end API)</span>
+dotnet new blazorwasm --hosted -n MyBlazorWasmHosted
+</div>
+<br>
+<div class="cmd-block">
+<span class="cmd-comment">// Program.cs — Blazor WASM (runs in browser)</span>
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+<span class="cmd-comment">// App is the root component; #app is the HTML element it renders into</span>
+builder.RootComponents.Add&lt;App&gt;("#app");
+builder.RootComponents.Add&lt;HeadOutlet&gt;("head::after");
+
+<span class="cmd-comment">// HttpClient for calling APIs — base address is the current host</span>
+builder.Services.AddScoped(sp =&gt; new HttpClient {
+    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+});
+
+await builder.Build().RunAsync();
+</div>
+""",
+                unsafe_allow_html=True,
+            )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📁 Blazor Project Structure — What Every File Does</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>File / Folder</th><th>Purpose</th></tr>
+      <tr><td>Program.cs</td><td>App startup, service registration, middleware pipeline</td></tr>
+      <tr><td>App.razor</td><td>Root component — sets up routing</td></tr>
+      <tr><td>Routes.razor (.NET 8)</td><td>Router configuration</td></tr>
+      <tr><td>Pages/</td><td>Page components (have @page directive)</td></tr>
+      <tr><td>Components/ (or Shared/)</td><td>Reusable components (no @page directive)</td></tr>
+      <tr><td>wwwroot/</td><td>Static files: CSS, images, JavaScript</td></tr>
+      <tr><td>wwwroot/app.css</td><td>Global CSS styles</td></tr>
+      <tr><td>ComponentName.razor.css</td><td>Scoped CSS — only applies to that component</td></tr>
+      <tr><td>appsettings.json</td><td>Configuration settings</td></tr>
+      <tr><td>_Imports.razor</td><td>@using statements for all components (like a global using file)</td></tr>
+    </table>
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">⚠️ Key Things to Be Aware Of in Blazor</div>
+  <div class="card-body">
+    <table class="shortcut-table">
+      <tr><th>#</th><th>Topic</th><th>What to Know</th></tr>
+      <tr><td>1</td><td>Component lifecycle</td><td>Learn OnInitialized, OnParametersSet, OnAfterRender — called at specific moments</td></tr>
+      <tr><td>2</td><td>StateHasChanged()</td><td>Call this to force UI re-render when state changes outside event handlers</td></tr>
+      <tr><td>3</td><td>@bind directive</td><td>Two-way data binding: @bind="myVariable" syncs input value and C# field</td></tr>
+      <tr><td>4</td><td>EventCallback</td><td>Use EventCallback&lt;T&gt; to pass events from child to parent components</td></tr>
+      <tr><td>5</td><td>Cascading Parameters</td><td>Share data through a component tree without passing through every level</td></tr>
+      <tr><td>6</td><td>JavaScript Interop</td><td>Call JS from C# with IJSRuntime.InvokeAsync — needed for browser APIs</td></tr>
+      <tr><td>7</td><td>WASM first load</td><td>First load is slow (downloads .NET runtime ~5–10MB) — use loading spinner</td></tr>
+      <tr><td>8</td><td>Authentication</td><td>Use AuthenticationStateProvider; Blazor supports cookie, JWT, OIDC auth</td></tr>
+      <tr><td>9</td><td>Render modes (.NET 8)</td><td>@rendermode InteractiveServer / InteractiveWebAssembly / InteractiveAuto</td></tr>
+      <tr><td>10</td><td>No direct DOM access</td><td>Don't manipulate DOM with JS directly — let Blazor manage it</td></tr>
+    </table>
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     st.markdown(_scroll_nav_html(), unsafe_allow_html=True)
