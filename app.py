@@ -29,10 +29,10 @@ _DEFAULTS = {
 
 # ── Learn-hub menu definitions ─────────────────────────────────────────────────
 # To add a new menu item, append to this list and update LATEST_NEW_TOPIC.
-LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle", ".NET", "Unit Testing", "LINQ", "Blazor", "C#"]
+LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle", ".NET", "Unit Testing", "LINQ", "Blazor", "C#", "Topic Suggestions"]
 # LATEST_NEW_TOPIC is the item that triggers the "new menu" banner.
 # Update this string whenever a brand-new item is added to LEARN_MENU_ITEMS.
-LATEST_NEW_TOPIC = "C#"
+LATEST_NEW_TOPIC = "Topic Suggestions"
 for _k, _v in _DEFAULTS.items():
     if _k not in st.session_state:
         st.session_state[_k] = _v
@@ -1796,6 +1796,47 @@ def save_to_supabase(data: dict) -> tuple:
         return False, f"Database error: {exc}"
 
 
+def _get_supabase_client():
+    """Return a Supabase client or None if credentials are not configured."""
+    try:
+        url = st.secrets.get("SUPABASE_URL", "") or os.getenv("SUPABASE_URL", "")
+        key = st.secrets.get("SUPABASE_KEY", "") or os.getenv("SUPABASE_KEY", "")
+    except Exception:
+        url = os.getenv("SUPABASE_URL", "")
+        key = os.getenv("SUPABASE_KEY", "")
+    if not url or not key:
+        return None
+    from supabase import create_client
+    return create_client(url, key)
+
+
+def save_topic_suggestion(topic: str) -> tuple:
+    """Insert a topic suggestion into Supabase. Returns (success: bool, message: str)."""
+    client = _get_supabase_client()
+    if client is None:
+        return (
+            False,
+            "Supabase credentials not configured — suggestion was not saved to the database.",
+        )
+    try:
+        client.table("topic_suggestions").insert({"topic": topic.strip()}).execute()
+        return True, "Suggestion saved successfully."
+    except Exception as exc:
+        return False, f"Database error: {exc}"
+
+
+def fetch_topic_suggestions() -> list:
+    """Fetch all topic suggestions from Supabase. Returns a list of dicts."""
+    client = _get_supabase_client()
+    if client is None:
+        return []
+    try:
+        response = client.table("topic_suggestions").select("topic").execute()
+        return response.data or []
+    except Exception:
+        return []
+
+
 # ── Landing Page ──────────────────────────────────────────────────────────────
 def page_landing():
     """Full-width hero landing page with Po animation and two CTAs."""
@@ -2276,18 +2317,32 @@ def _suggest_topic_dialog():
         placeholder="e.g. Docker & Kubernetes, CI/CD Pipelines, Azure Services...",
         height=130,
     )
+
+    db_available = _get_supabase_client() is not None
+    if db_available:
+        note_text = (
+            "<strong>Note:</strong> Suggested topics will be reviewed by our team. "
+            "Topics with the most requests will be featured in the "
+            "<strong>Topic Suggestions</strong> section of the learning hub "
+            "with <strong>#hashtag details</strong> and the number of requests received."
+        )
+    else:
+        note_text = (
+            "<strong>Note:</strong> Suggested topics will be reviewed by our team. "
+            "Persistence is currently unavailable (no database credentials configured)."
+        )
     st.markdown(
-        '<div class="suggest-note">'
-        "<strong>Note:</strong> Suggested topics will be reviewed by our team. "
-        "Topics with the most requests will be featured on a dedicated stats page "
-        "with <strong>#hashtag details</strong> and the number of requests received."
-        "</div>",
+        f'<div class="suggest-note">{note_text}</div>',
         unsafe_allow_html=True,
     )
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("Submit Suggestion", type="primary", use_container_width=True):
         if topic.strip():
-            st.success("Thank you! Your suggestion has been noted.")
+            ok, db_msg = save_topic_suggestion(topic)
+            if ok:
+                st.success("Thank you! Your suggestion has been noted.")
+            else:
+                st.warning(f"⚠️  Could not save your suggestion — {db_msg}")
         else:
             st.warning("Please enter a topic before submitting.")
 
@@ -5565,6 +5620,46 @@ string desc = nums switch
 """,
             unsafe_allow_html=True,
         )
+
+      elif section == "Topic Suggestions":
+        db_available = _get_supabase_client() is not None
+        st.markdown(
+            """
+<div class="content-card">
+  <div class="card-title">📊 Topic Suggestions</div>
+  <div class="card-body">
+    See which topics the community is requesting most. Use the
+    <strong>Add your suggested topic</strong> button in the sidebar to vote for a
+    new topic — the most-requested ones will be added to the learning hub.
+  </div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        if not db_available:
+            st.info(
+                "ℹ️  No database credentials configured. "
+                "Connect Supabase to persist and display community topic suggestions."
+            )
+        else:
+            rows = fetch_topic_suggestions()
+            if not rows:
+                st.info("No topic suggestions yet. Be the first to suggest one!")
+            else:
+                from collections import Counter
+                counts = Counter(r["topic"] for r in rows if r.get("topic"))
+                sorted_topics = counts.most_common()
+                st.markdown("### 🏆 Most-Requested Topics")
+                for rank, (topic, count) in enumerate(sorted_topics, start=1):
+                    import re
+                    hashtag = "#" + re.sub(r"[^a-zA-Z0-9]", "", topic.replace("&", "and").replace("+", "plus"))
+                    req_label = "request" if count == 1 else "requests"
+                    st.markdown(
+                        f"**{rank}.** {topic} &nbsp; `{hashtag}` &nbsp; — &nbsp; "
+                        f"**{count}** {req_label}",
+                        unsafe_allow_html=True,
+                    )
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     components.html(_scroll_nav_html(), height=0)
