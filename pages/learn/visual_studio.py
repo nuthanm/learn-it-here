@@ -33,18 +33,18 @@ You need to create C# model classes that match it — and you have a bug to fix 
 <br><br>
 <b>1. Generate C# classes from JSON in 10 seconds (Paste JSON as Classes):</b><br>
 You receive this JSON from the lab:
-<pre class="cmd-block">{
+<div class="cmd-block">{
   "patientId": "P-1042",
   "fullName": "Jane Smith",
   "dateOfBirth": "1985-04-15",
   "testResults": [
 { "testName": "Blood Sugar", "value": 5.4, "unit": "mmol/L" }
   ]
-}</pre>
+}</div>
 Instead of writing the C# class by hand, copy the JSON, then in Visual Studio go to:
 <b>Edit → Paste Special → Paste JSON as Classes</b>.
 Visual Studio instantly generates:
-<pre class="cmd-block">public class PatientResult
+<div class="cmd-block">public class PatientResult
 {
 public string PatientId { get; set; }
 public string FullName { get; set; }
@@ -56,7 +56,7 @@ public class TestResult
 public string TestName { get; set; }
 public float Value { get; set; }
 public string Unit { get; set; }
-}</pre>
+}</div>
 This saves 10–15 minutes of repetitive typing on every integration.
 <br><br>
 <b>2. Quick Actions (Ctrl+.) — fix errors without looking anything up:</b><br>

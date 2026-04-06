@@ -36,21 +36,21 @@ merge your changes back — a nightmare when five people do this at once. Git so
 <b>Here's exactly what you do:</b>
 <br><br>
 <b>Step 1 — Get the project onto your laptop:</b>
-<pre class="cmd-block">git clone https://github.com/mycompany/shopping-website.git
-cd shopping-website</pre>
+<div class="cmd-block">git clone https://github.com/mycompany/shopping-website.git
+cd shopping-website</div>
 Now you have a full copy of the project. Everyone else is working on their own copies too.
 <br><br>
 <b>Step 2 — Create your own workspace (branch) so you don't disturb others:</b>
-<pre class="cmd-block">git checkout -b feature/forgot-password</pre>
+<div class="cmd-block">git checkout -b feature/forgot-password</div>
 Think of a branch like a personal notebook. Your changes go here without touching the main codebase.
 <br><br>
 <b>Step 3 — Write your code. Then save your progress:</b>
-<pre class="cmd-block">git add .
-git commit -m "feat: add forgot password email flow"</pre>
+<div class="cmd-block">git add .
+git commit -m "feat: add forgot password email flow"</div>
 A commit is like a save point in a video game — you can always go back to it.
 <br><br>
 <b>Step 4 — Share your work with the team:</b>
-<pre class="cmd-block">git push origin feature/forgot-password</pre>
+<div class="cmd-block">git push origin feature/forgot-password</div>
 Your branch is now on GitHub/Azure DevOps. You open a <b>Pull Request</b> and a teammate reviews it.
 After approval it gets merged into the main codebase — safely, with a full history of every change you made.
 <br><br>
@@ -201,27 +201,27 @@ your manager calls and says "the login button is broken in production — fix it
 You don't want to disturb Alice's half-finished payment work. Here's how Git handles this perfectly:
 <br><br>
 <b>1. Get the very latest code:</b>
-<pre class="cmd-block">git fetch origin
-git pull origin main</pre>
+<div class="cmd-block">git fetch origin
+git pull origin main</div>
 <b>2. Create a hotfix branch — completely separate from Alice's work:</b>
-<pre class="cmd-block">git checkout -b hotfix/login-button-not-working</pre>
+<div class="cmd-block">git checkout -b hotfix/login-button-not-working</div>
 <b>3. Fix the bug in LoginController.cs, then save and share:</b>
-<pre class="cmd-block">git add src/Controllers/LoginController.cs
+<div class="cmd-block">git add src/Controllers/LoginController.cs
 git commit -m "fix: login button now submits form correctly"
-git push origin hotfix/login-button-not-working</pre>
+git push origin hotfix/login-button-not-working</div>
 <b>4. After your hotfix is merged, get Alice's latest changes too:</b>
-<pre class="cmd-block">git fetch origin
-git rebase origin/main</pre>
+<div class="cmd-block">git fetch origin
+git rebase origin/main</div>
 Both changes are now in the main codebase — no conflicts, no overwriting each other's work.
 Git tracked every line changed by everyone, independently.
 <br><br>
 <b>Stash — save unfinished work temporarily:</b> Suppose while you were mid-way through a new
 feature your boss asks you to quickly check something on another branch. Use:
-<pre class="cmd-block">git stash          # hides your unfinished changes safely
+<div class="cmd-block">git stash          # hides your unfinished changes safely
 git checkout main  # switch to another branch
 # ... do the check ...
 git checkout feature/my-feature
-git stash pop      # bring your unfinished changes back</pre>
+git stash pop      # bring your unfinished changes back</div>
   </div>
 </div>
 """,
