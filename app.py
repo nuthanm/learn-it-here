@@ -1456,7 +1456,9 @@ def _scroll_nav_html() -> str:
   /* Replace buttons with fresh clones to clear any stale listeners */
   function refreshBtn(old) {
     var fresh = old.cloneNode(true);
-    if (old.parentNode) old.parentNode.replaceChild(fresh, old);
+    if (old.parentNode) {
+      try { old.parentNode.replaceChild(fresh, old); } catch(e) { /* node removed by React re-render */ }
+    }
     return fresh;
   }
   topBtn = refreshBtn(topBtn);
@@ -1614,8 +1616,27 @@ def _copy_buttons_html() -> str:
 (function(){
   var pdoc = window.parent ? window.parent.document : document;
 
+  /* Strip the leading blank line and trailing whitespace that appear when
+     <div class="cmd-block"> content starts/ends on its own line in the HTML
+     source. Only div elements need this — <pre> blocks are already clean. */
+  function trimBlockContent(block) {
+    if (block.dataset.contentTrimmed || block.tagName.toLowerCase() !== 'div') return;
+    block.dataset.contentTrimmed = '1';
+    var fc = block.firstChild;
+    if (fc && fc.nodeType === 3) {
+      fc.nodeValue = fc.nodeValue.replace(/^\\s*\\n/, '');
+      if (fc.nodeValue === '') { block.removeChild(fc); }
+    }
+    var lc = block.lastChild;
+    if (lc && lc.nodeType === 3) {
+      lc.nodeValue = lc.nodeValue.replace(/\\n\\s*$/, '');
+      if (lc.nodeValue === '') { block.removeChild(lc); }
+    }
+  }
+
   function addCopyButtons() {
     pdoc.querySelectorAll('.cmd-block, .json-block').forEach(function(block) {
+      trimBlockContent(block);
       /* Skip blocks that already have a copy button injected. */
       if (block.querySelector('.copy-code-btn')) return;
       var btn = pdoc.createElement('button');
