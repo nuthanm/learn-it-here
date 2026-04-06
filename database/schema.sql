@@ -56,7 +56,7 @@ CREATE POLICY "allow_anon_insert"
     TO anon
     WITH CHECK (true);
 
--- Allow anonymous users to read all rows (used to display the leaderboard)
+-- Allow anonymous users to read all rows (used by the app to display community topic suggestions)
 CREATE POLICY "allow_anon_select"
     ON topic_suggestions
     FOR SELECT
