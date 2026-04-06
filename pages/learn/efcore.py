@@ -32,9 +32,9 @@ Their database is Oracle 19c. You need to store <b>customers</b> and their <b>or
 Here's the complete journey from zero to working code — the way it's done on a real project.
 <br><br>
 <b>Step 1 — Install the Oracle EF Core package:</b>
-<pre class="cmd-block">dotnet add package Oracle.EntityFrameworkCore</pre>
+<div class="cmd-block">dotnet add package Oracle.EntityFrameworkCore</div>
 <b>Step 2 — Define your C# entity classes (plain objects — no Oracle knowledge needed here):</b>
-<pre class="cmd-block">public class Customer
+<div class="cmd-block">public class Customer
 {
 public long Id { get; set; }           // maps to Oracle COLUMN "ID"
 public string FullName { get; set; }   // maps to "FULL_NAME"
@@ -49,9 +49,9 @@ public long CustomerId { get; set; }
 public decimal TotalAmount { get; set; }
 public DateTime OrderDate { get; set; }
 public Customer Customer { get; set; }
-}</pre>
+}</div>
 <b>Step 3 — Configure the DbContext (this is where Oracle rules are applied):</b>
-<pre class="cmd-block">public class AppDbContext : DbContext
+<div class="cmd-block">public class AppDbContext : DbContext
 {
 public DbSet&lt;Customer&gt; Customers { get; set; }
 public DbSet&lt;Order&gt; Orders { get; set; }
@@ -98,15 +98,15 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
          .HasForeignKey(e =&gt; e.CustomerId);
     });
 }
-}</pre>
+}</div>
 <b>Step 4 — Create and apply the migration (this creates the Oracle tables):</b>
-<pre class="cmd-block">dotnet ef migrations add CreateCustomersAndOrders
-dotnet ef database update</pre>
+<div class="cmd-block">dotnet ef migrations add CreateCustomersAndOrders
+dotnet ef database update</div>
 EF Core generates the Oracle-compatible SQL and runs it. The tables <code>CUSTOMERS</code>
 and <code>ORDERS</code> are created in Oracle — complete with sequences and foreign keys.
 <br><br>
 <b>Step 5 — Query data in your API controller (plain C# — EF handles the Oracle SQL):</b>
-<pre class="cmd-block">// Get all orders for customer ID 42, newest first
+<div class="cmd-block">// Get all orders for customer ID 42, newest first
 var orders = await _context.Orders
 .Where(o =&gt; o.CustomerId == 42)
 .OrderByDescending(o =&gt; o.OrderDate)
@@ -115,7 +115,7 @@ var orders = await _context.Orders
 // Add a new customer
 var newCustomer = new Customer { FullName = "Jane Smith", Email = "jane@shop.com" };
 _context.Customers.Add(newCustomer);
-await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID automatically</pre>
+await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID automatically</div>
 <b>Why Oracle-specific rules matter:</b> If you used the default lowercase table name
 <code>customers</code> instead of <code>CUSTOMERS</code>, Oracle would throw
 <em>"ORA-00942: table or view does not exist"</em> because Oracle's default behavior
@@ -135,9 +135,9 @@ this class of runtime errors entirely.
   Install the Oracle EF Core provider that matches your EF Core version:
   <br><br>
   <b>Package Manager Console</b>
-  <pre class="cmd-block">Install-Package Oracle.EntityFrameworkCore</pre>
+  <div class="cmd-block">Install-Package Oracle.EntityFrameworkCore</div>
   <b>.NET CLI</b>
-  <pre class="cmd-block">dotnet add package Oracle.EntityFrameworkCore</pre>
+  <div class="cmd-block">dotnet add package Oracle.EntityFrameworkCore</div>
   <b>Version alignment (mandatory standard):</b>
   <table class="shortcut-table">
 <tr><th>EF Core Version</th><th>Oracle.EntityFrameworkCore</th></tr>
@@ -158,17 +158,17 @@ this class of runtime errors entirely.
 <div class="card-title">🔌 Connection String &amp; DbContext Registration</div>
 <div class="card-body">
   <b>appsettings.json</b>
-  <pre class="cmd-block">{
+  <div class="cmd-block">{
   "ConnectionStrings": {
 "OracleDb": "User Id=myuser;Password=mypass;Data Source=myhost:1521/myservice;"
   }
-}</pre>
+}</div>
   <b>Program.cs / Startup.cs registration (standard)</b>
-  <pre class="cmd-block">builder.Services.AddDbContext&lt;AppDbContext&gt;(options =&gt;
+  <div class="cmd-block">builder.Services.AddDbContext&lt;AppDbContext&gt;(options =&gt;
 options.UseOracle(
     builder.Configuration.GetConnectionString("OracleDb"),
     o =&gt; o.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19)));
-</pre>
+</div>
   <ul>
 <li>Always call <code>UseOracleSQLCompatibility</code> and target the correct Oracle DB version.</li>
 <li>Store connection strings in <b>app secrets / environment variables</b>, never in source control.</li>
@@ -196,7 +196,7 @@ options.UseOracle(
 <tr><td>Schema (owner)</td><td>UPPERCASE</td><td><code>MYSCHEMA</code></td></tr>
   </table>
   <br>Configure globally in <b>OnModelCreating</b>:
-  <pre class="cmd-block">protected override void OnModelCreating(ModelBuilder modelBuilder)
+  <div class="cmd-block">protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
 // Apply UPPERCASE naming to every entity
 foreach (var entity in modelBuilder.Model.GetEntityTypes())
@@ -209,7 +209,7 @@ foreach (var entity in modelBuilder.Model.GetEntityTypes())
             prop.SetColumnName(colName.ToUpper());
     }
 }
-}</pre>
+}</div>
 </div>
 </div>""",
         unsafe_allow_html=True,
@@ -246,7 +246,7 @@ foreach (var entity in modelBuilder.Model.GetEntityTypes())
 <div class="card-body">
   Oracle does not support <code>IDENTITY</code> columns in all versions.
   Use <b>Sequences</b> for auto-generated numeric PKs — this is the team standard.
-  <pre class="cmd-block">// Entity
+  <div class="cmd-block">// Entity
 public class Order
 {
 public long Id { get; set; }
@@ -262,7 +262,7 @@ b.Property(e =&gt; e.Id)
  .HasColumnName("ID")
  .HasColumnType("NUMBER(19)")
  .UseHiLo("SEQ_ORDERS");   // HiLo uses a sequence under the hood
-});</pre>
+});</div>
   <ul>
 <li>Prefer <b>HiLo</b> pattern (<code>UseHiLo</code>) over <code>UseSequence</code> for better insert performance.</li>
 <li>Name every sequence <code>SEQ_&lt;TABLENAME&gt;</code>.</li>
@@ -305,18 +305,18 @@ b.Property(e =&gt; e.Id)
 <div class="card-title">⚙️ Stored Procedures &amp; Raw SQL</div>
 <div class="card-body">
   <b>Calling a stored procedure:</b>
-  <pre class="cmd-block">var result = await context.Database
+  <div class="cmd-block">var result = await context.Database
 .ExecuteSqlRawAsync(
     "BEGIN MY_SCHEMA.UPDATE_STATUS(:p_id, :p_status); END;",
     new OracleParameter("p_id", orderId),
     new OracleParameter("p_status", newStatus));
-</pre>
+</div>
   <b>Mapping a procedure result to an entity:</b>
-  <pre class="cmd-block">var orders = await context.Orders
+  <div class="cmd-block">var orders = await context.Orders
 .FromSqlRaw("SELECT * FROM TABLE(MY_SCHEMA.GET_ORDERS(:p_cust))",
     new OracleParameter("p_cust", customerId))
 .ToListAsync();
-</pre>
+</div>
   <b>Standards:</b>
   <ul>
 <li>Always use <b>named parameters</b> (<code>:param_name</code>) — never positional.</li>
