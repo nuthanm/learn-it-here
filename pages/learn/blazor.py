@@ -89,11 +89,6 @@ A Blazor component is a <code>.razor</code> file that combines HTML markup, C# c
 in one place. Here's every part explained:
   </div>
 </div>
-""",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
 <div class="cmd-block">
 <span class="cmd-comment">&lt;!-- File: Counter.razor — a simple counter component --&gt;</span>
 &#8203;
@@ -147,12 +142,6 @@ private void ResetCount() =&gt; currentCount = StartValue;
 <span class="cmd-comment">&lt;!-- ⑩ Optional: scoped CSS — in Counter.razor.css file --&gt;</span>
 <span class="cmd-comment">&lt;!-- h1 { color: #1A1A1A; } /* only applies to this component */ --&gt;</span>
 </div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        """
 <div class="content-card">
   <div class="card-title">🚀 How to Create &amp; Run a Blazor App</div>
   <div class="card-body">
