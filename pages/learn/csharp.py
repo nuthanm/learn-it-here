@@ -294,28 +294,46 @@ build it. Purpose-driven learning is 10× faster.
 <div class="content-card">
   <div class="card-title">🔄 C# Feature Evolution — Same Topic Across All Versions</div>
   <div class="card-body">
-Tracking how <b>"printing a person's name and age"</b> evolved across C# versions shows why
-newer syntax exists and what problem it solves.<br><br>
+Tracking how the same concept evolved across C# versions shows <b>why newer syntax exists</b>
+and what problem each version solved. Select a topic:
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
-<b>📌 C# 1.0 — String concatenation (2002)</b>
+    tabs_evo = st.tabs([
+        "🔤 Strings",
+        "❓ Null Handling",
+        "📦 Data Models",
+        "🔀 Switch",
+        "⚡ Async / Await",
+        "🔍 Collections",
+    ])
+
+    with tabs_evo[0]:
+        st.markdown(
+            """
+<b>📌 Tracking "Printing a person's name and age"</b><br><br>
+<b>C# 1.0 — String concatenation (2002)</b>
 <div class="cmd-block">
 string name = "Alice";
 int age = 30;
 Console.WriteLine("Name: " + name + ", Age: " + age);
 // ❌ Issue: verbose, hard to read, error-prone with many variables
 </div>
-<b>📌 C# 5.0 — String.Format (improvement, ~2012)</b>
+<b>C# 5.0 — String.Format (improvement, ~2012)</b>
 <div class="cmd-block">
 Console.WriteLine(String.Format("Name: {0}, Age: {1}", name, age));
 // Better, but {0} {1} placeholders are still confusing
 </div>
-<b>📌 C# 6.0 — String Interpolation ✅ (2015)</b>
+<b>C# 6.0 — String Interpolation ✅ (2015)</b>
 <div class="cmd-block">
 Console.WriteLine($"Name: {name}, Age: {age}");
 // ✅ Clean, readable — variables inline with the string
 // 🏠 Layman: Like filling in blanks in a sentence: "Name: [name], Age: [age]"
 </div>
-<b>📌 C# 9.0 — Top-level statements (2020)</b>
+<b>C# 9.0 — Top-level statements (2020)</b>
 <div class="cmd-block">
 // No class or Main method needed!
 string name = "Alice";
@@ -323,8 +341,13 @@ int age = 30;
 Console.WriteLine($"Name: {name}, Age: {age}");
 // ✅ Perfect for scripts and beginners — less boilerplate
 </div>
-<hr style="border:none;border-top:1px solid #ddd;margin:1.2rem 0">
+""",
+            unsafe_allow_html=True,
+        )
 
+    with tabs_evo[1]:
+        st.markdown(
+            """
 <b>📌 Tracking "Null Checking" evolution</b><br><br>
 <b>C# 1.0–5.0 — Classic null check</b>
 <div class="cmd-block">
@@ -351,8 +374,13 @@ string displayName = user?.Name ?? "Guest";
 string? name = null;   // ✅ explicitly nullable
 string  name2 = null;  // ❌ Compiler WARNING — this should never be null!
 </div>
-<hr style="border:none;border-top:1px solid #ddd;margin:1.2rem 0">
+""",
+            unsafe_allow_html=True,
+        )
 
+    with tabs_evo[2]:
+        st.markdown(
+            """
 <b>📌 Tracking "Data class / model" evolution</b><br><br>
 <b>C# 1.0–8.0 — Classic class with properties</b>
 <div class="cmd-block">
@@ -381,8 +409,13 @@ var p3 = p1 with { Age = 31 };
 // Creates a new Person with everything from p1, but Age = 31
 // ✅ Immutable data + easy "update"
 </div>
-<hr style="border:none;border-top:1px solid #ddd;margin:1.2rem 0">
+""",
+            unsafe_allow_html=True,
+        )
 
+    with tabs_evo[3]:
+        st.markdown(
+            """
 <b>📌 Tracking "Switch / branching" evolution</b><br><br>
 <b>C# 1.0 — Classic switch</b>
 <div class="cmd-block">
@@ -419,8 +452,13 @@ _                         => "Senior"
 };
 // ✅ Reads like English rules
 </div>
-<hr style="border:none;border-top:1px solid #ddd;margin:1.2rem 0">
+""",
+            unsafe_allow_html=True,
+        )
 
+    with tabs_evo[4]:
+        st.markdown(
+            """
 <b>📌 Tracking "Async programming" evolution</b><br><br>
 <b>C# 1.0–4.0 — Callbacks / BeginInvoke (painful)</b>
 <div class="cmd-block">
@@ -442,8 +480,13 @@ Console.WriteLine(result);
 // 🏠 Layman: Like ordering food at a restaurant — you sit, wait (await), and your
 //   food arrives (result) without blocking everyone else in the restaurant
 </div>
-<hr style="border:none;border-top:1px solid #ddd;margin:1.2rem 0">
+""",
+            unsafe_allow_html=True,
+        )
 
+    with tabs_evo[5]:
+        st.markdown(
+            """
 <b>📌 Tracking "Collections / Filtering" evolution (LINQ)</b><br><br>
 <b>C# 1.0–2.0 — Manual loop filtering</b>
 <div class="cmd-block">
@@ -468,11 +511,9 @@ var evens2 = (from n in numbers where n % 2 == 0 select n).ToList();
 int[] nums = [1, 2, 3, 4, 5];   // ✅ New [ ] syntax — same for arrays, lists, spans
 List&lt;int&gt; more = [1, 2, ..nums]; // ✅ Spread operator — merge collections easily
 </div>
-  </div>
-</div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
 
     st.markdown(
         """
