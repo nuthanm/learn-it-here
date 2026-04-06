@@ -34,3 +34,31 @@ CREATE POLICY "allow_auth_select"
     FOR SELECT
     TO authenticated
     USING (true);
+
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Topic Suggestions — stores learning-hub topic requests from users
+-- ─────────────────────────────────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS topic_suggestions (
+    id           UUID        DEFAULT gen_random_uuid()   PRIMARY KEY,
+    topic        TEXT        NOT NULL,
+    created_at   TIMESTAMPTZ DEFAULT NOW()               NOT NULL
+);
+
+-- Enable Row Level Security (RLS)
+ALTER TABLE topic_suggestions ENABLE ROW LEVEL SECURITY;
+
+-- Allow anonymous inserts (used by the Streamlit app with the anon key)
+CREATE POLICY "allow_anon_insert"
+    ON topic_suggestions
+    FOR INSERT
+    TO anon
+    WITH CHECK (true);
+
+-- Allow authenticated users to read all rows
+CREATE POLICY "allow_auth_select"
+    ON topic_suggestions
+    FOR SELECT
+    TO authenticated
+    USING (true);

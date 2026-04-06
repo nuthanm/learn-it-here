@@ -156,8 +156,34 @@ The app will be live at `https://your-app-name.streamlit.app`.
 
 ```
 learn-it-here/
-├── app.py                          # Main Streamlit application (landing, requirements, learn hub)
+├── app.py                          # Entry point — page config + routing (~30 lines)
+├── config.py                       # Constants (menu items, session-state defaults, nav helpers)
 ├── requirements.txt                # Python dependencies (streamlit, supabase, fpdf2)
+├── styles/
+│   └── theme.css                   # All application CSS (panda palette, responsive layout)
+├── components/
+│   ├── css.py                      # inject_css() — reads theme.css and injects it via st.markdown
+│   ├── panda.py                    # Animated panda HTML helpers (landing, robot, sitting states)
+│   ├── footer.py                   # Footer, scroll-nav, and copy-button HTML helpers
+│   └── dialogs.py                  # Suggest-a-topic dialog (@st.dialog)
+├── pages/
+│   ├── landing.py                  # page_landing() — hero layout with panda mascot
+│   ├── requirements.py             # page_requirements() — 8-question form + PDF export
+│   └── learn/
+│       ├── __init__.py             # page_learn() — sidebar nav + routing to section modules
+│       ├── git.py                  # render_git()
+│       ├── visual_studio.py        # render_visual_studio()
+│       ├── vscode.py               # render_vscode()
+│       ├── efcore.py               # render_efcore()
+│       ├── dotnet.py               # render_dotnet()
+│       ├── unit_testing.py         # render_unit_testing()
+│       ├── linq.py                 # render_linq()
+│       ├── blazor.py               # render_blazor()
+│       ├── csharp.py               # render_csharp()
+│       └── topic_suggestions.py    # render_topic_suggestions()
+├── services/
+│   ├── supabase_client.py          # Supabase helpers (save responses, topic suggestions, fetch)
+│   └── pdf_service.py              # PDF generation (generate_pdf, _safe)
 ├── database/
 │   └── schema.sql                  # Supabase PostgreSQL table schema
 ├── .streamlit/
@@ -165,6 +191,15 @@ learn-it-here/
 │   └── secrets.toml.example        # Credentials template (copy → secrets.toml)
 └── README.md
 ```
+
+### Architecture principles applied
+
+| Principle | How it applies |
+|---|---|
+| **Separation of Concerns** | UI (`pages/`, `components/`), data (`services/`), and config are fully decoupled |
+| **Single Responsibility** | Each module has one job — `pdf_service.py` knows nothing about Supabase |
+| **DRY** | CSS lives in one file; shared HTML helpers live in `components/`; Supabase credentials fetched in one place |
+| **Open/Closed** | Adding a new learning section = one new file in `pages/learn/` + one entry in `config.py` |
 
 ---
 
