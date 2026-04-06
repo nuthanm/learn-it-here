@@ -299,6 +299,7 @@ st.markdown(
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
     overflow-x: auto; white-space: pre-wrap;
+    position: relative;
   }
   .cmd-comment { color: #888888; font-style: italic; }
 
@@ -309,10 +310,10 @@ st.markdown(
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
     overflow-x: auto; white-space: pre-wrap;
+    position: relative;
   }
 
   /* ─ Code block copy button ─ */
-  .code-block-wrapper { position: relative; }
   .copy-code-btn {
     position: absolute; top: 0.5rem; right: 0.5rem;
     background: rgba(45,106,79,0.88); color: #FFFFFF;
@@ -1615,18 +1616,19 @@ def _copy_buttons_html() -> str:
 
   function addCopyButtons() {
     pdoc.querySelectorAll('.cmd-block, .json-block').forEach(function(block) {
-      if (block.parentNode && block.parentNode.classList.contains('code-block-wrapper')) return;
-      var wrapper = pdoc.createElement('div');
-      wrapper.className = 'code-block-wrapper';
-      block.parentNode.insertBefore(wrapper, block);
-      wrapper.appendChild(block);
+      /* Skip blocks that already have a copy button injected. */
+      if (block.querySelector('.copy-code-btn')) return;
       var btn = pdoc.createElement('button');
       btn.className = 'copy-code-btn';
       btn.textContent = 'Copy';
       btn.type = 'button';
       btn.setAttribute('aria-label', 'Copy code');
       btn.addEventListener('click', function() {
-        var text = block.innerText || block.textContent || '';
+        /* Clone the block and strip the injected button before reading text. */
+        var clone = block.cloneNode(true);
+        var btnClone = clone.querySelector('.copy-code-btn');
+        if (btnClone) { btnClone.parentNode.removeChild(btnClone); }
+        var text = clone.innerText || clone.textContent || '';
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(text).then(function() {
             btn.textContent = 'Copied!';
@@ -1637,7 +1639,11 @@ def _copy_buttons_html() -> str:
           fallbackCopy(text, btn);
         }
       });
-      wrapper.appendChild(btn);
+      /* Append the button directly inside the code block.
+         The block already has position:relative via CSS so the button
+         is positioned with position:absolute at top/right. This avoids
+         rearranging React-managed DOM nodes (which caused NotFoundError). */
+      block.appendChild(btn);
     });
   }
 
@@ -1660,7 +1666,7 @@ def _copy_buttons_html() -> str:
   var debounceTimer;
   var observer = new MutationObserver(function() {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(addCopyButtons, 150); /* 150ms gives React time to finish re-rendering */
+    debounceTimer = setTimeout(addCopyButtons, 300); /* 300ms gives React time to finish re-rendering */
   });
   observer.observe(pdoc.body, { childList: true, subtree: true });
 })();
@@ -2472,20 +2478,12 @@ git commit -m "feat: add forgot password email flow"</pre>
         )
 
         # Commands
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⌨️ Commands We Use Regularly</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div class="card-body">These are the commands you\'ll run day-to-day — '
-            "from getting the repo to pushing your work back up.</div>",
-            unsafe_allow_html=True,
-        )
-
-        st.markdown('<div class="card-section-title">Starting Out</div>', unsafe_allow_html=True)
-        st.markdown(
-            """<div class="cmd-block">
+            """<div class="content-card">
+<div class="card-title">⌨️ Commands We Use Regularly</div>
+<div class="card-body">These are the commands you'll run day-to-day — from getting the repo to pushing your work back up.</div>
+<div class="card-section-title">Starting Out</div>
+<div class="cmd-block">
 <span class="cmd-comment"># Clone the repository to your local machine</span>
 git clone https://github.com/your-org/your-repo.git
 &#8203;
@@ -2495,13 +2493,9 @@ cd your-repo
 <span class="cmd-comment"># Check current branch and status</span>
 git status
 git branch
-</div>""",
-            unsafe_allow_html=True,
-        )
-
-        st.markdown('<div class="card-section-title">Daily Workflow</div>', unsafe_allow_html=True)
-        st.markdown(
-            """<div class="cmd-block">
+</div>
+<div class="card-section-title">Daily Workflow</div>
+<div class="cmd-block">
 <span class="cmd-comment"># Always pull latest changes before starting work</span>
 git fetch origin
 git pull origin main
@@ -2522,13 +2516,9 @@ git commit -m "feat: add user login endpoint"
 &#8203;
 <span class="cmd-comment"># Push your branch to the remote</span>
 git push origin feature/my-feature-name
-</div>""",
-            unsafe_allow_html=True,
-        )
-
-        st.markdown('<div class="card-section-title">Keeping Your Branch Up to Date</div>', unsafe_allow_html=True)
-        st.markdown(
-            """<div class="cmd-block">
+</div>
+<div class="card-section-title">Keeping Your Branch Up to Date</div>
+<div class="cmd-block">
 <span class="cmd-comment"># Option 1: Rebase on main (keeps history clean — preferred)</span>
 git fetch origin
 git rebase origin/main
@@ -2542,13 +2532,9 @@ git reset HEAD src/MyFile.cs
 <span class="cmd-comment"># Temporarily stash unfinished work and come back later</span>
 git stash
 git stash pop
-</div>""",
-            unsafe_allow_html=True,
-        )
-
-        st.markdown('<div class="card-section-title">Useful Inspection Commands</div>', unsafe_allow_html=True)
-        st.markdown(
-            """<div class="cmd-block">
+</div>
+<div class="card-section-title">Useful Inspection Commands</div>
+<div class="cmd-block">
 <span class="cmd-comment"># Last 10 commits on current branch</span>
 git log --oneline -10
 &#8203;
@@ -2560,11 +2546,10 @@ git branch -a
 &#8203;
 <span class="cmd-comment"># Delete a local branch after merging</span>
 git branch -d feature/my-feature-name
+</div>
 </div>""",
             unsafe_allow_html=True,
         )
-
-        st.markdown("</div>", unsafe_allow_html=True)  # close content-card
 
         # Real-world Git scenario
         st.markdown(
@@ -2727,13 +2712,10 @@ public class TestResult
         )
 
         # Key features
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⚡ Key Productivity Features</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<div class="feature-grid">
+            """<div class="content-card">
+<div class="card-title">⚡ Key Productivity Features</div>
+<div class="feature-grid">
   <div class="feature-pill">
     <strong>🪄 Paste JSON as Classes</strong>
     <p>Edit &rarr; Paste Special &rarr; <b>Paste JSON as Classes</b>.
@@ -2794,19 +2776,16 @@ public class TestResult
     <p>Right-click any symbol &rarr; Refactor: rename everywhere, extract interface,
        extract method, inline temporary variable, and more — safely across the whole solution.</p>
   </div>
+</div>
 </div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Productivity settings
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⚙️ Productivity Settings Worth Configuring</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<div class="feature-grid">
+            """<div class="content-card">
+<div class="card-title">⚙️ Productivity Settings Worth Configuring</div>
+<div class="feature-grid">
   <div class="feature-pill">
     <strong>Font &amp; Editor Size</strong>
     <p>Tools &rarr; Options &rarr; Environment &rarr; Fonts and Colors.
@@ -2837,10 +2816,10 @@ public class TestResult
     <p>Add <code>guidelines</code> extension or set column guides in .editorconfig
        to keep lines under 120 characters.</p>
   </div>
+</div>
 </div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Recommended extensions
         st.markdown(
@@ -2879,13 +2858,10 @@ public class TestResult
         )
 
         # Key shortcuts
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⌨️ Essential Keyboard Shortcuts</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<table class="shortcut-table">
+            """<div class="content-card">
+<div class="card-title">⌨️ Essential Keyboard Shortcuts</div>
+<table class="shortcut-table">
 <tr><th>Shortcut</th><th>Action</th></tr>
 <tr><td>Ctrl+.</td><td>Quick Actions / Lightbulb fixes</td></tr>
 <tr><td>Ctrl+R, R</td><td>Rename symbol everywhere</td></tr>
@@ -2899,10 +2875,10 @@ public class TestResult
 <tr><td>Ctrl+0, Ctrl+G</td><td>Open Git Changes window</td></tr>
 <tr><td>Ctrl+T</td><td>Go to file / type / member</td></tr>
 <tr><td>Ctrl+Q</td><td>Quick Launch — search VS menus</td></tr>
-</table>""",
+</table>
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
     # ══════════════════════════════════════════════════════════════════════════
     # VS CODE SECTION
@@ -2973,13 +2949,10 @@ public class TestResult
         )
 
         # Key features
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⚡ Key Features</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<div class="feature-grid">
+            """<div class="content-card">
+<div class="card-title">⚡ Key Features</div>
+<div class="feature-grid">
   <div class="feature-pill">
     <strong>🖱️ Multi-Cursor Editing</strong>
     <p><b>Alt+Click</b> to add cursors. <b>Ctrl+D</b> selects the next occurrence.
@@ -3019,19 +2992,16 @@ public class TestResult
     <p>Powered by language servers (LSP). C# Dev Kit, Pylance, ESLint etc.
        give you completions, signatures, and hover docs just like the full IDE.</p>
   </div>
+</div>
 </div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Recommended extensions
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">🔌 Recommended Extensions</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<div class="feature-grid">
+            """<div class="content-card">
+<div class="card-title">🔌 Recommended Extensions</div>
+<div class="feature-grid">
   <div class="feature-pill">
     <strong>C# Dev Kit (Microsoft)</strong>
     <p>Full .NET / C# support — IntelliSense, refactoring, Test Explorer, and Solution Explorer inside VS Code.</p>
@@ -3072,23 +3042,17 @@ public class TestResult
     <strong>Docker</strong>
     <p>Browse containers, images, and registries. Build and run Dockerfiles from the explorer panel.</p>
   </div>
+</div>
 </div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Settings
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⚙️ Recommended settings.json</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div class="card-body">Open with <b>Ctrl+Shift+P</b> &rarr; "Open User Settings (JSON)"</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<div class="json-block">{
+            """<div class="content-card">
+<div class="card-title">⚙️ Recommended settings.json</div>
+<div class="card-body">Open with <b>Ctrl+Shift+P</b> &rarr; "Open User Settings (JSON)"</div>
+<div class="json-block">{
   "editor.fontSize": 14,
   "editor.fontFamily": "'Cascadia Code', 'JetBrains Mono', Consolas, monospace",
   "editor.fontLigatures": true,
@@ -3112,19 +3076,16 @@ public class TestResult
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
-}</div>""",
+}</div>
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Shortcuts
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⌨️ Essential Keyboard Shortcuts</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<table class="shortcut-table">
+            """<div class="content-card">
+<div class="card-title">⌨️ Essential Keyboard Shortcuts</div>
+<table class="shortcut-table">
 <tr><th>Shortcut</th><th>Action</th></tr>
 <tr><td>Ctrl+P</td><td>Quick file open (fuzzy search)</td></tr>
 <tr><td>Ctrl+Shift+P</td><td>Command Palette — search all commands</td></tr>
@@ -3140,10 +3101,10 @@ public class TestResult
 <tr><td>F2</td><td>Rename symbol everywhere</td></tr>
 <tr><td>Ctrl+K Z</td><td>Zen mode (distraction-free)</td></tr>
 <tr><td>Ctrl+Shift+`</td><td>New terminal instance</td></tr>
-</table>""",
+</table>
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
     # ══════════════════════════════════════════════════════════════════════════
     # EF CORE + ORACLE SECTION
@@ -3275,13 +3236,9 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
         )
 
         # Installation
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">📦 NuGet Package Setup</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">📦 NuGet Package Setup</div>
 <div class="card-body">
   Install the Oracle EF Core provider that matches your EF Core version:
   <br><br>
@@ -3299,19 +3256,14 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
   </table>
   Always keep EF Core and the Oracle provider on the <b>same major version</b>.
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Connection string
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">🔌 Connection String &amp; DbContext Registration</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">🔌 Connection String &amp; DbContext Registration</div>
 <div class="card-body">
   <b>appsettings.json</b>
   <pre class="cmd-block">{
@@ -3330,19 +3282,14 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
     <li>Store connection strings in <b>app secrets / environment variables</b>, never in source control.</li>
   </ul>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Naming conventions
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">📐 Naming Conventions (Mandatory Standards)</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">📐 Naming Conventions (Mandatory Standards)</div>
 <div class="card-body">
   Oracle historically uses <b>UPPERCASE</b> object names. Failing to follow these conventions
   causes case-sensitivity errors or "ORA-00942: table or view does not exist" at runtime.
@@ -3372,19 +3319,14 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
     }
 }</pre>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Data types
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">🔢 Oracle Data-Type Mapping Standards</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">🔢 Oracle Data-Type Mapping Standards</div>
 <div class="card-body">
   Always specify Oracle-native column types explicitly in Fluent API or Data Annotations to
   avoid provider defaults that may differ across environments.
@@ -3401,19 +3343,14 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
     <tr><td>byte[]</td><td>BLOB</td><td><code>.HasColumnType("BLOB")</code></td></tr>
   </table>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Sequences and IDs
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">🔑 Primary Keys &amp; Sequences (Standard)</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">🔑 Primary Keys &amp; Sequences (Standard)</div>
 <div class="card-body">
   Oracle does not support <code>IDENTITY</code> columns in all versions.
   Use <b>Sequences</b> for auto-generated numeric PKs — this is the team standard.
@@ -3440,19 +3377,14 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
     <li>For <b>GUID</b> PKs use <code>RAW(16)</code> and set <code>ValueGeneratedOnAdd</code> with a client-side <code>Guid.NewGuid()</code> default.</li>
   </ul>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Migrations
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">🔄 Migrations — Standards &amp; Commands</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">🔄 Migrations — Standards &amp; Commands</div>
 <div class="card-body">
   <table class="shortcut-table">
     <tr><th>Task</th><th>Command</th></tr>
@@ -3471,19 +3403,14 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
     <li>Every migration must be peer-reviewed before merging to the main branch.</li>
   </ul>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Stored Procedures
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">⚙️ Stored Procedures &amp; Raw SQL</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">⚙️ Stored Procedures &amp; Raw SQL</div>
 <div class="card-body">
   <b>Calling a stored procedure:</b>
   <pre class="cmd-block">var result = await context.Database
@@ -3506,19 +3433,15 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
     <li>Document stored procedure signatures in the same PR as the EF mapping.</li>
   </ul>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Best practices
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">✅ Best Practices Everyone Must Follow</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """<div class="feature-grid">
+            """<div class="content-card">
+<div class="card-title">✅ Best Practices Everyone Must Follow</div>
+<div class="feature-grid">
   <div class="feature-pill">
     <strong>🔠 Always Uppercase Names</strong>
     <p>Configure table and column names as UPPERCASE in <code>OnModelCreating</code>. Never rely on default casing.</p>
@@ -3551,19 +3474,15 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
     <strong>🔒 Secrets Out of Source</strong>
     <p>Oracle credentials belong in Azure Key Vault / environment secrets. Never hardcode in appsettings.json committed to Git.</p>
   </div>
+</div>
 </div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
         # Quick-reference table
-        st.markdown('<div class="content-card">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="card-title">📋 Quick-Reference Checklist</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
+            """<div class="content-card">
+<div class="card-title">📋 Quick-Reference Checklist</div>
 <div class="card-body">
 <table class="shortcut-table">
   <tr><th>#</th><th>Standard</th><th>Why It Matters</th></tr>
@@ -3579,10 +3498,9 @@ modelBuilder.Entity&lt;Order&gt;(b =&gt;
   <tr><td>10</td><td>Store credentials in secrets/Key Vault</td><td>Security compliance</td></tr>
 </table>
 </div>
-""",
+</div>""",
             unsafe_allow_html=True,
         )
-        st.markdown("</div>", unsafe_allow_html=True)
 
     # ══════════════════════════════════════════════════════════════════════════
     # .NET SECTION
