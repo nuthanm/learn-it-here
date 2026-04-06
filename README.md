@@ -127,9 +127,20 @@ Open [http://localhost:8501](http://localhost:8501) in your browser.
 4. Copy your **Project URL** and **anon public key** from
    *Project Settings → API* into your secrets file.
 
-The table `project_requirements` will be created with Row Level Security enabled:
+Two tables will be created with Row Level Security enabled:
+
+**`project_requirements`** — stores the 8-question form responses:
 - **Anon** users can **INSERT** (submit responses via the app).
 - **Authenticated** users can **SELECT** (view responses in the dashboard).
+
+**`topic_suggestions`** — stores community topic requests:
+- **Anon** users can **INSERT** (submit a suggestion) and **SELECT** (view the leaderboard).
+- **Authenticated** users can **SELECT** (view all suggestions).
+
+> ⚠️ If you see `"Could not find the table 'public.topic_suggestions' in the schema cache"`,
+> it means the `topic_suggestions` table has not been created yet. Re-run
+> [`database/schema.sql`](database/schema.sql) in the Supabase SQL Editor — the
+> `CREATE TABLE IF NOT EXISTS` statements are safe to run again.
 
 ---
 
