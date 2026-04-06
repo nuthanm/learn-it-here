@@ -4828,7 +4828,7 @@ await builder.Build().RunAsync();
     ✅ Consistently top 5 in the TIOBE programming language index<br>
     ✅ High demand in enterprise, finance, healthcare, gaming, government sectors<br>
     ✅ Microsoft Azure cloud = massive C# / .NET ecosystem<br>
-    ✅ Average salary: $95,000–$140,000/year (USA, 2024)<br><br>
+    ✅ Average salary: $95,000–$145,000/year (USA, 2025–2026)<br><br>
     <b>For students &amp; career changers:</b><br>
     ✅ One of the best-structured languages to <em>learn programming fundamentals</em><br>
     ✅ Strongly typed — the compiler catches your mistakes before they run<br>
