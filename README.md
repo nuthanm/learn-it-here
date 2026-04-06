@@ -6,6 +6,8 @@ questionnaire, then dive into curated learning guides matched to your exact tool
 versions. Responses are stored in **Supabase (PostgreSQL)** and can be exported as a
 **PDF report** with a single click.
 
+<img width="959" height="409" alt="image" src="https://github.com/user-attachments/assets/18d96a2f-de04-4292-b5a3-febfac129aa8" />
+
 ---
 
 ## ✨ Features
