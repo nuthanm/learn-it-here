@@ -64,6 +64,7 @@ def generate_pdf(data: dict) -> bytes:
         pdf.ln(5)
 
     # ── Footer ───────────────────────────────────────────────────────────────
+    pdf.set_auto_page_break(auto=False)
     pdf.set_y(-18)
     pdf.set_font("Helvetica", "I", 8)
     pdf.set_text_color(148, 163, 184)
