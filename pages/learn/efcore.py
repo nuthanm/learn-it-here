@@ -41,7 +41,7 @@ public string FullName { get; set; }   // maps to "FULL_NAME"
 public string Email { get; set; }      // maps to "EMAIL"
 public ICollection&lt;Order&gt; Orders { get; set; }
 }
-
+&#8203;
 public class Order
 {
 public long Id { get; set; }
@@ -55,7 +55,7 @@ public Customer Customer { get; set; }
 {
 public DbSet&lt;Customer&gt; Customers { get; set; }
 public DbSet&lt;Order&gt; Orders { get; set; }
-
+&#8203;
 protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     modelBuilder.Entity&lt;Customer&gt;(b =&gt;
@@ -75,7 +75,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
          .HasColumnType("VARCHAR2(300)")
          .IsRequired();
     });
-
+&#8203;
     modelBuilder.Entity&lt;Order&gt;(b =&gt;
     {
         b.ToTable("ORDERS");
@@ -111,7 +111,7 @@ var orders = await _context.Orders
 .Where(o =&gt; o.CustomerId == 42)
 .OrderByDescending(o =&gt; o.OrderDate)
 .ToListAsync();   // In web APIs, always prefer async DB calls to avoid blocking request threads.
-
+&#8203;
 // Add a new customer
 var newCustomer = new Customer { FullName = "Jane Smith", Email = "jane@shop.com" };
 _context.Customers.Add(newCustomer);
@@ -252,7 +252,7 @@ public class Order
 public long Id { get; set; }
 // ...
 }
-
+&#8203;
 // Fluent API in OnModelCreating
 modelBuilder.Entity&lt;Order&gt;(b =&gt;
 {
