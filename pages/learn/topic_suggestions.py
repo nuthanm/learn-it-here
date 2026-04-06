@@ -1,6 +1,4 @@
-import re
 import streamlit as st
-from collections import Counter
 from services.supabase_client import _get_supabase_client, fetch_topic_suggestions
 
 
