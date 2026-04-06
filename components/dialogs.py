@@ -36,6 +36,8 @@ def _suggest_topic_dialog():
             ok, db_msg = save_topic_suggestion(topic)
             if ok:
                 st.success("Thank you! Your suggestion has been noted.")
+                st.session_state["_topic_submitted"] = True
+                st.rerun()
             else:
                 st.warning(f"⚠️  Could not save your suggestion — {db_msg}")
         else:
