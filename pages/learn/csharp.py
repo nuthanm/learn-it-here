@@ -369,7 +369,7 @@ public record Person(string Name, int Age);
 // ✅ One line! Auto-generates constructor, Equals, GetHashCode, ToString
 // ✅ Immutable by default
 // 🏠 Layman: A record is like a stamped official form — once filled, it doesn't change
-
+&#8203;
 var p1 = new Person("Alice", 30);
 var p2 = new Person("Alice", 30);
 Console.WriteLine(p1 == p2); // true — value equality!
@@ -459,7 +459,7 @@ if (n % 2 == 0) evens.Add(n);
 var evens = numbers.Where(n => n % 2 == 0).ToList();
 // ✅ One line, expressive
 // 🏠 Layman: "Give me only the items WHERE my condition is true"
-
+&#8203;
 // Query syntax (SQL-like):
 var evens2 = (from n in numbers where n % 2 == 0 select n).ToList();
 </div>
@@ -514,7 +514,7 @@ Let's dissect this complete C# program and label every concept:<br><br>
 // ① Using directive — imports a namespace (like "import" in Python / Java)
 using System;
 using System.Collections.Generic;
-
+&#8203;
 // ② Namespace — groups related classes together (like a folder)
 namespace MyApp.Learning
 {
@@ -524,11 +524,11 @@ public class BankAccount
 {
     // ④ Field — a private variable that stores state inside the class
     private decimal _balance;
-
+&#8203;
     // ⑤ Property — controlled access to a field (get/set)
     //    "public" = readable from outside, "private set" = only settable inside
     public string Owner { get; private set; }
-
+&#8203;
     // ⑥ Constructor — special method called when an object is created
     //    "this" refers to the current instance
     public BankAccount(string owner, decimal initialBalance)
@@ -536,7 +536,7 @@ public class BankAccount
         Owner    = owner;        // ← set the property
         _balance = initialBalance;
     }
-
+&#8203;
     // ⑦ Method — a named action the class can perform
     //    returns void (nothing), takes a decimal parameter
     public void Deposit(decimal amount)
@@ -544,28 +544,28 @@ public class BankAccount
         // ⑧ Exception handling — catch and handle errors gracefully
         if (amount &lt;= 0)
             throw new ArgumentException("Amount must be positive.");
-
+&#8203;
         _balance += amount;
         // ⑨ String interpolation — embed expressions inside strings
         Console.WriteLine($"Deposited {amount:C}. New balance: {_balance:C}");
     }
-
+&#8203;
     // ⑩ Expression-bodied method (C# 6+) — one-liner method
     public decimal GetBalance() =&gt; _balance;
 }
-
+&#8203;
 // ⑪ Derived class — inherits from BankAccount (Inheritance)
 public class SavingsAccount : BankAccount
 {
     // ⑫ Auto-property with init-only setter (C# 9)
     public decimal InterestRate { get; init; }
-
+&#8203;
     public SavingsAccount(string owner, decimal balance, decimal rate)
         : base(owner, balance)      // ← calls the parent constructor
     {
         InterestRate = rate;
     }
-
+&#8203;
     // ⑬ Method override — customise inherited behaviour
     public void ApplyInterest()
     {
@@ -573,16 +573,16 @@ public class SavingsAccount : BankAccount
         Deposit(interest);
     }
 }
-
+&#8203;
 // ⑭ Interface — a contract: any class implementing this MUST have these members
 public interface IReportable
 {
     void PrintReport();
 }
-
+&#8203;
 // ⑮ Record — immutable data type (C# 9), auto-generates Equals/ToString
 public record Transaction(string Type, decimal Amount, DateTime Date);
-
+&#8203;
 // ⑯ Program entry point
 public class Program
 {
@@ -592,26 +592,26 @@ public class Program
     {
         // ⑱ Object instantiation — create an instance from the class blueprint
         var account = new SavingsAccount("Alice", 1000m, 0.05m);
-
+&#8203;
         account.Deposit(500m);
         account.ApplyInterest();
-
+&#8203;
         // ⑲ var keyword — type inferred by compiler (C# 3+)
         var balance = account.GetBalance();
-
+&#8203;
         // ⑳ LINQ — query a collection with lambda expressions
         var transactions = new List&lt;Transaction&gt;
         {
             new("Deposit",  500m,  DateTime.Now),
             new("Interest", 75m,   DateTime.Now),
         };
-
+&#8203;
         // Filter: only deposits
         var deposits = transactions.Where(t =&gt; t.Type == "Deposit").ToList();
-
+&#8203;
         // ㉑ async/await — non-blocking I/O operation
         await Task.Delay(10); // simulate async work
-
+&#8203;
         Console.WriteLine($"Final balance for {account.Owner}: {balance:C}");
     }
 }
@@ -665,7 +665,7 @@ int a = 5;
 int b = a;    // b is a COPY — changing b doesn't affect a
 b = 10;
 Console.WriteLine(a); // 5 — unchanged ✅
-
+&#8203;
 var list1 = new List&lt;int&gt; { 1, 2, 3 };
 var list2 = list1;    // list2 POINTS to the same list
 list2.Add(4);
@@ -682,16 +682,16 @@ type when you order the box. After that, you can only put that type in."<br>
 ArrayList oldList = new ArrayList();
 oldList.Add(42);
 oldList.Add("oops");        // compiles but runtime crash if you expect int!
-
+&#8203;
 // With generics — safe ✅
 List&lt;int&gt; safeList = new List&lt;int&gt;();
 safeList.Add(42);
 // safeList.Add("oops");    // ❌ Compile-time error — caught before it runs!
-
+&#8203;
 // Generic method
 T Max&lt;T&gt;(T a, T b) where T : IComparable&lt;T&gt;
 =&gt; a.CompareTo(b) &gt; 0 ? a : b;
-
+&#8203;
 Console.WriteLine(Max(3, 7));              // 7
 Console.WriteLine(Max("apple", "banana")); // banana
 </div>
@@ -705,17 +705,17 @@ An event is like a doorbell: when pressed, all registered listeners are notified
 <div class="cmd-block">
 // Delegate type declaration
 delegate string Formatter(int value);
-
+&#8203;
 // Methods that match the delegate signature
 string ToHex(int n)    =&gt; $"0x{n:X}";
 string ToBinary(int n) =&gt; Convert.ToString(n, 2);
-
+&#8203;
 Formatter fmt = ToHex;
 Console.WriteLine(fmt(255)); // 0xFF
-
+&#8203;
 fmt = ToBinary;
 Console.WriteLine(fmt(10));  // 1010
-
+&#8203;
 // Built-in delegate types: Action (void), Func (returns value), Predicate (bool)
 Action&lt;string&gt; greet    = name =&gt; Console.WriteLine($"Hello, {name}!");
 Func&lt;int, int, int&gt; add = (a, b) =&gt; a + b;
@@ -736,7 +736,7 @@ var people = new List&lt;(string Name, int Age, string City)&gt;
 ("Carol", 35, "London"),
 ("Dave",  28, "Berlin"),
 };
-
+&#8203;
 // Method syntax (most common)
 var londonAdults = people
 .Where(p =&gt; p.City == "London" &amp;&amp; p.Age &gt;= 30)
@@ -744,7 +744,7 @@ var londonAdults = people
 .Select(p =&gt; p.Name)
 .ToList();
 // Result: ["Alice", "Carol"]
-
+&#8203;
 // Aggregation
 int    totalAge = people.Sum(p =&gt; p.Age);      // 118
 double avgAge   = people.Average(p =&gt; p.Age);  // 29.5
@@ -766,13 +766,13 @@ using var client = new HttpClient();
 string content = await client.GetStringAsync(url);
 return content.Substring(0, 200);
 }
-
+&#8203;
 // Run multiple async tasks in parallel
 async Task RunParallelAsync()
 {
 var task1 = FetchWebPageAsync("https://example.com");
 var task2 = FetchWebPageAsync("https://microsoft.com");
-
+&#8203;
 // Wait for BOTH to complete simultaneously
 string[] results = await Task.WhenAll(task1, task2);
 Console.WriteLine($"Got {results.Length} pages");
@@ -792,27 +792,27 @@ public interface IEmailService
 {
 Task SendAsync(string to, string subject, string body);
 }
-
+&#8203;
 // Real implementation
 public class SmtpEmailService : IEmailService
 {
 public async Task SendAsync(string to, string subject, string body)
     =&gt; await Task.Run(() =&gt; Console.WriteLine($"Sending email to {to}"));
 }
-
+&#8203;
 // Consumer — receives IEmailService via constructor injection
 public class OrderService
 {
 private readonly IEmailService _email;
-
+&#8203;
 public OrderService(IEmailService email) =&gt; _email = email;
-
+&#8203;
 public async Task PlaceOrderAsync(string customerEmail)
 {
     await _email.SendAsync(customerEmail, "Order confirmed", "Thanks!");
 }
 }
-
+&#8203;
 // Registration in ASP.NET Core (Program.cs)
 // builder.Services.AddScoped&lt;IEmailService, SmtpEmailService&gt;();
 // ✅ Swap SmtpEmailService for MockEmailService in tests — zero code changes!
@@ -831,7 +831,7 @@ if (b == 0)
     throw new DivideByZeroException("Cannot divide by zero!");
 return a / b;
 }
-
+&#8203;
 try
 {
 decimal result = Divide(10, 0);
@@ -849,7 +849,7 @@ finally
 {
 Console.WriteLine("This always runs — good for cleanup (close files, etc.)");
 }
-
+&#8203;
 // Custom exception
 public class InsufficientFundsException : Exception
 {
@@ -867,11 +867,11 @@ of writing many separate "if it's a large box, do X; if it's a small envelope, d
 you write one clear set of patterns and the machine routes each parcel automatically.<br>
 <div class="cmd-block">
 object shape = new Circle(5.0);
-
+&#8203;
 // Type pattern (C# 7)
 if (shape is Circle c)
 Console.WriteLine($"Area: {Math.PI * c.Radius * c.Radius:F2}");
-
+&#8203;
 // Switch expression with property pattern (C# 8)
 double area = shape switch
 {
@@ -881,7 +881,7 @@ Triangle  { Base: var b, Height: var h }  =&gt; 0.5 * b * h,
 null =&gt; throw new ArgumentNullException(nameof(shape)),
 _    =&gt; throw new NotSupportedException("Unknown shape")
 };
-
+&#8203;
 // List pattern (C# 11)
 int[] nums = { 1, 2, 3 };
 string desc = nums switch

@@ -238,6 +238,7 @@
     position: relative;
   }
   .cmd-comment { color: #888888; font-style: italic; }
+  .cmd-block p { background: transparent !important; color: inherit; margin: 0; padding: 0; }
 
   /* ─ Settings / JSON blocks — deep panda black ─ */
   .json-block {
