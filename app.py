@@ -299,6 +299,7 @@ st.markdown(
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
     overflow-x: auto; white-space: pre-wrap;
+    position: relative;
   }
   .cmd-comment { color: #888888; font-style: italic; }
 
@@ -309,10 +310,10 @@ st.markdown(
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.86rem; margin: 0.6rem 0; line-height: 1.9;
     overflow-x: auto; white-space: pre-wrap;
+    position: relative;
   }
 
   /* ─ Code block copy button ─ */
-  .code-block-wrapper { position: relative; }
   .copy-code-btn {
     position: absolute; top: 0.5rem; right: 0.5rem;
     background: rgba(45,106,79,0.88); color: #FFFFFF;
@@ -1615,18 +1616,19 @@ def _copy_buttons_html() -> str:
 
   function addCopyButtons() {
     pdoc.querySelectorAll('.cmd-block, .json-block').forEach(function(block) {
-      if (block.parentNode && block.parentNode.classList.contains('code-block-wrapper')) return;
-      var wrapper = pdoc.createElement('div');
-      wrapper.className = 'code-block-wrapper';
-      block.parentNode.insertBefore(wrapper, block);
-      wrapper.appendChild(block);
+      /* Skip blocks that already have a copy button injected. */
+      if (block.querySelector('.copy-code-btn')) return;
       var btn = pdoc.createElement('button');
       btn.className = 'copy-code-btn';
       btn.textContent = 'Copy';
       btn.type = 'button';
       btn.setAttribute('aria-label', 'Copy code');
       btn.addEventListener('click', function() {
-        var text = block.innerText || block.textContent || '';
+        /* Clone the block and strip the injected button before reading text. */
+        var clone = block.cloneNode(true);
+        var btnClone = clone.querySelector('.copy-code-btn');
+        if (btnClone) { btnClone.parentNode.removeChild(btnClone); }
+        var text = clone.innerText || clone.textContent || '';
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(text).then(function() {
             btn.textContent = 'Copied!';
@@ -1637,7 +1639,11 @@ def _copy_buttons_html() -> str:
           fallbackCopy(text, btn);
         }
       });
-      wrapper.appendChild(btn);
+      /* Append the button directly inside the code block.
+         The block already has position:relative via CSS so the button
+         is positioned with position:absolute at top/right. This avoids
+         rearranging React-managed DOM nodes (which caused NotFoundError). */
+      block.appendChild(btn);
     });
   }
 
@@ -1660,7 +1666,7 @@ def _copy_buttons_html() -> str:
   var debounceTimer;
   var observer = new MutationObserver(function() {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(addCopyButtons, 150); /* 150ms gives React time to finish re-rendering */
+    debounceTimer = setTimeout(addCopyButtons, 300); /* 300ms gives React time to finish re-rendering */
   });
   observer.observe(pdoc.body, { childList: true, subtree: true });
 })();
