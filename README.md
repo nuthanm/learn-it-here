@@ -1,10 +1,10 @@
-# 📋 Learn it here
+# 🐼 Learn It Here
 
-A **professional, single-page Streamlit web app** that captures all key tech-stack
-questions before a project kicks off. Responses are stored in **Supabase (PostgreSQL)**
-and can be exported as a **PDF report** with a single click.
-
-<img width="958" height="412" alt="image" src="https://github.com/user-attachments/assets/7bf54542-d385-45a5-99f5-52a64b917bc4" />
+**Learn It Here** is a multi-page Streamlit web app that helps developers know their
+project stack before they start. Capture project requirements with a targeted
+questionnaire, then dive into curated learning guides matched to your exact tools and
+versions. Responses are stored in **Supabase (PostgreSQL)** and can be exported as a
+**PDF report** with a single click.
 
 ---
 
@@ -12,11 +12,14 @@ and can be exported as a **PDF report** with a single click.
 
 | Feature | Detail |
 |---|---|
-| **12-question form** | Covers version control, IDE, .NET/C#, EF Core, architecture, deployment, reporting, testing, logging, project management, unit testing, and code quality |
-| **Animated robot mascot** | Welcome → Thinking → Bye states with smooth CSS animations |
+| **Landing page** | Hero layout with animated 🐼 panda mascot and two CTAs |
+| **8-question requirements form** | Covers version control, IDE, code push method, deployment, architecture, design patterns, ORM, and additional notes |
 | **PDF export** | Professional PDF generated on submission (no server needed) |
 | **Supabase storage** | Responses persisted in PostgreSQL via Supabase |
-| **Minimalistic design** | Clean blue-white palette, card layout, fully responsive |
+| **Learning hub** | 9 curated topic guides: GIT, Visual Studio IDE, VS Code, EF Core + Oracle, .NET, Unit Testing, LINQ, Blazor, and C# |
+| **Suggest a topic** | Users can suggest new topics directly from the learning hub |
+| **Animated panda mascot** | Kung Fu Panda–style Po with 5 cycling expressions (happy, excited, thinking, wink, determined) |
+| **Responsive design** | Panda-themed palette (black / white / bamboo green), fully mobile-responsive |
 
 ---
 
@@ -32,22 +35,36 @@ and can be exported as a **PDF report** with a single click.
 
 ---
 
-## 📝 Questions Covered
+## 📝 Requirements Form — Questions Covered
 
-| # | Topic | Reference |
-|---|---|---|
-| 1 | **Version Control** — GitHub / Azure DevOps / Bitbucket / GitLab | Git is used locally for all platforms |
-| 2 | **IDE / Editor** — Visual Studio vs VS Code | Always use the latest version |
-| 3 | **C# & .NET Version** — .NET 9 → C# 13, .NET 8 → C# 12 | [Language versioning](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-versioning) |
-| 4 | **EF Core Version** | [What's new in EF Core](https://learn.microsoft.com/en-us/ef/core/what-is-new/) |
-| 5 | **Application Architecture & Design Patterns** — Clean Arch, CQRS, DDD, MVC… | |
-| 6 | **Deployment Process** — CI/CD pipeline, environments | |
-| 7 | **Crystal Reports** — Required / Not required / Under consideration | |
-| 8 | **Local Testing Feasibility** — Full / Partial / Deployment-only | |
-| 9 | **Logging / Tracing Tools** — App Insights, Serilog, ELK, Splunk… | |
-| 10 | **Project Management Tool** — Azure DevOps Boards / JIRA | |
-| 11 | **Unit Testing Framework** — xUnit / NUnit / MSTest | |
-| 12 | **Code Quality / Static Analysis** — SonarQube (mandatory / optional) | |
+| # | Topic |
+|---|---|
+| 1 | **Version Control** — GitHub / Azure DevOps / Bitbucket / GitLab |
+| 2 | **IDE / Editor** — Visual Studio / VS Code / JetBrains Rider / Other |
+| 3 | **Code Push Method** — Git CLI / IDE Git integration / GitHub Desktop / Other |
+| 4 | **Deployment Approaches** — CI/CD pipelines, cloud targets, manual deploy (multi-select) |
+| 5 | **Architecture Patterns** — Clean Architecture, CQRS, DDD, MVC, Microservices… (multi-select) |
+| 6 | **Design Patterns** — Repository, Unit of Work, Factory, Singleton… (multi-select) |
+| 7 | **ORM** — EF Core, Dapper, ADO.NET, SQLAlchemy, Prisma… |
+| 8 | **Additional Requirements** — Any other tools, frameworks, or notes |
+
+---
+
+## 🎓 Learning Hub — Topics Available
+
+| Topic | Highlights |
+|---|---|
+| **GIT** | Daily workflow, branching, rebasing, useful inspection commands |
+| **Visual Studio IDE** | Shortcuts, extensions, debugging tips |
+| **VS Code** | Settings, extensions, keyboard shortcuts |
+| **EF Core + Oracle** | Fluent API, Oracle-specific configuration, migrations |
+| **.NET** | Platform overview, LTS versions, tooling |
+| **Unit Testing** | xUnit vs NUnit vs MSTest, mocking, best practices |
+| **LINQ** | Deferred vs immediate execution, common operators, query syntax |
+| **Blazor** | Blazor Server vs WebAssembly vs Web App, component model |
+| **C#** | Language versions, value/reference types, generics, async/await, pattern matching |
+
+New topics can be suggested via the **"Suggest a Topic"** button inside the learning hub.
 
 ---
 
@@ -62,8 +79,8 @@ and can be exported as a **PDF report** with a single click.
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/nuthanm/project-requirements.git
-cd project-requirements
+git clone https://github.com/nuthanm/learn-it-here.git
+cd learn-it-here
 
 # 2. Create & activate a virtual environment
 python -m venv .venv
@@ -75,7 +92,7 @@ pip install -r requirements.txt
 
 # 4. Configure secrets
 cp .streamlit/secrets.toml.example .streamlit/secrets.toml
-copy .streamlit/secrets.toml.example .streamlit/secrets.toml # for windows
+copy .streamlit/secrets.toml.example .streamlit/secrets.toml  # Windows
 # Edit .streamlit/secrets.toml and add your Supabase URL + key
 ```
 
@@ -138,9 +155,9 @@ The app will be live at `https://your-app-name.streamlit.app`.
 ## 📁 Project Structure
 
 ```
-project-requirements/
-├── app.py                          # Main Streamlit application
-├── requirements.txt                # Python dependencies
+learn-it-here/
+├── app.py                          # Main Streamlit application (landing, requirements, learn hub)
+├── requirements.txt                # Python dependencies (streamlit, supabase, fpdf2)
 ├── database/
 │   └── schema.sql                  # Supabase PostgreSQL table schema
 ├── .streamlit/
