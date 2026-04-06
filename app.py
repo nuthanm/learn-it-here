@@ -1623,14 +1623,14 @@ def _copy_buttons_html() -> str:
     if (block.dataset.contentTrimmed || block.tagName.toLowerCase() !== 'div') return;
     block.dataset.contentTrimmed = '1';
     var fc = block.firstChild;
-    if (fc && fc.nodeType === 3) {
-      fc.nodeValue = fc.nodeValue.replace(/^\\s*\\n/, '');
-      if (fc.nodeValue === '') { block.removeChild(fc); }
+    if (fc && fc.nodeType === 3 && fc.nodeValue.charAt(0) === '\\n') {
+      fc.nodeValue = fc.nodeValue.slice(1);
+      if (!fc.nodeValue) { block.removeChild(fc); }
     }
     var lc = block.lastChild;
     if (lc && lc.nodeType === 3) {
-      lc.nodeValue = lc.nodeValue.replace(/\\n\\s*$/, '');
-      if (lc.nodeValue === '') { block.removeChild(lc); }
+      lc.nodeValue = lc.nodeValue.trimEnd ? lc.nodeValue.trimEnd() : lc.nodeValue;
+      if (!lc.nodeValue) { block.removeChild(lc); }
     }
   }
 
