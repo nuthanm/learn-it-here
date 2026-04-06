@@ -17,6 +17,10 @@ from pages.learn.topic_suggestions import render_topic_suggestions
 
 def page_learn():
     """Sidebar learning hub: GIT | Visual Studio IDE | VS Code | EF Core + Oracle."""
+    # ── Handle topic-submitted refresh ───────────────────────────────────────
+    if st.session_state.pop("_topic_submitted", False):
+        st.toast("✅ Your suggestion has been noted — thank you!", icon="🎉")
+
     # ── Handle banner dismiss via query param ─────────────────────────────────
     if st.query_params.get("banner_dismissed") == "1":
         st.session_state.learn_banner_dismissed = True
