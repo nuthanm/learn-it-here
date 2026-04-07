@@ -294,6 +294,160 @@ await builder.Build().RunAsync();
 
     st.markdown(
         """
+<div class="content-card" style="border-left: 4px solid #2196F3;">
+  <div class="card-title">🔄 Request Workflow — What Happens When You Visit a URL?</div>
+  <div class="card-body">
+Let's trace exactly what happens when a user visits <code>learnithere.com/weather</code> in a Blazor app,
+step by step from the browser all the way to the rendered page.
+  </div>
+</div>
+<div class="content-card">
+  <div class="card-body">
+<table class="shortcut-table">
+  <tr><th>Step</th><th>What Happens</th><th>File / Component Involved</th></tr>
+  <tr>
+    <td><b>① Browser Request</b></td>
+    <td>User navigates to <code>/weather</code>. The browser sends an HTTP request to the server (Blazor Server) or routes locally (WASM).</td>
+    <td>Browser / HTTP layer</td>
+  </tr>
+  <tr>
+    <td><b>② Server Responds</b></td>
+    <td>ASP.NET Core middleware pipeline processes the request. <code>Program.cs</code> maps Razor components — <code>App</code> is the root.</td>
+    <td><code>Program.cs</code></td>
+  </tr>
+  <tr>
+    <td><b>③ App.razor Loads</b></td>
+    <td><code>App.razor</code> is the root component. It renders a <code>&lt;Router&gt;</code> that scans all assemblies for components with an <code>@page</code> directive.</td>
+    <td><code>App.razor</code></td>
+  </tr>
+  <tr>
+    <td><b>④ Router Matches Route</b></td>
+    <td>The Router finds <code>Weather.razor</code> because it has <code>@page "/weather"</code>. If no match is found, the <code>&lt;NotFound&gt;</code> content is shown instead.</td>
+    <td><code>Router</code> inside <code>App.razor</code></td>
+  </tr>
+  <tr>
+    <td><b>⑤ RouteView Renders Page</b></td>
+    <td><code>&lt;RouteView&gt;</code> renders the matched component (<code>Weather.razor</code>) inside the layout defined by <code>DefaultLayout</code>.</td>
+    <td><code>Weather.razor</code>, <code>MainLayout.razor</code></td>
+  </tr>
+  <tr>
+    <td><b>⑥ Component Lifecycle Runs</b></td>
+    <td>Blazor calls lifecycle methods on the component: <code>OnInitialized</code> → <code>OnParametersSet</code> → <code>OnAfterRender</code>. Data is fetched and state is set up here.</td>
+    <td><code>Weather.razor</code> <code>@code { }</code> block</td>
+  </tr>
+  <tr>
+    <td><b>⑦ UI Is Rendered</b></td>
+    <td>Blazor generates the HTML from the component's markup + C# state and sends it to the browser DOM. For Blazor Server, updates flow over SignalR.</td>
+    <td>Blazor rendering engine</td>
+  </tr>
+</table>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+<div class="content-card" style="border-left: 4px solid #2196F3;">
+  <div class="card-title">📄 App.razor — The Root Component Explained</div>
+  <div class="card-body">
+<code>App.razor</code> is always the entry point for Blazor routing. Here is what its typical content looks like and what each part does:
+  </div>
+</div>
+<div class="cmd-block">
+<span class="cmd-comment">&lt;!-- App.razor — root component, sets up the Router --&gt;</span>
+&#8203;
+&lt;Router AppAssembly="@typeof(App).Assembly"&gt;
+&#8203;
+    <span class="cmd-comment">&lt;!-- ① Found — rendered when the Router finds a matching @page route --&gt;</span>
+    &lt;Found Context="routeData"&gt;
+&#8203;
+        <span class="cmd-comment">&lt;!-- RouteView renders the matched page inside DefaultLayout --&gt;</span>
+        &lt;RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" /&gt;
+&#8203;
+        <span class="cmd-comment">&lt;!-- FocusOnNavigate moves keyboard focus to the &lt;h1&gt; on page change --&gt;</span>
+        &lt;FocusOnNavigate RouteData="@routeData" Selector="h1" /&gt;
+&#8203;
+    &lt;/Found&gt;
+&#8203;
+    <span class="cmd-comment">&lt;!-- ② NotFound — rendered when no @page directive matches the URL --&gt;</span>
+    &lt;NotFound&gt;
+        &lt;PageTitle&gt;Not found&lt;/PageTitle&gt;
+        &lt;LayoutView Layout="@typeof(MainLayout)"&gt;
+            &lt;p role="alert"&gt;Sorry, there's nothing at this address.&lt;/p&gt;
+        &lt;/LayoutView&gt;
+    &lt;/NotFound&gt;
+&#8203;
+&lt;/Router&gt;
+</div>
+<div class="content-card">
+  <div class="card-body">
+<b>Key attributes explained:</b><br><br>
+🔹 <code>AppAssembly="@typeof(App).Assembly"</code> — tells the Router which assembly to scan for <code>@page</code> routes<br>
+🔹 <code>DefaultLayout="@typeof(MainLayout)"</code> — wraps every page in <code>MainLayout.razor</code> (nav bar, footer, etc.) unless overridden<br>
+🔹 <code>&lt;RouteView&gt;</code> — the component that physically renders the matched page<br>
+🔹 <code>&lt;FocusOnNavigate&gt;</code> — accessibility helper; moves focus to the heading after navigation<br>
+🔹 <code>&lt;NotFound&gt;</code> — fallback for 404-style mismatches — no redirect, just renders in-place
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+<div class="content-card" style="border-left: 4px solid #2196F3;">
+  <div class="card-title">🌦️ Example End-to-End: learnithere.com/weather</div>
+  <div class="card-body">
+Here is the complete picture of what happens when <code>/weather</code> is visited, mapped to real files:
+  </div>
+</div>
+<div class="cmd-block">
+<span class="cmd-comment">URL:  learnithere.com/weather</span>
+&#8203;
+<span class="cmd-comment">① Program.cs  ──────────────────────────────────────────────────</span>
+app.MapRazorComponents&lt;App&gt;()   <span class="cmd-comment">// App.razor is the root</span>
+   .AddInteractiveServerRenderMode();
+&#8203;
+<span class="cmd-comment">② App.razor  ───────────────────────────────────────────────────</span>
+&lt;Router AppAssembly="@typeof(App).Assembly"&gt;  <span class="cmd-comment">// scans for @page routes</span>
+    &lt;Found Context="routeData"&gt;
+        &lt;RouteView RouteData="@routeData"       <span class="cmd-comment">// "/weather" matched!</span>
+                   DefaultLayout="@typeof(MainLayout)" /&gt;
+    &lt;/Found&gt;
+&lt;/Router&gt;
+&#8203;
+<span class="cmd-comment">③ MainLayout.razor  ────────────────────────────────────────────</span>
+&lt;NavMenu /&gt;                      <span class="cmd-comment">// sidebar/top nav rendered</span>
+@Body                            <span class="cmd-comment">// ← Weather page renders here</span>
+&#8203;
+<span class="cmd-comment">④ Weather.razor  ───────────────────────────────────────────────</span>
+@page "/weather"                 <span class="cmd-comment">// matched by the Router</span>
+&#8203;
+&lt;h1&gt;Weather&lt;/h1&gt;
+&lt;p&gt;Today's forecast: @forecast&lt;/p&gt;
+&#8203;
+@code {
+    private string? forecast;
+&#8203;
+    <span class="cmd-comment">// ⑤ Lifecycle: called once when component first loads</span>
+    protected override async Task OnInitializedAsync()
+    {
+        forecast = await WeatherService.GetForecastAsync();
+    }
+}
+&#8203;
+<span class="cmd-comment">⑥ Browser displays rendered HTML ──────────────────────────────</span>
+<span class="cmd-comment">   (Blazor Server: updates via SignalR WebSocket)</span>
+<span class="cmd-comment">   (Blazor WASM:  direct DOM update in browser)</span>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
 <div class="content-card">
   <div class="card-title">⚠️ Key Things to Be Aware Of in Blazor</div>
   <div class="card-body">
