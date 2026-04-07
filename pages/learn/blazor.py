@@ -305,41 +305,13 @@ step by step from the browser all the way to the rendered page.
   <div class="card-body">
 <table class="shortcut-table">
   <tr><th>Step</th><th>What Happens</th><th>File / Component Involved</th></tr>
-  <tr>
-    <td><b>① Browser Request</b></td>
-    <td>User navigates to <code>/weather</code>. The browser sends an HTTP request to the server (Blazor Server) or routes locally (WASM).</td>
-    <td>Browser / HTTP layer</td>
-  </tr>
-  <tr>
-    <td><b>② Server Responds</b></td>
-    <td>ASP.NET Core middleware pipeline processes the request. <code>Program.cs</code> maps Razor components — <code>App</code> is the root.</td>
-    <td><code>Program.cs</code></td>
-  </tr>
-  <tr>
-    <td><b>③ App.razor Loads</b></td>
-    <td><code>App.razor</code> is the root component. It renders a <code>&lt;Router&gt;</code> that scans all assemblies for components with an <code>@page</code> directive.</td>
-    <td><code>App.razor</code></td>
-  </tr>
-  <tr>
-    <td><b>④ Router Matches Route</b></td>
-    <td>The Router finds <code>Weather.razor</code> because it has <code>@page "/weather"</code>. If no match is found, the <code>&lt;NotFound&gt;</code> content is shown instead.</td>
-    <td><code>Router</code> inside <code>App.razor</code></td>
-  </tr>
-  <tr>
-    <td><b>⑤ RouteView Renders Page</b></td>
-    <td><code>&lt;RouteView&gt;</code> renders the matched component (<code>Weather.razor</code>) inside the layout defined by <code>DefaultLayout</code>.</td>
-    <td><code>Weather.razor</code>, <code>MainLayout.razor</code></td>
-  </tr>
-  <tr>
-    <td><b>⑥ Component Lifecycle Runs</b></td>
-    <td>Blazor calls lifecycle methods on the component: <code>OnInitialized</code> → <code>OnParametersSet</code> → <code>OnAfterRender</code>. Data is fetched and state is set up here.</td>
-    <td><code>Weather.razor</code> <code>@code { }</code> block</td>
-  </tr>
-  <tr>
-    <td><b>⑦ UI Is Rendered</b></td>
-    <td>Blazor generates the HTML from the component's markup + C# state and sends it to the browser DOM. For Blazor Server, updates flow over SignalR.</td>
-    <td>Blazor rendering engine</td>
-  </tr>
+  <tr><td><b>① Browser Request</b></td><td>User navigates to <code>/weather</code>. The browser sends an HTTP request to the server (Blazor Server) or routes locally (WASM).</td><td>Browser / HTTP layer</td></tr>
+  <tr><td><b>② Server Responds</b></td><td>ASP.NET Core middleware pipeline processes the request. <code>Program.cs</code> maps Razor components — <code>App</code> is the root.</td><td><code>Program.cs</code></td></tr>
+  <tr><td><b>③ App.razor Loads</b></td><td><code>App.razor</code> is the root component. It renders a <code>&lt;Router&gt;</code> that scans all assemblies for components with an <code>@page</code> directive.</td><td><code>App.razor</code></td></tr>
+  <tr><td><b>④ Router Matches Route</b></td><td>The Router finds <code>Weather.razor</code> because it has <code>@page "/weather"</code>. If no match is found, the <code>&lt;NotFound&gt;</code> content is shown instead.</td><td><code>Router</code> inside <code>App.razor</code></td></tr>
+  <tr><td><b>⑤ RouteView Renders Page</b></td><td><code>&lt;RouteView&gt;</code> renders the matched component (<code>Weather.razor</code>) inside the layout defined by <code>DefaultLayout</code>.</td><td><code>Weather.razor</code>, <code>MainLayout.razor</code></td></tr>
+  <tr><td><b>⑥ Component Lifecycle Runs</b></td><td>Blazor calls lifecycle methods on the component: <code>OnInitialized</code> → <code>OnParametersSet</code> → <code>OnAfterRender</code>. Data is fetched and state is set up here.</td><td><code>Weather.razor</code> <code>@code { }</code> block</td></tr>
+  <tr><td><b>⑦ UI Is Rendered</b></td><td>Blazor generates the HTML from the component's markup + C# state and sends it to the browser DOM. For Blazor Server, updates flow over SignalR.</td><td>Blazor rendering engine</td></tr>
 </table>
   </div>
 </div>
