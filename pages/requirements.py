@@ -74,8 +74,7 @@ def page_requirements():
                 if st.button("🎓 Go to Learning Hub →", type="primary", use_container_width=True):
                     for k in list(st.session_state.keys()):
                         del st.session_state[k]
-                    st.session_state.page = "learn"
-                    st.rerun()
+                    _nav_to("learn")
             with sc2:
                 if st.button("📝 Submit Another Response", use_container_width=True):
                     for k in list(st.session_state.keys()):
