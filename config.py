@@ -12,10 +12,10 @@ _DEFAULTS = {
 
 # ── Learn-hub menu definitions ─────────────────────────────────────────────────
 # To add a new menu item, append to this list and update LATEST_NEW_TOPIC.
-LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle", ".NET", "Unit Testing", "LINQ", "Blazor", "C#", "Topic Suggestions"]
+LEARN_MENU_ITEMS = ["GIT", "Visual Studio IDE", "VS Code", "EF Core + Oracle", ".NET", "Unit Testing", "LINQ", "Blazor", "C#", "Topic Suggestions", "SQL Developer"]
 # LATEST_NEW_TOPIC is the item that triggers the "new menu" banner.
 # Update this string whenever a brand-new item is added to LEARN_MENU_ITEMS.
-LATEST_NEW_TOPIC = "Topic Suggestions"
+LATEST_NEW_TOPIC = "SQL Developer"
 
 
 def init_session_state():

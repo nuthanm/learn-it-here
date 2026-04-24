@@ -13,6 +13,7 @@ from pages.learn.linq import render_linq
 from pages.learn.blazor import render_blazor
 from pages.learn.csharp import render_csharp
 from pages.learn.topic_suggestions import render_topic_suggestions
+from pages.learn.sql_developer import render_sql_developer
 
 
 def page_learn():
@@ -130,6 +131,8 @@ def page_learn():
         render_csharp()
       elif section == "Topic Suggestions":
         render_topic_suggestions()
+      elif section == "SQL Developer":
+        render_sql_developer()
     st.markdown(_footer_html(), unsafe_allow_html=True)
     components.html(_scroll_nav_html(), height=0)
     components.html(_copy_buttons_html(), height=0)
