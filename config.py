@@ -1,7 +1,12 @@
 import streamlit as st
 
+# ── Page name constants ────────────────────────────────────────────────────────
+PAGE_LANDING = "landing"
+PAGE_REQUIREMENTS = "requirements"
+PAGE_LEARN = "learn"
+
 _DEFAULTS = {
-    "page": "landing",              # "landing" | "requirements" | "learn"
+    "page": PAGE_LANDING,              # "landing" | "requirements" | "learn"
     "animation_state": "welcome",
     "submitted": False,
     "pdf_bytes": None,
@@ -34,7 +39,7 @@ def _on_interact():
 def _nav_to(page: str):
     """Navigate to a page and rerun, keeping the URL in sync."""
     st.session_state.page = page
-    if page in ("requirements", "learn"):
+    if page in (PAGE_REQUIREMENTS, PAGE_LEARN):
         st.query_params["page"] = page
     else:
         if "page" in st.query_params:

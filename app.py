@@ -1,5 +1,5 @@
 import streamlit as st
-from config import LEARN_MENU_ITEMS, LATEST_NEW_TOPIC, init_session_state
+from config import LEARN_MENU_ITEMS, LATEST_NEW_TOPIC, PAGE_REQUIREMENTS, PAGE_LEARN, init_session_state
 from components.css import inject_css
 from pages.landing import page_landing
 from pages.requirements import page_requirements
@@ -16,7 +16,7 @@ init_session_state()
 
 # URL routing: on a fresh load, honour the ?page= query param
 _url_page = st.query_params.get("page")
-if _url_page in ("requirements", "learn") and st.session_state.page == "landing":
+if _url_page in (PAGE_REQUIREMENTS, PAGE_LEARN) and st.session_state.page == "landing":
     st.session_state.page = _url_page
 
 # Logo-click navigation
@@ -31,9 +31,9 @@ if st.query_params.get("go") == "home":
 inject_css()
 
 page = st.session_state.page
-if page == "requirements":
+if page == PAGE_REQUIREMENTS:
     page_requirements()
-elif page == "learn":
+elif page == PAGE_LEARN:
     page_learn()
 else:
     page_landing()
