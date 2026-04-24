@@ -14,9 +14,16 @@ st.set_page_config(
 
 init_session_state()
 
+# URL routing: on a fresh load, honour the ?page= query param
+_url_page = st.query_params.get("page")
+if _url_page in ("requirements", "learn") and st.session_state.page == "landing":
+    st.session_state.page = _url_page
+
 # Logo-click navigation
 if st.query_params.get("go") == "home":
     del st.query_params["go"]
+    if "page" in st.query_params:
+        del st.query_params["page"]
     if st.session_state.get("page") != "landing":
         st.session_state.page = "landing"
         st.rerun()

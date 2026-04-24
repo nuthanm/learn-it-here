@@ -32,6 +32,11 @@ def _on_interact():
 
 
 def _nav_to(page: str):
-    """Navigate to a page and rerun."""
+    """Navigate to a page and rerun, keeping the URL in sync."""
     st.session_state.page = page
+    if page in ("requirements", "learn"):
+        st.query_params["page"] = page
+    else:
+        if "page" in st.query_params:
+            del st.query_params["page"]
     st.rerun()
