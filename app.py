@@ -1,5 +1,5 @@
 import streamlit as st
-from config import LEARN_MENU_ITEMS, LATEST_NEW_TOPIC, PAGE_REQUIREMENTS, PAGE_LEARN, init_session_state
+from config import PAGE_REQUIREMENTS, PAGE_LEARN, init_session_state
 from components.css import inject_css
 from pages.landing import page_landing
 from pages.requirements import page_requirements
