@@ -44,4 +44,6 @@ def _nav_to(page: str):
     else:
         if "page" in st.query_params:
             del st.query_params["page"]
+        if "section" in st.query_params:
+            del st.query_params["section"]
     st.rerun()

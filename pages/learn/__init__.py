@@ -103,6 +103,9 @@ def page_learn():
         if st.button("← Home", key="learn_back", use_container_width=True):
             _nav_to("landing")
 
+    # ── Sync section to URL so the page is deep-linkable ─────────────────────
+    st.query_params["section"] = st.session_state.learn_section
+
     # ── Main content area ─────────────────────────────────────────────────────
     with content_col:
         section = st.session_state.learn_section
