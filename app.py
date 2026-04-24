@@ -18,16 +18,15 @@ init_session_state()
 _url_page = st.query_params.get("page")
 if _url_page in (PAGE_REQUIREMENTS, PAGE_LEARN) and st.session_state.page == "landing":
     st.session_state.page = _url_page
-
-# Deep-link support: honour the ?section= query param for the learn hub
-if st.session_state.page == PAGE_LEARN:
-    _url_section = st.query_params.get("section")
-    if _url_section in LEARN_MENU_ITEMS:
-        st.session_state.learn_section = _url_section
-    elif _url_section is not None:
-        # Unknown section — stay on learn hub with the default section
-        if "section" in st.query_params:
-            del st.query_params["section"]
+    # Deep-link support: honour the ?section= query param only on initial navigation
+    if _url_page == PAGE_LEARN:
+        _url_section = st.query_params.get("section")
+        if _url_section in LEARN_MENU_ITEMS:
+            st.session_state.learn_section = _url_section
+        elif _url_section is not None:
+            # Unknown section — stay on learn hub with the default section
+            if "section" in st.query_params:
+                del st.query_params["section"]
 
 # Logo-click navigation
 if st.query_params.get("go") == "home":
