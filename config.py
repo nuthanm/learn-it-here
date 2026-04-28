@@ -329,3 +329,9 @@ def _nav_to(page: str, section: str = None, sub: str = None):
     else:
         # Fallback if registry isn't populated (shouldn't happen at runtime).
         st.rerun()
+
+
+# ── Backwards-compatible aliases ─────────────────────────────────────────────
+# Older modules import the leading-underscore names; keep them working until
+# every caller is migrated to the public names documented at the top.
+_on_interact = on_interact

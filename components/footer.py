@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 
-def _footer_html() -> str:
+def footer_html() -> str:
     """In-flow footer — minimal muted text."""
     return """
 <div class="kfp-footer">
