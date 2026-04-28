@@ -1,24 +1,14 @@
-import streamlit as st
-import streamlit.components.v1 as components
-
-
-def _footer_html() -> str:
-    """Fixed bottom footer — panda palette."""
+def footer_html() -> str:
+    """In-flow footer — minimal muted text."""
     return """
 <div class="kfp-footer">
-  <span style="font-size:0.9rem;font-weight:800;
-    background:linear-gradient(135deg,#74C69D,#FFB3BA);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-    🐼 Learn It Here &mdash; Developed in 2026
-  </span>
-  <span style="font-size:0.75rem;color:#888888;">
-    Powered by Streamlit &amp; Supabase
-  </span>
+  <span>© 2026 Learn It Here</span>
+  <span>Built with Streamlit</span>
 </div>
 """
 
 
-def _scroll_nav_html() -> str:
+def scroll_nav_html() -> str:
     """Return a full HTML document for components.html(height=0).
 
     Creates scroll-to-top / scroll-to-bottom buttons directly in the parent
@@ -251,7 +241,7 @@ def _scroll_nav_html() -> str:
 """
 
 
-def _copy_buttons_html() -> str:
+def copy_buttons_html() -> str:
     """Return a full HTML document for components.html(height=0).
 
     Injects a 'Copy' button into every ``.cmd-block`` and ``.json-block``
@@ -348,3 +338,8 @@ def _copy_buttons_html() -> str:
 </html>
 """
 
+
+# Backwards-compatible aliases — older modules import the underscore names.
+_footer_html = footer_html
+_scroll_nav_html = scroll_nav_html
+_copy_buttons_html = copy_buttons_html

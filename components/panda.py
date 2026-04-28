@@ -1,7 +1,4 @@
-import streamlit as st
-
-
-def _panda_landing_html() -> str:
+def panda_landing_html() -> str:
     """Full KFP Po face — SVG with 5 cycling expressions + per-emotion orbital dots."""
     return """<!DOCTYPE html>
 <html lang="en">
@@ -387,30 +384,31 @@ def _panda_landing_html() -> str:
 # ── Panda Helper — Requirements Form (welcome / thinking / bye states) ────────
 
 
-def _robot_html(state: str) -> str:
+def robot_html(state: str) -> str:
     """Animated panda face helper for the requirements form page — matches landing panda style."""
     _messages = {
-        "welcome": (
-            "Hey! 🐼 Let's capture your<br>project requirements.<br>Fill in the form!"
-        ),
+        "welcome": ("Hey! 🐼 Let's capture your<br>project requirements.<br>Fill in the form!"),
         "thinking": (
             "Hmm, thinking along<br>with you… 🤔"
             "<br><span class='dots'><span>.</span><span>.</span><span>.</span></span>"
         ),
         "bye": (
-            "Awesome! 🎉<br>Requirements saved!<br>"
-            "Download your PDF below!<br>Time to learn! 🐼"
+            "Awesome! 🎉<br>Requirements saved!<br>Download your PDF below!<br>Time to learn! 🐼"
         ),
     }
     msg = _messages.get(state, _messages["welcome"])
     # Expression visibility per state
-    s_happy   = "1" if state == "welcome"  else "0"
-    s_think   = "1" if state == "thinking" else "0"
-    s_excited = "1" if state == "bye"      else "0"
+    s_happy = "1" if state == "welcome" else "0"
+    s_think = "1" if state == "thinking" else "0"
+    s_excited = "1" if state == "bye" else "0"
 
-    wave_l     = "waveL .7s ease-in-out infinite" if state in ("welcome", "bye") else "none"
-    wave_r     = "waveR .7s ease-in-out infinite" if state in ("welcome", "bye") else "none"
-    body_anim  = "thinkBob 2s ease-in-out infinite" if state == "thinking" else "float 4s ease-in-out 1.2s infinite"
+    wave_l = "waveL .7s ease-in-out infinite" if state in ("welcome", "bye") else "none"
+    wave_r = "waveR .7s ease-in-out infinite" if state in ("welcome", "bye") else "none"
+    body_anim = (
+        "thinkBob 2s ease-in-out infinite"
+        if state == "thinking"
+        else "float 4s ease-in-out 1.2s infinite"
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -537,7 +535,7 @@ def _robot_html(state: str) -> str:
 # ── Sitting Panda — Waiting State (Requirements Page Right Side) ──────────────
 
 
-def _sitting_panda_html() -> str:
+def sitting_panda_html() -> str:
     """Static sitting panda — same face style as landing, no animations."""
     return """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
@@ -643,3 +641,8 @@ def _sitting_panda_html() -> str:
 
 # ── KFP Footer ────────────────────────────────────────────────────────────────
 
+
+# Backwards-compatible aliases — older modules import the underscore names.
+_panda_landing_html = panda_landing_html
+_robot_html = robot_html
+_sitting_panda_html = sitting_panda_html

@@ -1,205 +1,225 @@
+""".NET learning page rendered with the minimal content primitives."""
+
 import streamlit as st
+
+from components.content import (
+    code_block,
+    link_list,
+    paragraph,
+    section_intro,
+    section_title,
+    subsection,
+)
 
 
 def render_dotnet():
-    st.markdown(
-        """
-<div class="content-card">
-  <div class="card-title">🟣 What is .NET? (For Complete Beginners)</div>
-  <div class="card-body">
-<b>.NET</b> (pronounced "dot net") is a <em>free, open-source developer platform</em> created by
-Microsoft. Think of it as a powerful toolbox that lets you build all kinds of software —
-websites, mobile apps, desktop apps, games, cloud services, and more — using a common set
-of tools and languages (mainly <b>C#</b>, F#, and VB.NET).<br><br>
-<b>Why should you learn it?</b><br>
-✅ Used by millions of developers worldwide<br>
-✅ Backed by Microsoft and a huge open-source community<br>
-✅ Runs on Windows, macOS, and Linux<br>
-✅ Excellent performance — one of the fastest web frameworks in the world<br>
-✅ Great job market demand<br><br>
-<b>Simple analogy:</b> If programming is like cooking, .NET is the professional kitchen
-(with all utensils, ovens, and recipes) — C# is the chef who works in that kitchen.
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+    section_title(
+        ".NET",
+        "A free, open-source developer platform from Microsoft for building almost anything.",
     )
 
-    st.markdown(
-        """
-<div class="content-card">
-  <div class="card-title">📜 .NET Release History &amp; Associated C# Versions</div>
-  <div class="card-body">
-Every version of .NET comes paired with a version of C# — the primary language used to write .NET apps.
-Here's the full picture from the very beginning:<br><br>
-<table class="shortcut-table">
-  <tr><th>.NET Version</th><th>Release Year</th><th>C# Version</th><th>Support Type</th><th>Key Highlights</th></tr>
-  <tr><td>.NET Framework 1.0</td><td>2002</td><td>C# 1.0</td><td>End of Life</td><td>The very first .NET — Windows only, introduced CLR &amp; BCL</td></tr>
-  <tr><td>.NET Framework 1.1</td><td>2003</td><td>C# 1.2</td><td>End of Life</td><td>Bug fixes, ASP.NET improvements</td></tr>
-  <tr><td>.NET Framework 2.0</td><td>2005</td><td>C# 2.0</td><td>End of Life</td><td>Generics, anonymous methods, nullable types</td></tr>
-  <tr><td>.NET Framework 3.0</td><td>2006</td><td>C# 2.0</td><td>End of Life</td><td>WPF, WCF, WF introduced</td></tr>
-  <tr><td>.NET Framework 3.5</td><td>2007</td><td>C# 3.0</td><td>End of Life</td><td>LINQ, lambda expressions, extension methods</td></tr>
-  <tr><td>.NET Framework 4.0</td><td>2010</td><td>C# 4.0</td><td>End of Life</td><td>TPL (Task Parallel Library), dynamic keyword</td></tr>
-  <tr><td>.NET Framework 4.5</td><td>2012</td><td>C# 5.0</td><td>End of Life</td><td>async/await introduced</td></tr>
-  <tr><td>.NET Framework 4.6</td><td>2015</td><td>C# 6.0</td><td>End of Life</td><td>RyuJIT compiler, string interpolation</td></tr>
-  <tr><td>.NET Framework 4.7</td><td>2017</td><td>C# 7.x</td><td>End of Life</td><td>Tuples, pattern matching, local functions</td></tr>
-  <tr><td>.NET Framework 4.8</td><td>2019</td><td>C# 7.3</td><td>Maintenance</td><td>Last ever .NET Framework — still supported on Windows</td></tr>
-  <tr><td><b>.NET Core 1.0</b></td><td>2016</td><td>C# 6.0</td><td>End of Life</td><td>First cross-platform .NET — Linux/macOS support!</td></tr>
-  <tr><td>.NET Core 2.0</td><td>2017</td><td>C# 7.1</td><td>End of Life</td><td>.NET Standard 2.0 support, massive API expansion</td></tr>
-  <tr><td>.NET Core 2.1</td><td>2018</td><td>C# 7.3</td><td>End of Life</td><td>LTS release, Span&lt;T&gt;, SignalR</td></tr>
-  <tr><td>.NET Core 3.0</td><td>2019</td><td>C# 8.0</td><td>End of Life</td><td>WPF/WinForms on Core, Blazor Server</td></tr>
-  <tr><td>.NET Core 3.1</td><td>2019</td><td>C# 8.0</td><td>End of Life (2022)</td><td>LTS — most used Core version; gRPC support</td></tr>
-  <tr><td><b>.NET 5</b></td><td>2020</td><td>C# 9.0</td><td>End of Life</td><td>Unified .NET — merged Core + Framework vision; no "Core" branding</td></tr>
-  <tr><td><b>.NET 6</b></td><td>2021</td><td>C# 10.0</td><td>End of Life (2024)</td><td>LTS — minimal APIs, .NET MAUI preview, hot reload</td></tr>
-  <tr><td>.NET 7</td><td>2022</td><td>C# 11.0</td><td>End of Life</td><td>STS — rate limiting, output caching, regex improvements</td></tr>
-  <tr><td><b>.NET 8</b></td><td>2023</td><td>C# 12.0</td><td><b>LTS ✅ Current</b></td><td>Native AOT, Blazor United, primary constructors, collection expressions</td></tr>
-  <tr><td>.NET 9</td><td>2024</td><td>C# 13.0</td><td>STS</td><td>LINQ improvements, params spans, Task.WhenEach</td></tr>
-  <tr><td><b>.NET 10</b></td><td>2025 (Nov)</td><td>C# 14.0</td><td><b>LTS (Upcoming)</b></td><td>In development — next long-term support release</td></tr>
-</table>
-<br>
-<b>LTS</b> = Long-Term Support (3 years). <b>STS</b> = Standard-Term Support (18 months).
-<b>Rule of thumb:</b> Use an LTS version for production apps — currently <b>.NET 8</b>.
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+    section_intro(
+        '.NET (pronounced "dot net") lets you build websites, mobile apps, desktop apps, '
+        "games, cloud services, and more using a common set of tools and languages "
+        "(mainly C#, F#, and VB.NET)."
     )
 
-    st.markdown(
-        """
-<div class="content-card">
-  <div class="card-title">⚖️ .NET Framework vs .NET Standard vs .NET (Core / 5+)</div>
-  <div class="card-body">
-This is one of the most confusing things for beginners — three names that all say ".NET"!
-Let's break it down with plain English and a comparison table.<br><br>
-<b>Think of it this way:</b><br>
-🏠 <b>.NET Framework</b> = An old house (Windows-only, comfy but can't be moved)<br>
-📐 <b>.NET Standard</b> = A set of blueprints (a contract that different .NETs agree to follow)<br>
-🚀 <b>.NET (Core / 5+)</b> = The new modern building (cross-platform, fast, the future)<br><br>
-<table class="shortcut-table">
-  <tr><th>Feature</th><th>.NET Framework</th><th>.NET Standard</th><th>.NET (Core / 5+)</th></tr>
-  <tr><td>What it is</td><td>Original full Windows .NET</td><td>A specification/interface (not a runtime)</td><td>Modern, unified cross-platform .NET</td></tr>
-  <tr><td>Runs on</td><td>Windows only</td><td>N/A — it's a standard, not a runtime</td><td>Windows, macOS, Linux</td></tr>
-  <tr><td>Status</td><td>Maintenance (no new features)</td><td>Superseded by .NET 5+ (still used in libraries)</td><td>Active — all future development here</td></tr>
-  <tr><td>Latest version</td><td>4.8.1</td><td>2.1</td><td>.NET 9 (LTS: .NET 8)</td></tr>
-  <tr><td>Who should use it</td><td>Legacy apps that can't migrate</td><td>Library authors targeting multiple runtimes</td><td>Everyone building new apps</td></tr>
-  <tr><td>Performance</td><td>Good</td><td>N/A</td><td>Excellent (much faster)</td></tr>
-  <tr><td>Open Source</td><td>Partially</td><td>Yes</td><td>Yes (fully open source)</td></tr>
-  <tr><td>WinForms / WPF</td><td>✅ Full support</td><td>❌ Not a runtime</td><td>✅ Supported since .NET Core 3.0</td></tr>
-  <tr><td>ASP.NET / Web API</td><td>✅ ASP.NET 4.x</td><td>❌ Not a runtime</td><td>✅ ASP.NET Core (much faster)</td></tr>
-  <tr><td>NuGet packages</td><td>Targets net4x</td><td>Targets netstandard2.x</td><td>Targets net6, net7, net8 etc.</td></tr>
-</table>
-<br>
-<b>When do you see .NET Standard today?</b> When you look at a NuGet library that says
-<code>netstandard2.0</code> — it means that library works in both .NET Framework AND .NET Core/5+.
-It's a compatibility bridge. For <em>new libraries</em>, target .NET 8 directly.
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+    subsection("What is .NET? (For complete beginners)")
+    paragraph(
+        ".NET is a free, open-source developer platform created by Microsoft. Think of it "
+        "as a powerful toolbox that lets you build all kinds of software using a shared "
+        "runtime, base class library, and tooling."
+    )
+    paragraph("Why should you learn it?")
+    link_list(
+        [
+            "Used by millions of developers worldwide",
+            "Backed by Microsoft and a huge open-source community",
+            "Runs on Windows, macOS, and Linux",
+            "Excellent performance — one of the fastest web frameworks in the world",
+            "Great job market demand",
+        ]
+    )
+    paragraph(
+        "Simple analogy: if programming is like cooking, .NET is the professional kitchen "
+        "(with all utensils, ovens, and recipes) — C# is the chef who works in that kitchen."
     )
 
-    st.markdown(
-        """
-<div class="content-card" style="border-left: 4px solid #40916C;">
-  <div class="card-title">🏗️ Anatomy of a .NET Console Program</div>
-  <div class="card-body">
-Here's the simplest possible .NET program (.NET 6+ with top-level statements), with every line explained:
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+    subsection("Supported platforms")
+    link_list(["Windows", "macOS", "Linux", "Android", "iOS", "Browser (WebAssembly)"])
+
+    subsection(".NET release history & associated C# versions")
+    paragraph(
+        "Every version of .NET comes paired with a version of C# — the primary language "
+        "used to write .NET apps. Here's the full picture from the very beginning:"
     )
     st.markdown(
         """
-<div class="cmd-block">
-<span class="cmd-comment">// File: Program.cs  — this is the entry point of your app</span>
-&#8203;
-<span class="cmd-comment">// 1. 'using' brings in a namespace so you can use its classes without full path</span>
+| .NET Version | Release Year | C# Version | Support Type | Key Highlights |
+|---|---|---|---|---|
+| .NET Framework 1.0 | 2002 | C# 1.0 | End of Life | The very first .NET — Windows only, introduced CLR & BCL |
+| .NET Framework 1.1 | 2003 | C# 1.2 | End of Life | Bug fixes, ASP.NET improvements |
+| .NET Framework 2.0 | 2005 | C# 2.0 | End of Life | Generics, anonymous methods, nullable types |
+| .NET Framework 3.0 | 2006 | C# 2.0 | End of Life | WPF, WCF, WF introduced |
+| .NET Framework 3.5 | 2007 | C# 3.0 | End of Life | LINQ, lambda expressions, extension methods |
+| .NET Framework 4.0 | 2010 | C# 4.0 | End of Life | TPL (Task Parallel Library), dynamic keyword |
+| .NET Framework 4.5 | 2012 | C# 5.0 | End of Life | async/await introduced |
+| .NET Framework 4.6 | 2015 | C# 6.0 | End of Life | RyuJIT compiler, string interpolation |
+| .NET Framework 4.7 | 2017 | C# 7.x | End of Life | Tuples, pattern matching, local functions |
+| .NET Framework 4.8 | 2019 | C# 7.3 | Maintenance | Last ever .NET Framework — still supported on Windows |
+| **.NET Core 1.0** | 2016 | C# 6.0 | End of Life | First cross-platform .NET — Linux/macOS support |
+| .NET Core 2.0 | 2017 | C# 7.1 | End of Life | .NET Standard 2.0 support, massive API expansion |
+| .NET Core 2.1 | 2018 | C# 7.3 | End of Life | LTS release, Span&lt;T&gt;, SignalR |
+| .NET Core 3.0 | 2019 | C# 8.0 | End of Life | WPF/WinForms on Core, Blazor Server |
+| .NET Core 3.1 | 2019 | C# 8.0 | End of Life (2022) | LTS — most used Core version; gRPC support |
+| **.NET 5** | 2020 | C# 9.0 | End of Life | Unified .NET — merged Core + Framework vision; no "Core" branding |
+| **.NET 6** | 2021 | C# 10.0 | End of Life (2024) | LTS — minimal APIs, .NET MAUI preview, hot reload |
+| .NET 7 | 2022 | C# 11.0 | End of Life | STS — rate limiting, output caching, regex improvements |
+| **.NET 8** | 2023 | C# 12.0 | **LTS — Current** | Native AOT, Blazor United, primary constructors, collection expressions |
+| .NET 9 | 2024 | C# 13.0 | STS | LINQ improvements, params spans, Task.WhenEach |
+| **.NET 10** | 2025 (Nov) | C# 14.0 | **LTS (Upcoming)** | In development — next long-term support release |
+"""
+    )
+    paragraph(
+        "LTS = Long-Term Support (3 years). STS = Standard-Term Support (18 months). "
+        "Rule of thumb: use an LTS version for production apps — currently .NET 8."
+    )
+
+    subsection(".NET Framework vs .NET Standard vs .NET (Core / 5+)")
+    paragraph(
+        "This is one of the most confusing things for beginners — three names that all "
+        'say ".NET". Here\'s the plain-English breakdown.'
+    )
+    paragraph(
+        "Think of it this way: .NET Framework is an old house (Windows-only, comfy but "
+        "can't be moved). .NET Standard is a set of blueprints (a contract that different "
+        ".NETs agree to follow). .NET (Core / 5+) is the new modern building "
+        "(cross-platform, fast, the future)."
+    )
+    st.markdown(
+        """
+| Feature | .NET Framework | .NET Standard | .NET (Core / 5+) |
+|---|---|---|---|
+| What it is | Original full Windows .NET | A specification/interface (not a runtime) | Modern, unified cross-platform .NET |
+| Runs on | Windows only | N/A — it's a standard, not a runtime | Windows, macOS, Linux |
+| Status | Maintenance (no new features) | Superseded by .NET 5+ (still used in libraries) | Active — all future development here |
+| Latest version | 4.8.1 | 2.1 | .NET 9 (LTS: .NET 8) |
+| Who should use it | Legacy apps that can't migrate | Library authors targeting multiple runtimes | Everyone building new apps |
+| Performance | Good | N/A | Excellent (much faster) |
+| Open Source | Partially | Yes | Yes (fully open source) |
+| WinForms / WPF | Full support | Not a runtime | Supported since .NET Core 3.0 |
+| ASP.NET / Web API | ASP.NET 4.x | Not a runtime | ASP.NET Core (much faster) |
+| NuGet packages | Targets net4x | Targets netstandard2.x | Targets net6, net7, net8 etc. |
+"""
+    )
+    paragraph(
+        "When do you see .NET Standard today? When you look at a NuGet library that says "
+        "netstandard2.0 — it means that library works in both .NET Framework AND .NET "
+        "Core/5+. It's a compatibility bridge. For new libraries, target .NET 8 directly."
+    )
+
+    subsection("Anatomy of a .NET console program")
+    paragraph(
+        "Here's a simple .NET console program with every line explained. This is the "
+        "classic style; .NET 6+ also supports top-level statements that omit the "
+        "namespace and Main boilerplate."
+    )
+    code_block(
+        """// File: Program.cs  — this is the entry point of your app
+
+// 1. 'using' brings in a namespace so you can use its classes without full path
 using System;
-&#8203;
-<span class="cmd-comment">// 2. 'namespace' groups your code logically (like a folder for code)</span>
+
+// 2. 'namespace' groups your code logically (like a folder for code)
 namespace MyFirstApp
 {
-<span class="cmd-comment">// 3. 'class' is a blueprint for objects</span>
-class Program
-{
-    <span class="cmd-comment">// 4. Main() is where your program starts running</span>
-    static void Main(string[] args)
+    // 3. 'class' is a blueprint for objects
+    class Program
     {
-        <span class="cmd-comment">// 5. Console.WriteLine prints text to the screen + newline</span>
-        Console.WriteLine("Hello, .NET World! 🐼");
-&#8203;
-        <span class="cmd-comment">// 6. Variables store data — 'string' holds text</span>
-        string name = "Developer";
-        int age = 25;
-&#8203;
-        <span class="cmd-comment">// 7. String interpolation — $ prefix lets you embed variables</span>
-        Console.WriteLine($"Name: {name}, Age: {age}");
-&#8203;
-        <span class="cmd-comment">// 8. Console.ReadLine() waits for user to type something</span>
-        Console.Write("Press Enter to exit...");
-        Console.ReadLine();
+        // 4. Main() is where your program starts running
+        static void Main(string[] args)
+        {
+            // 5. Console.WriteLine prints text to the screen + newline
+            Console.WriteLine("Hello, .NET World!");
+
+            // 6. Variables store data — 'string' holds text
+            string name = "Developer";
+            int age = 25;
+
+            // 7. String interpolation — $ prefix lets you embed variables
+            Console.WriteLine($"Name: {name}, Age: {age}");
+
+            // 8. Console.ReadLine() waits for user to type something
+            Console.Write("Press Enter to exit...");
+            Console.ReadLine();
+        }
     }
-}
-}
-</div>
-""",
-        unsafe_allow_html=True,
+}""",
+        language="csharp",
     )
 
-    st.markdown(
-        """
-<div class="content-card">
-  <div class="card-title">🚀 How to Create &amp; Run Your First .NET App</div>
-  <div class="card-body">
-<b>Step 1 — Install the .NET SDK:</b> Download from <a href="https://dotnet.microsoft.com/download" target="_blank">dotnet.microsoft.com/download</a><br>
-After installing, open a terminal and verify:
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+    subsection("How to create & run your first .NET app")
+    paragraph(
+        "Step 1 — Install the .NET SDK from the official download page, then verify the "
+        "installation from a terminal."
     )
-    st.markdown(
-        """
-<div class="cmd-block">
-<span class="cmd-comment"># Check .NET is installed and see the version</span>
+    code_block(
+        """# Check .NET is installed and see the version
 dotnet --version
-&#8203;
-<span class="cmd-comment"># Create a new console application</span>
+
+# Create a new console application
 dotnet new console -n MyFirstApp
 cd MyFirstApp
-&#8203;
-<span class="cmd-comment"># Run the app</span>
+
+# Run the app
 dotnet run
-&#8203;
-<span class="cmd-comment"># Build without running</span>
+
+# Build without running
 dotnet build
-&#8203;
-<span class="cmd-comment"># List all available project templates</span>
-dotnet new list
-</div>
-""",
-        unsafe_allow_html=True,
+
+# List all available project templates
+dotnet new list""",
+        language="bash",
     )
+    paragraph("Typical workflow: install SDK -> dotnet new -> edit code -> dotnet run.")
+
+    subsection("Quick reference — what to use when")
     st.markdown(
         """
-<div class="content-card">
-  <div class="card-title">📋 Quick Reference — What to Use When</div>
-  <div class="card-body">
-<table class="shortcut-table">
-  <tr><th>Situation</th><th>Use This</th></tr>
-  <tr><td>Building a new web API or website</td><td>ASP.NET Core (.NET 8)</td></tr>
-  <tr><td>Building a Windows desktop app</td><td>WPF or WinForms on .NET 8</td></tr>
-  <tr><td>Building a cross-platform desktop app</td><td>.NET MAUI</td></tr>
-  <tr><td>Building a browser app in C#</td><td>Blazor WebAssembly</td></tr>
-  <tr><td>Maintaining an old Windows-only app</td><td>.NET Framework 4.8 (maintenance mode)</td></tr>
-  <tr><td>Creating a NuGet library for broad compatibility</td><td>Target netstandard2.0 or net8</td></tr>
-  <tr><td>Cloud / microservices</td><td>.NET 8 with Docker</td></tr>
-</table>
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+| Situation | Use This |
+|---|---|
+| Building a new web API or website | ASP.NET Core (.NET 8) |
+| Building a Windows desktop app | WPF or WinForms on .NET 8 |
+| Building a cross-platform desktop app | .NET MAUI |
+| Building a browser app in C# | Blazor WebAssembly |
+| Maintaining an old Windows-only app | .NET Framework 4.8 (maintenance mode) |
+| Creating a NuGet library for broad compatibility | Target netstandard2.0 or net8 |
+| Cloud / microservices | .NET 8 with Docker |
+"""
     )
 
+    subsection("Further reading")
+    link_list(
+        [
+            (
+                "Download .NET SDK",
+                "https://dotnet.microsoft.com/download",
+                "official installers for Windows, macOS, Linux",
+            ),
+            (
+                ".NET documentation",
+                "https://learn.microsoft.com/dotnet/",
+                "the canonical reference from Microsoft",
+            ),
+            (
+                "C# language reference",
+                "https://learn.microsoft.com/dotnet/csharp/",
+                "language guide and tutorials",
+            ),
+            (
+                ".NET release schedule",
+                "https://dotnet.microsoft.com/platform/support/policy/dotnet-core",
+                "support policy and LTS / STS dates",
+            ),
+        ]
+    )

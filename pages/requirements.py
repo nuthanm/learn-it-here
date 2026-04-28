@@ -1,369 +1,338 @@
+"""Project requirements questionnaire page."""
+
+from __future__ import annotations
+
+from datetime import datetime, timezone
+
 import streamlit as st
 import streamlit.components.v1 as components
-from datetime import datetime, timezone
-from components.panda import _robot_html
-from components.footer import _footer_html, _scroll_nav_html, _copy_buttons_html
-from config import _on_interact, _nav_to
-from services.supabase_client import save_to_supabase
+
+from components.footer import copy_buttons_html, footer_html, scroll_nav_html
+from components.forms import multiselect_with_other, select_with_other
+from components.header import site_header_html
+from config import (
+    PAGE_LANDING,
+    PAGE_LEARN,
+    PAGE_REQUIREMENTS,
+    on_interact,
+    url_for,
+)
+from models import RequirementsRecord
 from services.pdf_service import generate_pdf
+from services.supabase_client import save_requirements
+
+# ── Question option lists ────────────────────────────────────────────────────
+VC_OPTIONS = [
+    "Git",
+    "SVN (Subversion)",
+    "TFS (Team Foundation)",
+    "Mercurial",
+    "Perforce",
+    "None",
+    "Other",
+]
+CODE_PUSH_OPTIONS = [
+    "GIT CLI (Command Line)",
+    "GitHub Desktop",
+    "Visual Studio Built-in Git",
+    "VS Code Built-in Git",
+    "SourceTree",
+    "GitKraken",
+    "TortoiseGit",
+    "Azure DevOps (Web Push)",
+    "Fork (Git Client)",
+    "Other",
+]
+IDE_OPTIONS = [
+    "Visual Studio (Full IDE)",
+    "Visual Studio Code",
+    "IntelliJ IDEA",
+    "Eclipse",
+    "Rider (JetBrains)",
+    "PyCharm",
+    "WebStorm",
+    "Sublime Text",
+    "Atom",
+    "Notepad++",
+    "Vim / Neovim",
+    "Other",
+]
+DEPLOYMENT_OPTIONS = [
+    "Azure DevOps Pipelines (CI/CD)",
+    "GitHub Actions",
+    "Jenkins",
+    "AWS CodePipeline",
+    "Docker / Containers",
+    "Kubernetes (K8s)",
+    "Manual / FTP Deploy",
+    "Azure App Service",
+    "IIS Direct Deploy",
+    "Other",
+]
+ARCHITECTURE_OPTIONS = [
+    "Clean Architecture",
+    "Microservices",
+    "Monolithic",
+    "Layered (N-Tier)",
+    "Event-Driven",
+    "Serverless",
+    "CQRS",
+    "DDD (Domain-Driven Design)",
+    "Hexagonal (Ports & Adapters)",
+    "MVC",
+    "Other",
+]
+DESIGN_PATTERN_OPTIONS = [
+    "Repository Pattern",
+    "Unit of Work",
+    "Singleton",
+    "Factory",
+    "Strategy",
+    "Observer",
+    "Mediator (MediatR)",
+    "Dependency Injection",
+    "SOLID Principles",
+    "Builder",
+    "Decorator",
+    "Other",
+]
+ORM_OPTIONS = [
+    "Entity Framework Core",
+    "Entity Framework 6",
+    "Dapper",
+    "NHibernate",
+    "ADO.NET (Raw)",
+    "Hibernate (Java)",
+    "SQLAlchemy (Python)",
+    "Django ORM (Python)",
+    "Sequelize (Node.js)",
+    "Prisma (Node.js)",
+    "None / Not applicable",
+    "Other",
+]
 
 
-def page_requirements():
-    """Project requirements questionnaire — professional layout, no sidebar."""
-    cb = _on_interact
+def _strip_legacy_query_params() -> None:
+    """Drop any stale query keys left over from the legacy URL scheme."""
+    for key in ("page", "go", "section", "sub"):
+        if key in st.query_params:
+            del st.query_params[key]
 
-    # Nav bar (logo only, no back button at top)
+
+def _render_post_submission_view() -> None:
+    """The thank-you screen with a PDF download and quick links."""
     st.markdown(
-        """
-<div class="kfp-nav">
-  <a href="?go=home" target="_self" class="kfp-nav-brand">
-    <span class="kfp-nav-logo">🐼</span>
-    <div class="kfp-nav-text">
-      <div class="kfp-nav-title">Learn It Here</div>
-      <div class="kfp-nav-tagline">Project Requirements</div>
-    </div>
-  </a>
-</div>
-""",
+        '<h1 class="page-title">All done — great work</h1>'
+        '<p class="page-lead">Your project requirements have been captured.</p>',
         unsafe_allow_html=True,
     )
-    st.divider()
-
-    # ── Header ──────────────────────────────────────────────────────────────
     st.markdown(
-        '<div class="app-title">📋 Project Requirements</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div class="app-subtitle">'
-        "Capture your project's tech-stack details. "
-        "Fill in the questions and download a shareable PDF."
+        '<div class="success-card">'
+        '<div class="success-title">🎉 Submission saved</div>'
+        '<div class="success-sub">Download a shareable PDF of your project brief below.</div>'
         "</div>",
         unsafe_allow_html=True,
     )
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── Post-submission view ─────────────────────────────────────────────────
-    if st.session_state.submitted:
-        _, c2, _ = st.columns([1, 2, 1])
-        with c2:
-            st.markdown(
-                """<div class="success-card">
-  <div class="success-title">🎉 All done — great work!</div>
-  <div class="success-sub">Your project requirements have been captured successfully.</div>
-</div>""",
-                unsafe_allow_html=True,
-            )
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.session_state.get("pdf_bytes"):
-                st.download_button(
-                    label="⬇️  Download Requirements as PDF",
-                    data=st.session_state.pdf_bytes,
-                    file_name=f"project_requirements_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                )
-            else:
-                pdf_err = st.session_state.get("pdf_error", "")
-                if pdf_err:
-                    st.warning(f"PDF generation failed: {pdf_err}")
-                else:
-                    st.info("PDF could not be generated. Your requirements were still saved.")
-            st.markdown("<br>", unsafe_allow_html=True)
-            sc1, sc2 = st.columns(2, gap="medium")
-            with sc1:
-                if st.button("🎓 Go to Learning Hub →", type="primary", use_container_width=True):
-                    for k in list(st.session_state.keys()):
-                        del st.session_state[k]
-                    st.session_state.page = "learn"
-                    st.rerun()
-            with sc2:
-                if st.button("📝 Submit Another Response", use_container_width=True):
-                    for k in list(st.session_state.keys()):
-                        del st.session_state[k]
-                    st.rerun()
-        st.markdown(_footer_html(), unsafe_allow_html=True)
-        components.html(_scroll_nav_html(), height=0)
-        return
+    if st.session_state.get("pdf_bytes"):
+        ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        st.download_button(
+            label="Download requirements as PDF",
+            data=st.session_state.pdf_bytes,
+            file_name=f"project_requirements_{ts}.pdf",
+            mime="application/pdf",
+        )
+    else:
+        pdf_err = st.session_state.get("pdf_error", "")
+        if pdf_err:
+            st.warning(f"PDF generation failed: {pdf_err}")
+        else:
+            st.info("PDF could not be generated. Your requirements were still saved.")
 
-    # ── Full-width form layout ─────────────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(
+        '<div style="display:flex;gap:16px;align-items:center;">'
+        f'<a class="text-link" href="{url_for(PAGE_LEARN)}" target="_self">'
+        "Browse the learning hub →</a>"
+        f'<a class="text-link" href="{url_for(PAGE_REQUIREMENTS)}" target="_self" '
+        'onclick="window.location.reload();">Submit another response</a>'
+        "</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(footer_html(), unsafe_allow_html=True)
+    components.html(scroll_nav_html(), height=0)
+
+
+def _render_form() -> RequirementsRecord | None:
+    """Render the requirements form. Returns the record on submit, else ``None``."""
+    cb = on_interact
+
+    st.markdown('<h1 class="page-title">Project Requirements</h1>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="page-lead">'
+        "Capture your project's tech-stack details. "
+        "Fill in the questions and download a shareable PDF."
+        "</p>",
+        unsafe_allow_html=True,
+    )
+
     st.markdown('<div class="form-card">', unsafe_allow_html=True)
 
-    # ── Q1: Version Control ───────────────────────────────────────────
+    # ── Section 1: Version Management ───────────────────────────────
     st.markdown('<div class="section-label">Version Management</div>', unsafe_allow_html=True)
-    st.markdown('<div class="q-label">1. Version Control</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Which version control system does your team use?</div>',
-        unsafe_allow_html=True,
+    vc_val = select_with_other(
+        "Version control",
+        VC_OPTIONS,
+        key="version_control",
+        help="Which version control system does your team use?",
+        on_change=cb,
+        other_label="Specify version control",
     )
-    vc = st.selectbox(
-        "vc_select",
-        ["Git", "SVN (Subversion)", "TFS (Team Foundation)", "Mercurial", "Perforce", "None", "Other"],
-        index=None, placeholder="Choose an option",
-        key="version_control", label_visibility="collapsed", on_change=cb,
+    code_push_val = select_with_other(
+        "How do you push the code?",
+        CODE_PUSH_OPTIONS,
+        key="code_push",
+        help="Which tool or method do you use to push code to the remote repository?",
+        on_change=cb,
+        other_label="Specify code push method",
     )
-    vc_other = ""
-    if vc == "Other":
-        vc_other = st.text_input("Specify version control", key="vc_other", on_change=cb)
 
-    # ── Q2: IDE or Editor ─────────────────────────────────────────────
-    st.markdown('<div class="section-label">Development Environment</div>', unsafe_allow_html=True)
-    st.markdown('<div class="q-label">2. IDE or Editor</div>', unsafe_allow_html=True)
+    # ── Section 2: Development Environment ──────────────────────────
     st.markdown(
-        '<div class="q-hint">Select the IDE / editor your team primarily uses.</div>',
+        '<div class="section-label">Development Environment</div>',
         unsafe_allow_html=True,
     )
-    ide = st.selectbox(
-        "ide_select",
-        [
-            "Visual Studio (Full IDE)",
-            "Visual Studio Code",
-            "IntelliJ IDEA",
-            "Eclipse",
-            "Rider (JetBrains)",
-            "PyCharm",
-            "WebStorm",
-            "Sublime Text",
-            "Atom",
-            "Notepad++",
-            "Vim / Neovim",
-            "Other",
-        ],
-        index=None, placeholder="Choose an option",
-        key="ide", label_visibility="collapsed", on_change=cb,
+    ide_val = select_with_other(
+        "IDE or editor",
+        IDE_OPTIONS,
+        key="ide",
+        help="Select the IDE / editor your team primarily uses.",
+        on_change=cb,
+        other_label="Specify IDE / Editor",
     )
-    ide_other = ""
-    if ide == "Other":
-        ide_other = st.text_input("Specify IDE / Editor", key="ide_other", on_change=cb)
+    deployment_val = multiselect_with_other(
+        "Deployment approaches",
+        DEPLOYMENT_OPTIONS,
+        key="deployment",
+        help="Select all deployment strategies that apply to your project.",
+        on_change=cb,
+        other_label="Specify deployment approach",
+    )
 
-    # ── Q3: How do you push the code ──────────────────────────────────
-    st.markdown('<div class="section-label">Code Management</div>', unsafe_allow_html=True)
-    st.markdown('<div class="q-label">3. How do you push the code?</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Which tool or method do you use to push code to the remote repository?</div>',
-        unsafe_allow_html=True,
+    # ── Section 3: Architecture ─────────────────────────────────────
+    st.markdown('<div class="section-label">Architecture</div>', unsafe_allow_html=True)
+    arch_val = multiselect_with_other(
+        "Architecture patterns",
+        ARCHITECTURE_OPTIONS,
+        key="architecture",
+        help="Select the architecture patterns followed in your project.",
+        on_change=cb,
+        other_label="Specify architecture pattern",
     )
-    code_push = st.selectbox(
-        "code_push_select",
-        [
-            "GIT CLI (Command Line)",
-            "GitHub Desktop",
-            "Visual Studio Built-in Git",
-            "VS Code Built-in Git",
-            "SourceTree",
-            "GitKraken",
-            "TortoiseGit",
-            "Azure DevOps (Web Push)",
-            "Fork (Git Client)",
-            "Other",
-        ],
-        index=None, placeholder="Choose an option",
-        key="code_push", label_visibility="collapsed", on_change=cb,
+    dp_val = multiselect_with_other(
+        "Design patterns",
+        DESIGN_PATTERN_OPTIONS,
+        key="design_patterns",
+        help="Select the design patterns commonly used in your codebase.",
+        on_change=cb,
+        other_label="Specify design pattern",
     )
-    code_push_other = ""
-    if code_push == "Other":
-        code_push_other = st.text_input("Specify code push method", key="code_push_other", on_change=cb)
+    orm_val = select_with_other(
+        "ORM",
+        ORM_OPTIONS,
+        key="orm",
+        help="Which ORM framework does your project use?",
+        on_change=cb,
+        other_label="Specify ORM",
+    )
 
-    # ── Q4: Deployment Approaches ─────────────────────────────────────
-    st.markdown('<div class="section-label">Deployment &amp; DevOps</div>', unsafe_allow_html=True)
-    st.markdown('<div class="q-label">4. Which deployment approaches are you following?</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Select all deployment strategies that apply to your project.</div>',
-        unsafe_allow_html=True,
-    )
-    deployment = st.multiselect(
-        "deployment_select",
-        [
-            "Azure DevOps Pipelines (CI/CD)",
-            "GitHub Actions",
-            "Jenkins",
-            "AWS CodePipeline",
-            "Docker / Containers",
-            "Kubernetes (K8s)",
-            "Manual / FTP Deploy",
-            "Azure App Service",
-            "IIS Direct Deploy",
-            "Other",
-        ],
-        placeholder="Choose options",
-        key="deployment", label_visibility="collapsed", on_change=cb,
-    )
-    deployment_other = ""
-    if "Other" in deployment:
-        deployment_other = st.text_input("Specify deployment approach", key="deployment_other", on_change=cb)
-
-    # ── Q5: Architecture Patterns ─────────────────────────────────────
-    st.markdown('<div class="section-label">Architecture &amp; Design</div>', unsafe_allow_html=True)
-    st.markdown('<div class="q-label">5. Architecture Patterns</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Select the architecture patterns followed in your project.</div>',
-        unsafe_allow_html=True,
-    )
-    architecture = st.multiselect(
-        "arch_select",
-        [
-            "Clean Architecture",
-            "Microservices",
-            "Monolithic",
-            "Layered (N-Tier)",
-            "Event-Driven",
-            "Serverless",
-            "CQRS",
-            "DDD (Domain-Driven Design)",
-            "Hexagonal (Ports & Adapters)",
-            "MVC",
-            "Other",
-        ],
-        placeholder="Choose options",
-        key="architecture", label_visibility="collapsed", on_change=cb,
-    )
-    arch_other = ""
-    if "Other" in architecture:
-        arch_other = st.text_input("Specify architecture pattern", key="arch_other", on_change=cb)
-
-    # ── Q6: Design Patterns ───────────────────────────────────────────
-    st.markdown('<div class="q-label">6. Design Patterns</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Select the design patterns commonly used in your codebase.</div>',
-        unsafe_allow_html=True,
-    )
-    design_patterns = st.multiselect(
-        "dp_select",
-        [
-            "Repository Pattern",
-            "Unit of Work",
-            "Singleton",
-            "Factory",
-            "Strategy",
-            "Observer",
-            "Mediator (MediatR)",
-            "Dependency Injection",
-            "SOLID Principles",
-            "Builder",
-            "Decorator",
-            "Other",
-        ],
-        placeholder="Choose options",
-        key="design_patterns", label_visibility="collapsed", on_change=cb,
-    )
-    dp_other = ""
-    if "Other" in design_patterns:
-        dp_other = st.text_input("Specify design pattern", key="dp_other", on_change=cb)
-
-    # ── Q7: ORM ───────────────────────────────────────────────────────
-    st.markdown('<div class="q-label">7. ORM (Object-Relational Mapping)</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Which ORM framework does your project use?</div>',
-        unsafe_allow_html=True,
-    )
-    orm = st.selectbox(
-        "orm_select",
-        [
-            "Entity Framework Core",
-            "Entity Framework 6",
-            "Dapper",
-            "NHibernate",
-            "ADO.NET (Raw)",
-            "Hibernate (Java)",
-            "SQLAlchemy (Python)",
-            "Django ORM (Python)",
-            "Sequelize (Node.js)",
-            "Prisma (Node.js)",
-            "None / Not applicable",
-            "Other",
-        ],
-        index=None, placeholder="Choose an option",
-        key="orm", label_visibility="collapsed", on_change=cb,
-    )
-    orm_other = ""
-    if orm == "Other":
-        orm_other = st.text_input("Specify ORM", key="orm_other", on_change=cb)
-
-    # ── Additional Requirements ─────────────────────────────────────
-    st.markdown('<div class="q-label">8. Additional Requirements</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="q-hint">Any other tools, frameworks, or notes you\'d like to mention?</div>',
-        unsafe_allow_html=True,
-    )
-    additional_requirements = st.text_area(
-        "additional_requirements",
-        placeholder="e.g. We use Docker for containerization, Redis for caching, CI/CD with GitHub Actions…",
+    # ── Section 4: Other ────────────────────────────────────────────
+    st.markdown('<div class="section-label">Other</div>', unsafe_allow_html=True)
+    additional = st.text_area(
+        "Additional notes",
+        placeholder=(
+            "e.g. We use Docker for containerization, Redis for caching, CI/CD with GitHub Actions…"
+        ),
         height=120,
-        key="additional_requirements", label_visibility="collapsed", on_change=cb,
+        key="additional_requirements",
+        help="Any other tools, frameworks, or notes you'd like to mention?",
+        on_change=cb,
     )
 
     st.markdown("</div>", unsafe_allow_html=True)  # close .form-card
 
-    # ── Action Buttons: Submit | Back to Home ─────────────────────────
-    st.markdown("<br>", unsafe_allow_html=True)
-    btn1, btn2 = st.columns(2, gap="medium")
-    with btn1:
-        submit_clicked = st.button(
-            "Submit Requirements →", type="primary", use_container_width=True
+    # ── Action row ─────────────────────────────────────────────────
+    st.markdown('<div class="form-actions">', unsafe_allow_html=True)
+    _spacer, cancel_col, submit_col = st.columns([6, 2, 3])
+    with cancel_col:
+        st.markdown(
+            f'<a class="text-link" href="{url_for(PAGE_LANDING)}" target="_self" '
+            'style="display:inline-block;padding-top:10px;">Cancel</a>',
+            unsafe_allow_html=True,
         )
-    with btn2:
-        back_clicked = st.button(
-            "← Back to Home", use_container_width=True
-        )
+    with submit_col:
+        submit_clicked = st.button("Submit requirements", type="primary", use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    if back_clicked:
-        _nav_to("landing")
+    if not submit_clicked:
+        return None
 
-    # ── Handle Submission ─────────────────────────────────────────────
-    if submit_clicked:
-        vc_val = vc if vc != "Other" else (vc_other or "Other")
-        ide_val = ide if ide != "Other" else (ide_other or "Other")
-        cp_val = code_push if code_push != "Other" else (code_push_other or "Other")
-
-        deploy_list = list(deployment)
-        if "Other" in deploy_list and deployment_other:
-            deploy_list = [deployment_other if x == "Other" else x for x in deploy_list]
-        deploy_val = ", ".join(deploy_list)
-
-        arch_list = list(architecture)
-        if "Other" in arch_list and arch_other:
-            arch_list = [arch_other if x == "Other" else x for x in arch_list]
-        arch_val = ", ".join(arch_list)
-
-        dp_list = list(design_patterns)
-        if "Other" in dp_list and dp_other:
-            dp_list = [dp_other if x == "Other" else x for x in dp_list]
-        dp_val = ", ".join(dp_list)
-
-        orm_val = orm if orm != "Other" else (orm_other or "Other")
-
-        record = {
-            "submitted_at":      datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "version_control":   vc_val,
-            "ide":               ide_val,
-            "code_push":         cp_val,
-            "deployment":        deploy_val,
-            "architecture":      arch_val,
-            "design_patterns":   dp_val,
-            "orm":               orm_val,
-            "additional_requirements": additional_requirements.strip(),
-        }
-
-        ok, db_msg = save_to_supabase(record)
-        if ok:
-            st.success(db_msg)
-        else:
-            st.info(f"ℹ️  {db_msg}")
-
-        try:
-            st.session_state.pdf_bytes = generate_pdf(record)
-            st.session_state.pdf_error = None
-        except Exception as exc:
-            st.session_state.pdf_bytes = None
-            st.session_state.pdf_error = str(exc)
-
-        st.session_state.animation_state = "bye"
-        st.session_state.submitted = True
-        st.rerun()
-
-    st.markdown(_footer_html(), unsafe_allow_html=True)
-    components.html(_scroll_nav_html(), height=0)
-    components.html(_copy_buttons_html(), height=0)
+    record: RequirementsRecord = {
+        "submitted_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "version_control": vc_val,
+        "ide": ide_val,
+        "code_push": code_push_val,
+        "deployment": deployment_val,
+        "architecture": arch_val,
+        "design_patterns": dp_val,
+        "orm": orm_val,
+        "additional_requirements": additional.strip(),
+    }
+    return record
 
 
-# ── Suggest-topic dialog (module-level so the decorator is stable) ────────────
+def page_requirements() -> None:
+    """Project requirements questionnaire — minimalist layout."""
+    st.markdown(site_header_html(active=PAGE_REQUIREMENTS), unsafe_allow_html=True)
+    _strip_legacy_query_params()
 
+    # Breadcrumb
+    st.markdown(
+        '<div class="breadcrumb">'
+        f'<a href="{url_for(PAGE_LANDING)}" target="_self">Home</a>'
+        '<span class="breadcrumb-sep">/</span>'
+        '<span class="breadcrumb-current">Requirements</span>'
+        "</div>",
+        unsafe_allow_html=True,
+    )
+
+    # Branch: post-submission thank-you screen vs the form itself.
+    if st.session_state.submitted:
+        _render_post_submission_view()
+        return
+
+    record = _render_form()
+    if record is None:
+        st.markdown(footer_html(), unsafe_allow_html=True)
+        components.html(scroll_nav_html(), height=0)
+        components.html(copy_buttons_html(), height=0)
+        return
+
+    # ── Submission handling ─────────────────────────────────────────
+    save_result = save_requirements(record)
+    if save_result.ok:
+        st.success(save_result.message)
+    else:
+        st.info(f"ℹ️  {save_result.message}")
+
+    try:
+        st.session_state.pdf_bytes = generate_pdf(record)
+        st.session_state.pdf_error = None
+    except Exception as exc:  # noqa: BLE001 - PDF lib can raise many things
+        st.session_state.pdf_bytes = None
+        st.session_state.pdf_error = str(exc)
+
+    st.session_state.animation_state = "bye"
+    st.session_state.submitted = True
+    st.rerun()
