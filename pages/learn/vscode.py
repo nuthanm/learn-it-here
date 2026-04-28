@@ -216,7 +216,7 @@ Ctrl+Shift+P      Command Palette — search all commands
 Ctrl+`            Toggle integrated terminal
 Ctrl+B            Toggle sidebar visibility
 Ctrl+/            Toggle line comment
-Alt+Up / Alt+Dn   Move current line up / down
+Alt+Up / Alt+Down Move current line up / down
 Shift+Alt+Down    Duplicate current line below
 Ctrl+D            Select next occurrence of current word
 Ctrl+Shift+L      Select ALL occurrences of current word
