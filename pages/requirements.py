@@ -12,12 +12,6 @@ def page_requirements():
     """Project requirements questionnaire — minimalist layout."""
     cb = _on_interact
 
-    # Keep the URL in sync with the active page so the address bar always shows
-    # `?page=requirements` (this is what makes the page sharable / bookmarkable
-    # and prevents the URL from collapsing to "/" on subsequent reruns).
-    if st.query_params.get("page") != PAGE_REQUIREMENTS:
-        st.query_params["page"] = PAGE_REQUIREMENTS
-
     # Slim site header with text-link nav
     st.markdown(_site_header_html(active=PAGE_REQUIREMENTS), unsafe_allow_html=True)
 
