@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 from components.panda import _panda_landing_html
 from components.header import _site_header_html
 from components.footer import _footer_html, _scroll_nav_html
-from config import PAGE_LANDING, _nav_to
+from config import PAGE_LANDING, PAGE_LEARN, PAGE_REQUIREMENTS, _nav_to, _url_for
 
 
 def page_landing():
@@ -67,6 +67,35 @@ def page_landing():
     <strong>Learn &amp; ship fast</strong>
     <span>Hands-on, zero fluff — only the knowledge your project actually needs.</span>
   </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    # ── 3-tile showcase below the feature row ────────────────────────────────
+    # Card-chrome tiles with sharable in-app links. Built via _url_for so the
+    # URL scheme stays consistent with the rest of the app.
+    st.markdown(
+        f"""
+<div class="tile-grid">
+  <a class="tile" href="{_url_for(page=PAGE_REQUIREMENTS)}" target="_self">
+    <span class="tile-icon">📝</span>
+    <span class="tile-title">Start a project brief</span>
+    <span class="tile-desc">Answer seven questions and get a shareable PDF for your team.</span>
+    <span class="tile-cta">Open the form →</span>
+  </a>
+  <a class="tile" href="{_url_for(page=PAGE_LEARN, section='git')}" target="_self">
+    <span class="tile-icon">📚</span>
+    <span class="tile-title">Browse the learning hub</span>
+    <span class="tile-desc">Curated topics across Git, .NET, EF Core, Blazor, SQL, and more.</span>
+    <span class="tile-cta">Explore topics →</span>
+  </a>
+  <a class="tile" href="{_url_for(page=PAGE_LEARN, section='topic-suggestions')}" target="_self">
+    <span class="tile-icon">💡</span>
+    <span class="tile-title">Suggest a topic</span>
+    <span class="tile-desc">Vote on what to add next — most-requested topics ship first.</span>
+    <span class="tile-cta">See requests →</span>
+  </a>
 </div>
 """,
         unsafe_allow_html=True,

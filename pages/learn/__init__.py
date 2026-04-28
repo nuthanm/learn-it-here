@@ -1,20 +1,96 @@
+"""Learn hub: slim header + data-driven left rail + content column."""
+
+import importlib
+
 import streamlit as st
 import streamlit.components.v1 as components
-from components.header import _site_header_html
-from components.footer import _footer_html, _scroll_nav_html, _copy_buttons_html
+
 from components.dialogs import _suggest_topic_dialog
-from config import PAGE_LEARN, LEARN_MENU_ITEMS, LATEST_NEW_TOPIC
-from pages.learn.git import render_git
-from pages.learn.visual_studio import render_visual_studio
-from pages.learn.vscode import render_vscode
-from pages.learn.efcore import render_efcore
-from pages.learn.dotnet import render_dotnet
-from pages.learn.unit_testing import render_unit_testing
-from pages.learn.linq import render_linq
-from pages.learn.blazor import render_blazor
-from pages.learn.csharp import render_csharp
-from pages.learn.topic_suggestions import render_topic_suggestions
-from pages.learn.sql_developer import render_sql_developer
+from components.footer import _copy_buttons_html, _footer_html, _scroll_nav_html
+from components.header import _site_header_html
+from config import (
+    LATEST_NEW_TOPIC,
+    LEARN_SECTIONS,
+    PAGE_LEARN,
+    _url_for,
+    default_section_slug,
+    find_section,
+    find_subsection,
+)
+
+
+def _resolve_renderer(dotted: str):
+    """Resolve a "module:function" string into the actual callable."""
+    module_path, _, fn_name = dotted.partition(":")
+    module = importlib.import_module(module_path)
+    return getattr(module, fn_name)
+
+
+def _render_sidebar(active_section_slug, active_sub_slug):
+    """Render the data-driven left rail with anchor links (sharable)."""
+    items_html = ['<nav class="topics-nav" aria-label="Learning topics">']
+    for sec in LEARN_SECTIONS:
+        is_active = sec["slug"] == active_section_slug
+        cls = "topic-link active" if is_active else "topic-link"
+        items_html.append(
+            f'<a class="{cls}" href="{_url_for(page=PAGE_LEARN, section=sec["slug"])}" '
+            f'target="_self">{sec["title"]}</a>'
+        )
+        # Render second-level submenu only under the active section.
+        if is_active and sec.get("subsections"):
+            items_html.append('<div class="sub-nav">')
+            # "Overview" link goes back to the section landing (no sub).
+            overview_cls = "sub-link active" if not active_sub_slug else "sub-link"
+            items_html.append(
+                f'<a class="{overview_cls}" '
+                f'href="{_url_for(page=PAGE_LEARN, section=sec["slug"])}" '
+                f'target="_self">Overview</a>'
+            )
+            for sub in sec["subsections"]:
+                sub_cls = (
+                    "sub-link active"
+                    if sub["slug"] == active_sub_slug
+                    else "sub-link"
+                )
+                items_html.append(
+                    f'<a class="{sub_cls}" '
+                    f'href="{_url_for(page=PAGE_LEARN, section=sec["slug"], sub=sub["slug"])}" '
+                    f'target="_self">{sub["title"]}</a>'
+                )
+            items_html.append("</div>")
+    items_html.append("</nav>")
+    st.markdown(
+        '<div class="topics-heading">Topics</div>' + "".join(items_html),
+        unsafe_allow_html=True,
+    )
+
+
+def _render_breadcrumb(section, sub):
+    """Render the breadcrumb path for the current section/sub."""
+    parts = [
+        '<div class="breadcrumb">',
+        '<a href="?go=home" target="_self">Home</a>',
+        '<span class="breadcrumb-sep">/</span>',
+        '<a href="?page=learn" target="_self">Learning Hub</a>',
+    ]
+    if section:
+        parts.append('<span class="breadcrumb-sep">/</span>')
+        if sub:
+            # Section becomes a link, sub is the current crumb.
+            parts.append(
+                f'<a href="{_url_for(page=PAGE_LEARN, section=section["slug"])}" '
+                f'target="_self">{section["title"]}</a>'
+            )
+            parts.append('<span class="breadcrumb-sep">/</span>')
+            parts.append(
+                f'<span class="breadcrumb-current">{sub["title"]}</span>'
+            )
+        else:
+            parts.append(
+                f'<span class="breadcrumb-current">{section["title"]}</span>'
+            )
+    parts.append("</div>")
+    st.markdown("".join(parts), unsafe_allow_html=True)
 
 
 def page_learn():
@@ -43,23 +119,18 @@ def page_learn():
             unsafe_allow_html=True,
         )
 
-    section = st.session_state.get("learn_section", "GIT")
+    # ── Resolve the active section / sub from session_state (set in app.py) ──
+    section_slug = st.session_state.get("learn_section") or default_section_slug()
+    section = find_section(section_slug)
+    sub_slug = st.session_state.get("learn_sub")
+    sub = find_subsection(section, sub_slug) if sub_slug else None
 
     # ── Two-column layout: sidebar (2) + content (8) ──────────────────────────
     nav_col, content_col = st.columns([2, 8], gap="medium")
 
-    # ── Sidebar nav ───────────────────────────────────────────────────────────
+    # ── Sidebar nav (data-driven anchor links, sharable URLs) ────────────────
     with nav_col:
-        st.markdown(
-            '<div class="topics-heading">Topics</div>',
-            unsafe_allow_html=True,
-        )
-        st.radio(
-            "Topics",
-            options=LEARN_MENU_ITEMS,
-            key="learn_section",
-            label_visibility="collapsed",
-        )
+        _render_sidebar(section["slug"] if section else None, sub_slug)
         st.markdown('<hr class="sidebar-divider">', unsafe_allow_html=True)
         # Demoted: small link-style "+ Suggest a topic"
         st.markdown('<div class="suggest-topic-btn">', unsafe_allow_html=True)
@@ -70,46 +141,20 @@ def page_learn():
             _suggest_topic_dialog()
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ── Sync section to URL so the page is deep-linkable ─────────────────────
-    st.query_params["section"] = st.session_state.learn_section
-
     # ── Main content area ─────────────────────────────────────────────────────
     with content_col:
-        # Breadcrumb at the top of the content column
-        st.markdown(
-            f'<div class="breadcrumb">'
-            f'<a href="?go=home" target="_self">Home</a>'
-            f'<span class="breadcrumb-sep">/</span>'
-            f'<a href="?page=learn" target="_self">Learning Hub</a>'
-            f'<span class="breadcrumb-sep">/</span>'
-            f'<span class="breadcrumb-current">{section}</span>'
-            f"</div>",
-            unsafe_allow_html=True,
-        )
+        _render_breadcrumb(section, sub)
 
-        section = st.session_state.learn_section
-        if section == "GIT":
-            render_git()
-        elif section == "Visual Studio IDE":
-            render_visual_studio()
-        elif section == "VS Code":
-            render_vscode()
-        elif section == "EF Core + Oracle":
-            render_efcore()
-        elif section == ".NET":
-            render_dotnet()
-        elif section == "Unit Testing":
-            render_unit_testing()
-        elif section == "LINQ":
-            render_linq()
-        elif section == "Blazor":
-            render_blazor()
-        elif section == "C#":
-            render_csharp()
-        elif section == "Topic Suggestions":
-            render_topic_suggestions()
-        elif section == "SQL Developer":
-            render_sql_developer()
+        target = sub if sub else section
+        if target and target.get("renderer"):
+            try:
+                renderer = _resolve_renderer(target["renderer"])
+            except (ImportError, AttributeError) as exc:
+                st.error(f"Failed to load page: {exc}")
+            else:
+                renderer()
+        else:
+            st.info("Select a topic from the sidebar.")
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     components.html(_scroll_nav_html(), height=0)
