@@ -6,7 +6,6 @@ from components.footer import _footer_html, _scroll_nav_html
 from config import (
     PAGE_LANDING,
     PAGE_LEARN,
-    PAGE_REQUIREMENTS,
     _nav_to,
     _url_for,
     default_section_slug,
@@ -44,11 +43,15 @@ def page_landing():
             key="cta_start",
         ):
             _nav_to("requirements")
+        # Use target="_top" so the browser performs a real navigation that
+        # updates the URL bar with the full query string (?page=learn&section=git).
+        # With target="_self", Streamlit's anchor-click interception can swallow
+        # the query params and leave the user on the landing page.
         st.markdown(
             f'<div class="hero-secondary">'
             f'<a class="text-link" '
             f'href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" '
-            f'target="_self">or browse the learning hub →</a></div>',
+            f'target="_top">or browse the learning hub →</a></div>',
             unsafe_allow_html=True,
         )
 
@@ -81,34 +84,10 @@ def page_landing():
         unsafe_allow_html=True,
     )
 
-    # ── 3-tile showcase below the feature row ────────────────────────────────
-    # Card-chrome tiles with sharable in-app links. Built via _url_for so the
-    # URL scheme stays consistent with the rest of the app.
-    st.markdown(
-        f"""
-<div class="tile-grid">
-  <a class="tile" href="{_url_for(page=PAGE_REQUIREMENTS)}" target="_self">
-    <span class="tile-icon">📝</span>
-    <span class="tile-title">Start a project brief</span>
-    <span class="tile-desc">Answer seven questions and get a shareable PDF for your team.</span>
-    <span class="tile-cta">Open the form →</span>
-  </a>
-  <a class="tile" href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" target="_self">
-    <span class="tile-icon">📚</span>
-    <span class="tile-title">Browse the learning hub</span>
-    <span class="tile-desc">Curated topics across Git, .NET, EF Core, Blazor, SQL, and more.</span>
-    <span class="tile-cta">Explore topics →</span>
-  </a>
-  <a class="tile" href="{_url_for(page=PAGE_LEARN, section='topic-suggestions')}" target="_self">
-    <span class="tile-icon">💡</span>
-    <span class="tile-title">Suggest a topic</span>
-    <span class="tile-desc">Vote on what to add next — most-requested topics ship first.</span>
-    <span class="tile-cta">See requests →</span>
-  </a>
-</div>
-""",
-        unsafe_allow_html=True,
-    )
+    # ── 3-tile showcase removed per design — keep landing focused on the
+    # hero CTA and the feature row above. The same destinations remain
+    # reachable via the header nav and the "or browse the learning hub →"
+    # secondary link.
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     components.html(_scroll_nav_html(), height=0)
