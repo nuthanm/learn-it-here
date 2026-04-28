@@ -43,9 +43,6 @@ def render():
     link_list(
         [
             ("Pro Git book (free)", "https://git-scm.com/book", "the canonical reference"),
-            (
-                "Git cheatsheet (GitHub)",
-                "https://education.github.com/git-cheat-sheet-education.pdf",
-            ),
+            ("Git cheatsheet (GitHub)", "https://education.github.com/git-cheat-sheet-education.pdf"),
         ]
     )

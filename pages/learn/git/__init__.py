@@ -33,16 +33,12 @@ def render_git():
     paragraph("Step 1 — Get the project onto your laptop:")
     code_block(
         "git clone https://github.com/mycompany/shopping-website.git\ncd shopping-website",
-        language="bash",
+        language="bash"
     )
-    paragraph(
-        "Now you have a full copy of the project. Everyone else is working on their own copies too."
-    )
+    paragraph("Now you have a full copy of the project. Everyone else is working on their own copies too.")
     paragraph("Step 2 — Create your own workspace (branch) so you don't disturb others:")
     code_block("git checkout -b feature/forgot-password", language="bash")
-    paragraph(
-        "Think of a branch like a personal notebook. Your changes go here without touching the main codebase."
-    )
+    paragraph("Think of a branch like a personal notebook. Your changes go here without touching the main codebase.")
     paragraph("Step 3 — Write your code. Then save your progress:")
     code_block('git add .\ngit commit -m "feat: add forgot password email flow"', language="bash")
     paragraph("A commit is like a save point in a video game — you can always go back to it.")
@@ -60,14 +56,12 @@ def render_git():
         "Git works the same way locally regardless of which platform hosts your remote repository. "
         "Each platform adds its own collaboration and CI/CD features on top."
     )
-    link_list(
-        [
-            "GitHub — Open-source leader, GitHub Actions CI/CD, GitHub Copilot",
-            "Azure DevOps — Microsoft ecosystem, Boards, Pipelines, Repos",
-            "Bitbucket — Atlassian ecosystem, integrates with JIRA natively",
-            "GitLab — All-in-one DevOps platform, built-in CI/CD pipelines",
-        ]
-    )
+    link_list([
+        "GitHub — Open-source leader, GitHub Actions CI/CD, GitHub Copilot",
+        "Azure DevOps — Microsoft ecosystem, Boards, Pipelines, Repos",
+        "Bitbucket — Atlassian ecosystem, integrates with JIRA natively",
+        "GitLab — All-in-one DevOps platform, built-in CI/CD pipelines",
+    ])
 
     subsection("Workflow")
     paragraph(
@@ -86,7 +80,7 @@ cd your-repo
 # Check current branch and status
 git status
 git branch""",
-        language="bash",
+        language="bash"
     )
 
     subsection("Daily workflow")
@@ -111,7 +105,7 @@ git commit -m "feat: add user login endpoint"
 
 # Push your branch to the remote
 git push origin feature/my-feature-name""",
-        language="bash",
+        language="bash"
     )
 
     subsection("Keeping your branch up to date")
@@ -129,7 +123,7 @@ git reset HEAD src/MyFile.cs
 # Temporarily stash unfinished work and come back later
 git stash
 git stash pop""",
-        language="bash",
+        language="bash"
     )
 
     subsection("Useful inspection commands")
@@ -145,7 +139,7 @@ git branch -a
 
 # Delete a local branch after merging
 git branch -d feature/my-feature-name""",
-        language="bash",
+        language="bash"
     )
 
     subsection("Real-world example — Fixing a bug while someone else adds a feature")
@@ -163,7 +157,7 @@ git branch -d feature/my-feature-name""",
         """git add src/Controllers/LoginController.cs
 git commit -m "fix: login button now submits form correctly"
 git push origin hotfix/login-button-not-working""",
-        language="bash",
+        language="bash"
     )
     paragraph("4. After your hotfix is merged, get Alice's latest changes too:")
     code_block("git fetch origin\ngit rebase origin/main", language="bash")
@@ -181,29 +175,27 @@ git checkout main  # switch to another branch
 # ... do the check ...
 git checkout feature/my-feature
 git stash pop      # bring your unfinished changes back""",
-        language="bash",
+        language="bash"
     )
 
     subsection("Using GIT inside Visual Studio IDE")
-    paragraph(
-        "You don't need to use the terminal at all — Visual Studio has a full Git UI built in."
-    )
-
+    paragraph("You don't need to use the terminal at all — Visual Studio has a full Git UI built in.")
+    
     subsection("Open Git Changes")
     paragraph("View → Git Changes (Ctrl+0, Ctrl+G) — stage, unstage, and commit files visually.")
-
+    
     subsection("Git Repository Window")
     paragraph("View → Git Repository — see branch history, compare commits, create branches.")
-
+    
     subsection("Create Branch")
     paragraph('Click the branch name in the status bar (bottom-right) and select "New Branch".')
-
+    
     subsection("Pull / Push / Fetch")
     paragraph("Git menu at the top → Pull, Push, Fetch — or use the sync icon in the status bar.")
-
+    
     subsection("Resolve Merge Conflicts")
     paragraph("VS opens a 3-way merge editor — accept incoming, current, or both, side by side.")
-
+    
     subsection("Create Pull Request")
     paragraph(
         'Git menu → "Create Pull Request" — opens your platform (Azure DevOps or GitHub) in the '

@@ -1,16 +1,12 @@
 """Shared site header — slim brand + horizontal text-link nav."""
 
-from __future__ import annotations
-
-from html import escape
-
-from config import PAGE_LANDING, PAGE_LEARN, PAGE_REQUIREMENTS, url_for
+from config import PAGE_LANDING, PAGE_REQUIREMENTS, PAGE_LEARN, _url_for
 
 
-def site_header_html(active: str = PAGE_LANDING) -> str:
+def _site_header_html(active: str = PAGE_LANDING) -> str:
     """Render the slim site header as an HTML string.
 
-    ``active`` is one of PAGE_LANDING / PAGE_REQUIREMENTS / PAGE_LEARN and
+    `active` is one of PAGE_LANDING / PAGE_REQUIREMENTS / PAGE_LEARN and
     controls which nav link is rendered with the "active" underline.
     """
 
@@ -25,24 +21,16 @@ def site_header_html(active: str = PAGE_LANDING) -> str:
     # which makes every header click do nothing. target="_self" navigates
     # within the Streamlit iframe; st.navigation in app.py then matches the
     # new URL path and runs the correct page.
-    landing_url = escape(url_for(PAGE_LANDING), quote=True)
-    requirements_url = escape(url_for(PAGE_REQUIREMENTS), quote=True)
-    learn_url = escape(url_for(PAGE_LEARN), quote=True)
-
     return f"""
 <div class="site-header">
-  <a class="brand" href="{landing_url}" target="_self">
+  <a class="brand" href="{_url_for(PAGE_LANDING)}" target="_self">
     <span class="brand-mark">🐼</span>
     <span>Learn It Here</span>
   </a>
   <nav class="site-nav" aria-label="Primary">
-    <a class="{_cls(PAGE_LANDING)}" href="{landing_url}" target="_self">Home</a>
-    <a class="{_cls(PAGE_REQUIREMENTS)}" href="{requirements_url}" target="_self">Requirements</a>
-    <a class="{_cls(PAGE_LEARN)}" href="{learn_url}" target="_self">Learn</a>
+    <a class="{_cls(PAGE_LANDING)}" href="{_url_for(PAGE_LANDING)}" target="_self">Home</a>
+    <a class="{_cls(PAGE_REQUIREMENTS)}" href="{_url_for(PAGE_REQUIREMENTS)}" target="_self">Requirements</a>
+    <a class="{_cls(PAGE_LEARN)}" href="{_url_for(PAGE_LEARN)}" target="_self">Learn</a>
   </nav>
 </div>
 """
-
-
-# Backwards-compatible alias — older modules import the underscore name.
-_site_header_html = site_header_html

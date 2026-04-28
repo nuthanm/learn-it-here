@@ -19,7 +19,7 @@ def render_dotnet():
     )
 
     section_intro(
-        '.NET (pronounced "dot net") lets you build websites, mobile apps, desktop apps, '
+        ".NET (pronounced \"dot net\") lets you build websites, mobile apps, desktop apps, "
         "games, cloud services, and more using a common set of tools and languages "
         "(mainly C#, F#, and VB.NET)."
     )
@@ -88,7 +88,7 @@ def render_dotnet():
     subsection(".NET Framework vs .NET Standard vs .NET (Core / 5+)")
     paragraph(
         "This is one of the most confusing things for beginners — three names that all "
-        'say ".NET". Here\'s the plain-English breakdown.'
+        "say \".NET\". Here's the plain-English breakdown."
     )
     paragraph(
         "Think of it this way: .NET Framework is an old house (Windows-only, comfy but "

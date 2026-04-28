@@ -4,6 +4,7 @@ import streamlit as st
 
 from components.content import (
     code_block,
+    link_list,
     paragraph,
     section_intro,
     section_title,
@@ -39,9 +40,7 @@ def render_efcore():
     paragraph("Step 1 — Install the Oracle EF Core package:")
     code_block("dotnet add package Oracle.EntityFrameworkCore", language="bash")
 
-    paragraph(
-        "Step 2 — Define your C# entity classes (plain objects — no Oracle knowledge needed here):"
-    )
+    paragraph("Step 2 — Define your C# entity classes (plain objects — no Oracle knowledge needed here):")
     code_block(
         """public class Customer
 {
@@ -141,8 +140,8 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
     )
     paragraph(
         "Why Oracle-specific rules matter: if you used the default lowercase table name "
-        '"customers" instead of "CUSTOMERS", Oracle would throw '
-        '"ORA-00942: table or view does not exist" because Oracle\'s default behavior is '
+        "\"customers\" instead of \"CUSTOMERS\", Oracle would throw "
+        "\"ORA-00942: table or view does not exist\" because Oracle's default behavior is "
         "case-sensitive with uppercase names. Following the naming conventions above prevents "
         "this class of runtime errors entirely."
     )
@@ -191,7 +190,7 @@ await _context.SaveChangesAsync();  // EF uses SEQ_CUSTOMERS to generate the ID 
     subsection("Naming conventions (mandatory standards)")
     paragraph(
         "Oracle historically uses UPPERCASE object names. Failing to follow these conventions "
-        'causes case-sensitivity errors or "ORA-00942: table or view does not exist" at runtime.'
+        "causes case-sensitivity errors or \"ORA-00942: table or view does not exist\" at runtime."
     )
     st.markdown(
         """| Object | Convention | Example |

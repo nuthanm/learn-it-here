@@ -6,13 +6,13 @@ Avoid bespoke HTML / coloured cards — keep the page chrome quiet so the
 content reads first.
 """
 
-from collections.abc import Iterable
 from html import escape
+from typing import Iterable, Optional, Tuple, Union
 
 import streamlit as st
 
 
-def section_title(title: str, subtitle: str | None = None) -> None:
+def section_title(title: str, subtitle: Optional[str] = None) -> None:
     """Render the page-level title + optional lead paragraph."""
     st.markdown(
         f'<h1 class="page-title">{escape(title)}</h1>',
@@ -49,7 +49,7 @@ def paragraph(text: str) -> None:
     )
 
 
-def code_block(code: str, language: str = "", label: str | None = None) -> None:
+def code_block(code: str, language: str = "", label: Optional[str] = None) -> None:
     """Render a minimal labelled code block.
 
     Uses Streamlit's native `st.code` for syntax highlighting and copy button.
@@ -62,7 +62,7 @@ def code_block(code: str, language: str = "", label: str | None = None) -> None:
     st.code(code, language=language or None)
 
 
-LinkItem = str | tuple[str, str] | tuple[str, str, str]
+LinkItem = Union[str, Tuple[str, str], Tuple[str, str, str]]
 
 
 def link_list(items: Iterable[LinkItem]) -> None:

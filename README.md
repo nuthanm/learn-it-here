@@ -65,6 +65,24 @@ shared links keep working.
 
 ---
 
+## 🔗 URL Scheme
+
+The app uses Streamlit's `st.navigation` API for path-based routing. Top-level pages live at clean single-segment paths; the Learning Hub keeps section / sub-section selection in the query string.
+
+| Page | URL |
+|---|---|
+| Landing | `https://learnithere.streamlit.app/` |
+| Project Requirements | `https://learnithere.streamlit.app/projectrequirements` |
+| Default learning page (GIT) | `https://learnithere.streamlit.app/learning-hub` |
+| Learning Hub section | `https://learnithere.streamlit.app/learning-hub?section=git` |
+| Learning Hub sub-page | `https://learnithere.streamlit.app/learning-hub?section=git&sub=branching` |
+
+> ⚠️ **Streamlit limitation:** `st.navigation` only supports a **single URL path segment per page**, and path segments cannot contain spaces. URLs like `/Learning Hub/GIT/Branching` (multiple segments and embedded spaces) are therefore not achievable on Streamlit Community Cloud. Section / sub-section selection is exposed through query parameters instead.
+
+Legacy URLs from the previous query-string-only routing (`?page=requirements`, `?page=learn&section=git&sub=branching`, `?go=home`) are automatically redirected to the new path-based equivalents, so existing shared links keep working.
+
+---
+
 ## 📝 Requirements Form — Questions Covered
 
 | # | Topic |

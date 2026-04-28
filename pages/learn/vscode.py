@@ -52,7 +52,7 @@ def render_vscode():
     paragraph(
         "3. Live Share — pair programming with a teammate in another city. Your colleague "
         "in London is stuck on a bug. Instead of screen-sharing (laggy, read-only), install "
-        'the Live Share extension, click "Share", and send her the link. She now sees your '
+        "the Live Share extension, click \"Share\", and send her the link. She now sees your "
         "file, can edit it, and you both see each other's cursors in real time — just like "
         "Google Docs, but for code. No files to email, no VPN needed."
     )
@@ -66,7 +66,7 @@ def render_vscode():
     )
     paragraph(
         "5. Command Palette — find any command without memorising menus. Forgot how to "
-        'format a JSON file? Press Ctrl+Shift+P, type "format", and "Format Document" '
+        "format a JSON file? Press Ctrl+Shift+P, type \"format\", and \"Format Document\" "
         "appears instantly. Press Enter. The entire file is formatted. The Command Palette "
         "gives you access to literally every VS Code feature by searching for it."
     )
@@ -131,7 +131,9 @@ def render_vscode():
     )
 
     subsection("REST Client / Thunder Client")
-    paragraph("Test HTTP APIs by writing .http files or using a GUI — no need to leave the editor.")
+    paragraph(
+        "Test HTTP APIs by writing .http files or using a GUI — no need to leave the editor."
+    )
 
     subsection("Prettier")
     paragraph(
@@ -151,7 +153,9 @@ def render_vscode():
     )
 
     subsection("Todo Tree")
-    paragraph("Scans all files for TODO / FIXME / HACK comments and lists them in a sidebar panel.")
+    paragraph(
+        "Scans all files for TODO / FIXME / HACK comments and lists them in a sidebar panel."
+    )
 
     subsection("Bracket Pair Colorizer")
     paragraph(
@@ -160,7 +164,9 @@ def render_vscode():
     )
 
     subsection("Path Intellisense")
-    paragraph("Autocompletes file paths as you type import or reference statements.")
+    paragraph(
+        "Autocompletes file paths as you type import or reference statements."
+    )
 
     subsection("Docker")
     paragraph(
@@ -169,7 +175,9 @@ def render_vscode():
     )
 
     subsection("Recommended settings.json")
-    paragraph('Open with Ctrl+Shift+P then choose "Open User Settings (JSON)".')
+    paragraph(
+        "Open with Ctrl+Shift+P then choose \"Open User Settings (JSON)\"."
+    )
     code_block(
         """{
   "editor.fontSize": 14,
@@ -226,9 +234,6 @@ Ctrl+Shift+`      New terminal instance""",
             ("VS Code documentation", "https://code.visualstudio.com/docs", "official docs"),
             ("Tips and Tricks", "https://code.visualstudio.com/docs/getstarted/tips-and-tricks"),
             ("Extension Marketplace", "https://marketplace.visualstudio.com/vscode"),
-            (
-                "Keyboard shortcuts reference",
-                "https://code.visualstudio.com/docs/getstarted/keybindings",
-            ),
+            ("Keyboard shortcuts reference", "https://code.visualstudio.com/docs/getstarted/keybindings"),
         ]
     )

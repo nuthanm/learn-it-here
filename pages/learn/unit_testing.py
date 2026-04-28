@@ -31,9 +31,7 @@ def render_unit_testing():
     )
     paragraph("Why every developer should write unit tests:")
     paragraph("- Catch bugs early — find problems in seconds, not in production.")
-    paragraph(
-        "- Refactor confidently — change code without fear; tests tell you if you broke something."
-    )
+    paragraph("- Refactor confidently — change code without fear; tests tell you if you broke something.")
     paragraph("- Living documentation — tests show exactly how code is supposed to behave.")
     paragraph("- Faster debugging — a failing test pinpoints exactly which unit broke.")
     paragraph("- Required in most professional teams — companies expect developers to write tests.")

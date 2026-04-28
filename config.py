@@ -25,24 +25,24 @@ from typing import Any
 
 import streamlit as st
 
-# ── Page name constants ──────────────────────────────────────────────────────
+# ── Page name constants ────────────────────────────────────────────────────────
 PAGE_LANDING = "landing"
 PAGE_REQUIREMENTS = "requirements"
 PAGE_LEARN = "learn"
 
-_DEFAULTS: dict[str, Any] = {
-    "page": PAGE_LANDING,
+_DEFAULTS = {
+    "page": PAGE_LANDING,              # "landing" | "requirements" | "learn"
     "animation_state": "welcome",
     "submitted": False,
     "pdf_bytes": None,
     "interacted": False,
-    "learn_section": "git",
-    "learn_sub": None,
-    "learn_banner_dismissed": False,
+    "learn_section": "git",            # active learn-hub section (slug)
+    "learn_sub": None,                 # active sub-section slug (or None)
+    "learn_banner_dismissed": False,   # new-topic banner dismissed this session
 }
 
 
-# ── Learn-hub menu (hierarchical, data-driven) ───────────────────────────────
+# ── Learn-hub menu (hierarchical, data-driven) ────────────────────────────────
 # Each section: {slug, title, renderer, subsections?}
 # `slug` is the URL-stable id and MUST NOT change once published — that's what
 # makes shared links durable. `title` is display-only and can be edited freely.
@@ -51,7 +51,7 @@ _DEFAULTS: dict[str, Any] = {
 #
 # To add a new top-level topic: append a dict here. To add a sub-page: append
 # to the parent's "subsections" list. Nothing else needs to change.
-LEARN_SECTIONS: list[dict[str, Any]] = [
+LEARN_SECTIONS = [
     {
         "slug": "git",
         "title": "GIT",
@@ -122,11 +122,84 @@ LEARN_SECTIONS: list[dict[str, Any]] = [
 ]
 
 # Backwards-compatible flat list of display titles (used by older code paths).
-LEARN_MENU_ITEMS: list[str] = [s["title"] for s in LEARN_SECTIONS]
+LEARN_MENU_ITEMS = [s["title"] for s in LEARN_SECTIONS]
 
 # LATEST_NEW_TOPIC is the item that triggers the "new menu" banner.
 # Update this string whenever a brand-new item is added.
 LATEST_NEW_TOPIC = "SQL Developer"
+
+
+# ── Lookup helpers ─────────────────────────────────────────────────────────────
+def find_section(identifier):
+    """Return the section dict matching `identifier`, or None.
+
+    Accepts either a slug (canonical) or a display title (legacy URLs).
+    """
+    if not identifier:
+        return None
+    for s in LEARN_SECTIONS:
+        if s["slug"] == identifier or s["title"] == identifier:
+            return s
+    return None
+
+
+def find_subsection(section, identifier):
+    """Return the subsection dict matching `identifier` within `section`, or None."""
+    if not section or not identifier:
+        return None
+    for sub in section.get("subsections") or []:
+        if sub["slug"] == identifier or sub["title"] == identifier:
+            return sub
+    return None
+
+
+def default_section_slug():
+    return LEARN_SECTIONS[0]["slug"] if LEARN_SECTIONS else None
+
+
+# ── Sharable URL builder ──────────────────────────────────────────────────────
+def _url_for(page=None, section=None, sub=None):
+    """Build a stable, shareable in-app URL using path-based routing.
+
+    Top-level pages are mapped to a single URL path segment (the maximum
+    Streamlit Cloud supports — see README). Section / sub-section selection
+    inside the Learning Hub stays in the query string because Streamlit does
+    not support nested path segments or path segments containing spaces.
+
+    Examples:
+      _url_for()                                      -> '/'
+      _url_for(page='requirements')                   -> '/projectrequirements'
+      _url_for(page='learn', section='git')           -> '/learning-hub?section=git'
+      _url_for(page='learn', section='git',
+               sub='basics')                          -> '/learning-hub?section=git&sub=basics'
+    """
+    if page in (None, PAGE_LANDING):
+        return "/"
+    if page == PAGE_REQUIREMENTS:
+        return "/projectrequirements"
+    if page == PAGE_LEARN:
+        url = "/learning-hub"
+        params = []
+        if section:
+            params.append(f"section={section}")
+            if sub:
+                params.append(f"sub={sub}")
+        if params:
+            url += "?" + "&".join(params)
+        return url
+    return "/"
+
+
+# ── Page registry (populated by app.py once st.Page objects exist) ────────────
+# `_nav_to` needs the StreamlitPage objects so it can call st.switch_page on
+# them. app.py constructs the pages and registers them here on every rerun.
+_PAGES: dict = {}
+
+
+def register_pages(pages: dict) -> None:
+    """Register the StreamlitPage objects keyed by PAGE_* constants."""
+    _PAGES.clear()
+    _PAGES.update(pages)
 
 
 # ── Lookup helpers ───────────────────────────────────────────────────────────
@@ -225,16 +298,12 @@ def on_interact() -> None:
         st.session_state.animation_state = "thinking"
 
 
-def nav_to(
-    page: str,
-    section: str | None = None,
-    sub: str | None = None,
-) -> None:
-    """Navigate to a page via ``st.switch_page``, keeping the URL in sync.
+def _nav_to(page: str, section: str = None, sub: str = None):
+    """Navigate to a page via st.switch_page, keeping the URL in sync.
 
-    ``st.switch_page`` preserves the current query string across the rerun,
-    so we update ``st.query_params`` to the canonical state for the
-    destination page *before* switching.
+    `st.switch_page` preserves the current query string across the rerun, so
+    we update `st.query_params` to the canonical state for the destination
+    page *before* switching.
     """
     if page == PAGE_LEARN:
         if section:
@@ -260,11 +329,3 @@ def nav_to(
     else:
         # Fallback if registry isn't populated (shouldn't happen at runtime).
         st.rerun()
-
-
-# ── Backwards-compatible aliases ─────────────────────────────────────────────
-# Older modules import the underscore-prefixed names directly. New code
-# should import the public names (above).
-_url_for = url_for
-_nav_to = nav_to
-_on_interact = on_interact

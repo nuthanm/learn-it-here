@@ -31,9 +31,7 @@ def render_visual_studio():
         "bug to fix too."
     )
 
-    paragraph(
-        "1. Generate C# classes from JSON in 10 seconds (Paste JSON as Classes). You receive this JSON from the lab:"
-    )
+    paragraph("1. Generate C# classes from JSON in 10 seconds (Paste JSON as Classes). You receive this JSON from the lab:")
     code_block(
         """{
   "patientId": "P-1042",
@@ -86,7 +84,7 @@ public class TestResult
 
     paragraph(
         "4. Test Explorer — run all tests with one click. After fixing the age bug, "
-        'open View → Test Explorer and click "Run All". All 47 unit tests finish in '
+        "open View → Test Explorer and click \"Run All\". All 47 unit tests finish in "
         "3 seconds. 3 tests go red — those are the areas your fix might have broken. "
         "You fix them before pushing anything."
     )
@@ -114,7 +112,7 @@ public class TestResult
     subsection("Generate from usage")
     paragraph(
         "Type a class or method that doesn't exist yet, press Ctrl+. and choose "
-        '"Generate class / method" — VS creates the skeleton automatically.'
+        "\"Generate class / method\" — VS creates the skeleton automatically."
     )
 
     subsection("Live code analysis")
@@ -176,8 +174,8 @@ public class TestResult
 
     subsection("IntelliSense completion")
     paragraph(
-        'Tools → Options → Text Editor → C# → IntelliSense. Enable "Show completion '
-        'list after character is deleted" and "Highlight matching portions".'
+        "Tools → Options → Text Editor → C# → IntelliSense. Enable \"Show completion "
+        "list after character is deleted\" and \"Highlight matching portions\"."
     )
 
     subsection("Code style and formatting")
@@ -208,7 +206,8 @@ public class TestResult
 
     subsection("GitHub Copilot")
     paragraph(
-        "AI pair programmer — suggests whole lines, methods, and even entire classes as you type."
+        "AI pair programmer — suggests whole lines, methods, and even entire classes "
+        "as you type."
     )
 
     subsection("ReSharper / Rider")
@@ -218,13 +217,19 @@ public class TestResult
     )
 
     subsection("CodeMaid")
-    paragraph("Cleans up code — removes unused usings, reorganises members, formats on save.")
+    paragraph(
+        "Cleans up code — removes unused usings, reorganises members, formats on save."
+    )
 
     subsection("Visual Studio IntelliCode")
-    paragraph("AI-assisted IntelliCode completions trained on open-source .NET code patterns.")
+    paragraph(
+        "AI-assisted IntelliCode completions trained on open-source .NET code patterns."
+    )
 
     subsection("Web Essentials")
-    paragraph("Browser sync, BundlerMinifier, and CSS / JavaScript helpers for web projects.")
+    paragraph(
+        "Browser sync, BundlerMinifier, and CSS / JavaScript helpers for web projects."
+    )
 
     subsection("Productivity Power Tools")
     paragraph(

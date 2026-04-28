@@ -22,7 +22,7 @@ def render_csharp():
     # What is C#?
     # ------------------------------------------------------------------
     section_intro(
-        'C# (pronounced "C sharp") is a modern, object-oriented programming language '
+        "C# (pronounced \"C sharp\") is a modern, object-oriented programming language "
         "created by Microsoft in 2000. It was designed by Anders Hejlsberg, who also "
         "designed TypeScript and previously Turbo Pascal and Delphi."
     )
@@ -208,20 +208,31 @@ def render_csharp():
 
     subsection("Video games (Unity)")
     paragraph(
-        "Pokémon GO, Cuphead, Cities: Skylines, and Among Us are all built with Unity and C#."
+        "Pokémon GO, Cuphead, Cities: Skylines, and Among Us are all built with Unity "
+        "and C#."
     )
 
     subsection("Cross-platform mobile apps")
-    paragraph(".NET MAUI: one codebase produces iOS, Android, Windows, and macOS apps.")
+    paragraph(
+        ".NET MAUI: one codebase produces iOS, Android, Windows, and macOS apps."
+    )
 
     subsection("Cloud and serverless")
-    paragraph("Azure Functions and Azure App Services — C# is Azure's first-class citizen.")
+    paragraph(
+        "Azure Functions and Azure App Services — C# is Azure's first-class citizen."
+    )
 
     subsection("Windows desktop apps")
-    paragraph("WPF (rich UI) and WinForms (classic) remain popular for internal business tools.")
+    paragraph(
+        "WPF (rich UI) and WinForms (classic) remain popular for internal business "
+        "tools."
+    )
 
     subsection("AI and ML")
-    paragraph("ML.NET for machine learning pipelines; integration with Python AI models via REST.")
+    paragraph(
+        "ML.NET for machine learning pipelines; integration with Python AI models via "
+        "REST."
+    )
 
     subsection("Dev tools and CLIs")
     paragraph("Roslyn compiler, PowerShell, and NuGet are all built in C# / .NET.")
@@ -263,12 +274,14 @@ def render_csharp():
 
     subsection("Phase 2 — Core language basics (weeks 1–3)")
     paragraph(
-        "Variables and types, operators, if/else, loops (for, while, foreach), methods, and arrays."
+        "Variables and types, operators, if/else, loops (for, while, foreach), "
+        "methods, and arrays."
     )
 
     subsection("Phase 3 — Object-oriented programming (weeks 4–6)")
     paragraph(
-        "Classes, objects, constructors, properties, inheritance, interfaces, and abstract classes."
+        "Classes, objects, constructors, properties, inheritance, interfaces, and "
+        "abstract classes."
     )
 
     subsection("Phase 4 — Intermediate C# (month 2)")
@@ -278,7 +291,10 @@ def render_csharp():
     )
 
     subsection("Phase 5 — A real framework (month 3 onwards)")
-    paragraph("Pick one: ASP.NET Core (web), Unity (games), or WPF (desktop) and build a project.")
+    paragraph(
+        "Pick one: ASP.NET Core (web), Unity (games), or WPF (desktop) and build a "
+        "project."
+    )
 
     subsection("Free learning resources")
     link_list(
@@ -368,7 +384,7 @@ def render_csharp():
     )
 
     with tabs_evo[0]:
-        paragraph('Tracking "printing a person\'s name and age" across versions.')
+        paragraph("Tracking \"printing a person's name and age\" across versions.")
 
         code_block(
             'string name = "Alice";\n'
@@ -405,7 +421,7 @@ def render_csharp():
         )
 
     with tabs_evo[1]:
-        paragraph('Tracking "null checking" across versions.')
+        paragraph("Tracking \"null checking\" across versions.")
 
         code_block(
             "if (user != null)\n"
@@ -420,7 +436,7 @@ def render_csharp():
         code_block(
             "Console.WriteLine(user?.Name);\n"
             "// If user is null, returns null instead of crashing\n"
-            '// Layman: "if the person exists, tell me their name; otherwise say nothing"',
+            "// Layman: \"if the person exists, tell me their name; otherwise say nothing\"",
             language="csharp",
             label="C# 6.0 — null-conditional operator (?.) (2015)",
         )
@@ -441,7 +457,7 @@ def render_csharp():
         )
 
     with tabs_evo[2]:
-        paragraph('Tracking "data class / model" across versions.')
+        paragraph("Tracking \"data class / model\" across versions.")
 
         code_block(
             "public class Person\n"
@@ -471,13 +487,13 @@ def render_csharp():
         code_block(
             "var p3 = p1 with { Age = 31 };\n"
             "// Creates a new Person with everything from p1, but Age = 31\n"
-            '// Immutable data + easy "update"',
+            "// Immutable data + easy \"update\"",
             language="csharp",
             label="C# 9.0 — with expressions (non-destructive mutation)",
         )
 
     with tabs_evo[3]:
-        paragraph('Tracking "switch / branching" across versions.')
+        paragraph("Tracking \"switch / branching\" across versions.")
 
         code_block(
             'string day = "Monday";\n'
@@ -503,7 +519,7 @@ def render_csharp():
             '    _ => "Weekday"\n'
             "};\n"
             "// Concise, returns a value, no 'break' needed\n"
-            '// Layman: like a lookup table — "for this input, give me that output"',
+            "// Layman: like a lookup table — \"for this input, give me that output\"",
             language="csharp",
             label="C# 8.0 — switch expression (2019)",
         )
@@ -521,10 +537,10 @@ def render_csharp():
         )
 
     with tabs_evo[4]:
-        paragraph('Tracking "async programming" across versions.')
+        paragraph("Tracking \"async programming\" across versions.")
 
         code_block(
-            '// Old way — callbacks make "callback hell"\n'
+            "// Old way — callbacks make \"callback hell\"\n"
             "webClient.DownloadStringCompleted += (s, e) => {\n"
             "    Console.WriteLine(e.Result);  // runs when done\n"
             "};\n"
@@ -548,7 +564,7 @@ def render_csharp():
         )
 
     with tabs_evo[5]:
-        paragraph('Tracking "collections / filtering" across versions (LINQ).')
+        paragraph("Tracking \"collections / filtering\" across versions (LINQ).")
 
         code_block(
             "List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };\n"
@@ -564,7 +580,7 @@ def render_csharp():
         code_block(
             "var evens = numbers.Where(n => n % 2 == 0).ToList();\n"
             "// One line, expressive\n"
-            '// Layman: "give me only the items WHERE my condition is true"\n'
+            "// Layman: \"give me only the items WHERE my condition is true\"\n"
             "\n"
             "// Query syntax (SQL-like):\n"
             "var evens2 = (from n in numbers where n % 2 == 0 select n).ToList();",
@@ -615,7 +631,7 @@ def render_csharp():
     paragraph("Let's dissect this complete C# program and label every concept:")
 
     code_block(
-        '// (1) Using directive — imports a namespace (like "import" in Python / Java)\n'
+        "// (1) Using directive — imports a namespace (like \"import\" in Python / Java)\n"
         "using System;\n"
         "using System.Collections.Generic;\n"
         "\n"
@@ -623,18 +639,18 @@ def render_csharp():
         "namespace MyApp.Learning\n"
         "{\n"
         "    // (3) Class — a blueprint / template for creating objects\n"
-        '    //     "public" = accessible from other code\n'
+        "    //     \"public\" = accessible from other code\n"
         "    public class BankAccount\n"
         "    {\n"
         "        // (4) Field — a private variable that stores state inside the class\n"
         "        private decimal _balance;\n"
         "\n"
         "        // (5) Property — controlled access to a field (get/set)\n"
-        '        //     "public" = readable from outside, "private set" = only settable inside\n'
+        "        //     \"public\" = readable from outside, \"private set\" = only settable inside\n"
         "        public string Owner { get; private set; }\n"
         "\n"
         "        // (6) Constructor — special method called when an object is created\n"
-        '        //     "this" refers to the current instance\n'
+        "        //     \"this\" refers to the current instance\n"
         "        public BankAccount(string owner, decimal initialBalance)\n"
         "        {\n"
         "            Owner    = owner;        // set the property\n"
@@ -647,11 +663,11 @@ def render_csharp():
         "        {\n"
         "            // (8) Exception handling — catch and handle errors gracefully\n"
         "            if (amount <= 0)\n"
-        '                throw new ArgumentException("Amount must be positive.");\n'
+        "                throw new ArgumentException(\"Amount must be positive.\");\n"
         "\n"
         "            _balance += amount;\n"
         "            // (9) String interpolation — embed expressions inside strings\n"
-        '            Console.WriteLine($"Deposited {amount:C}. New balance: {_balance:C}");\n'
+        "            Console.WriteLine($\"Deposited {amount:C}. New balance: {_balance:C}\");\n"
         "        }\n"
         "\n"
         "        // (10) Expression-bodied method (C# 6+) — one-liner method\n"
@@ -695,7 +711,7 @@ def render_csharp():
         "        public static async Task Main(string[] args)\n"
         "        {\n"
         "            // (18) Object instantiation — create an instance from the class blueprint\n"
-        '            var account = new SavingsAccount("Alice", 1000m, 0.05m);\n'
+        "            var account = new SavingsAccount(\"Alice\", 1000m, 0.05m);\n"
         "\n"
         "            account.Deposit(500m);\n"
         "            account.ApplyInterest();\n"
@@ -706,17 +722,17 @@ def render_csharp():
         "            // (20) LINQ — query a collection with lambda expressions\n"
         "            var transactions = new List<Transaction>\n"
         "            {\n"
-        '                new("Deposit",  500m,  DateTime.Now),\n'
-        '                new("Interest", 75m,   DateTime.Now),\n'
+        "                new(\"Deposit\",  500m,  DateTime.Now),\n"
+        "                new(\"Interest\", 75m,   DateTime.Now),\n"
         "            };\n"
         "\n"
         "            // Filter: only deposits\n"
-        '            var deposits = transactions.Where(t => t.Type == "Deposit").ToList();\n'
+        "            var deposits = transactions.Where(t => t.Type == \"Deposit\").ToList();\n"
         "\n"
         "            // (21) async/await — non-blocking I/O operation\n"
         "            await Task.Delay(10); // simulate async work\n"
         "\n"
-        '            Console.WriteLine($"Final balance for {account.Owner}: {balance:C}");\n'
+        "            Console.WriteLine($\"Final balance for {account.Owner}: {balance:C}\");\n"
         "        }\n"
         "    }\n"
         "}",
@@ -787,27 +803,27 @@ def render_csharp():
         "casting needed."
     )
     paragraph(
-        'Layman: a generic box says "this box holds exactly one type of thing — you '
+        "Layman: a generic box says \"this box holds exactly one type of thing — you "
         "decide which type when you order the box. After that, you can only put that "
-        'type in."'
+        "type in.\""
     )
     code_block(
         "// Without generics — dangerous (any object, cast required)\n"
         "ArrayList oldList = new ArrayList();\n"
         "oldList.Add(42);\n"
-        'oldList.Add("oops");        // compiles but runtime crash if you expect int!\n'
+        "oldList.Add(\"oops\");        // compiles but runtime crash if you expect int!\n"
         "\n"
         "// With generics — safe\n"
         "List<int> safeList = new List<int>();\n"
         "safeList.Add(42);\n"
-        '// safeList.Add("oops");    // Compile-time error — caught before it runs!\n'
+        "// safeList.Add(\"oops\");    // Compile-time error — caught before it runs!\n"
         "\n"
         "// Generic method\n"
         "T Max<T>(T a, T b) where T : IComparable<T>\n"
         "    => a.CompareTo(b) > 0 ? a : b;\n"
         "\n"
         "Console.WriteLine(Max(3, 7));              // 7\n"
-        'Console.WriteLine(Max("apple", "banana")); // banana',
+        "Console.WriteLine(Max(\"apple\", \"banana\")); // banana",
         language="csharp",
     )
 
@@ -818,8 +834,8 @@ def render_csharp():
         "delegates."
     )
     paragraph(
-        'Layman: a delegate is like a job posting: "I need someone who can take an int '
-        'and return a string." Any method matching that description can fill the role. '
+        "Layman: a delegate is like a job posting: \"I need someone who can take an int "
+        "and return a string.\" Any method matching that description can fill the role. "
         "An event is like a doorbell: when pressed, all registered listeners are "
         "notified."
     )
@@ -828,7 +844,7 @@ def render_csharp():
         "delegate string Formatter(int value);\n"
         "\n"
         "// Methods that match the delegate signature\n"
-        'string ToHex(int n)    => $"0x{n:X}";\n'
+        "string ToHex(int n)    => $\"0x{n:X}\";\n"
         "string ToBinary(int n) => Convert.ToString(n, 2);\n"
         "\n"
         "Formatter fmt = ToHex;\n"
@@ -838,9 +854,9 @@ def render_csharp():
         "Console.WriteLine(fmt(10));  // 1010\n"
         "\n"
         "// Built-in delegate types: Action (void), Func (returns value), Predicate (bool)\n"
-        'Action<string> greet    = name => Console.WriteLine($"Hello, {name}!");\n'
+        "Action<string> greet    = name => Console.WriteLine($\"Hello, {name}!\");\n"
         "Func<int, int, int> add = (a, b) => a + b;\n"
-        'greet("Alice");               // Hello, Alice!\n'
+        "greet(\"Alice\");               // Hello, Alice!\n"
         "Console.WriteLine(add(3, 4)); // 7",
         language="csharp",
     )
@@ -851,25 +867,25 @@ def render_csharp():
         "IQueryable<T> source — collections, databases (EF Core), XML, JSON."
     )
     paragraph(
-        'Layman: LINQ is like SQL for your C# lists. "Give me all customers from my '
-        'list where their city is London, ordered by name, and take only the top 5."'
+        "Layman: LINQ is like SQL for your C# lists. \"Give me all customers from my "
+        "list where their city is London, ordered by name, and take only the top 5.\""
     )
     code_block(
         "var people = new List<(string Name, int Age, string City)>\n"
         "{\n"
-        '    ("Alice", 30, "London"),\n'
-        '    ("Bob",   25, "Paris"),\n'
-        '    ("Carol", 35, "London"),\n'
-        '    ("Dave",  28, "Berlin"),\n'
+        "    (\"Alice\", 30, \"London\"),\n"
+        "    (\"Bob\",   25, \"Paris\"),\n"
+        "    (\"Carol\", 35, \"London\"),\n"
+        "    (\"Dave\",  28, \"Berlin\"),\n"
         "};\n"
         "\n"
         "// Method syntax (most common)\n"
         "var londonAdults = people\n"
-        '    .Where(p => p.City == "London" && p.Age >= 30)\n'
+        "    .Where(p => p.City == \"London\" && p.Age >= 30)\n"
         "    .OrderBy(p => p.Name)\n"
         "    .Select(p => p.Name)\n"
         "    .ToList();\n"
-        '// Result: ["Alice", "Carol"]\n'
+        "// Result: [\"Alice\", \"Carol\"]\n"
         "\n"
         "// Aggregation\n"
         "int    totalAge = people.Sum(p => p.Age);      // 118\n"
@@ -895,7 +911,7 @@ def render_csharp():
         "async Task<string> FetchWebPageAsync(string url)\n"
         "{\n"
         "    using var client = new HttpClient();\n"
-        '    // Await = "start this, come back when done, don\'t block"\n'
+        "    // Await = \"start this, come back when done, don't block\"\n"
         "    string content = await client.GetStringAsync(url);\n"
         "    return content.Substring(0, 200);\n"
         "}\n"
@@ -903,12 +919,12 @@ def render_csharp():
         "// Run multiple async tasks in parallel\n"
         "async Task RunParallelAsync()\n"
         "{\n"
-        '    var task1 = FetchWebPageAsync("https://example.com");\n'
-        '    var task2 = FetchWebPageAsync("https://microsoft.com");\n'
+        "    var task1 = FetchWebPageAsync(\"https://example.com\");\n"
+        "    var task2 = FetchWebPageAsync(\"https://microsoft.com\");\n"
         "\n"
         "    // Wait for BOTH to complete simultaneously\n"
         "    string[] results = await Task.WhenAll(task1, task2);\n"
-        '    Console.WriteLine($"Got {results.Length} pages");\n'
+        "    Console.WriteLine($\"Got {results.Length} pages\");\n"
         "}",
         language="csharp",
     )
@@ -935,7 +951,7 @@ def render_csharp():
         "public class SmtpEmailService : IEmailService\n"
         "{\n"
         "    public async Task SendAsync(string to, string subject, string body)\n"
-        '        => await Task.Run(() => Console.WriteLine($"Sending email to {to}"));\n'
+        "        => await Task.Run(() => Console.WriteLine($\"Sending email to {to}\"));\n"
         "}\n"
         "\n"
         "// Consumer — receives IEmailService via constructor injection\n"
@@ -947,7 +963,7 @@ def render_csharp():
         "\n"
         "    public async Task PlaceOrderAsync(string customerEmail)\n"
         "    {\n"
-        '        await _email.SendAsync(customerEmail, "Order confirmed", "Thanks!");\n'
+        "        await _email.SendAsync(customerEmail, \"Order confirmed\", \"Thanks!\");\n"
         "    }\n"
         "}\n"
         "\n"
@@ -971,7 +987,7 @@ def render_csharp():
         "public decimal Divide(decimal a, decimal b)\n"
         "{\n"
         "    if (b == 0)\n"
-        '        throw new DivideByZeroException("Cannot divide by zero!");\n'
+        "        throw new DivideByZeroException(\"Cannot divide by zero!\");\n"
         "    return a / b;\n"
         "}\n"
         "\n"
@@ -982,15 +998,15 @@ def render_csharp():
         "}\n"
         "catch (DivideByZeroException ex)\n"
         "{\n"
-        '    Console.WriteLine($"Math error: {ex.Message}"); // handled\n'
+        "    Console.WriteLine($\"Math error: {ex.Message}\"); // handled\n"
         "}\n"
         "catch (Exception ex)\n"
         "{\n"
-        '    Console.WriteLine($"Unexpected: {ex.Message}"); // catch-all fallback\n'
+        "    Console.WriteLine($\"Unexpected: {ex.Message}\"); // catch-all fallback\n"
         "}\n"
         "finally\n"
         "{\n"
-        '    Console.WriteLine("This always runs — good for cleanup (close files, etc.)");\n'
+        "    Console.WriteLine(\"This always runs — good for cleanup (close files, etc.)\");\n"
         "}\n"
         "\n"
         "// Custom exception\n"
@@ -998,7 +1014,7 @@ def render_csharp():
         "{\n"
         "    public decimal RequiredAmount { get; }\n"
         "    public InsufficientFundsException(decimal amount)\n"
-        '        : base($"Need {amount:C} more in your account.") => RequiredAmount = amount;\n'
+        "        : base($\"Need {amount:C} more in your account.\") => RequiredAmount = amount;\n"
         "}",
         language="csharp",
     )
@@ -1012,7 +1028,7 @@ def render_csharp():
     paragraph(
         "Layman: pattern matching is like a smart sorting machine at a post office. "
         "Instead of writing many separate \"if it's a large box, do X; if it's a small "
-        'envelope, do Y" rules, you write one clear set of patterns and the machine '
+        "envelope, do Y\" rules, you write one clear set of patterns and the machine "
         "routes each parcel automatically."
     )
     code_block(
@@ -1020,7 +1036,7 @@ def render_csharp():
         "\n"
         "// Type pattern (C# 7)\n"
         "if (shape is Circle c)\n"
-        '    Console.WriteLine($"Area: {Math.PI * c.Radius * c.Radius:F2}");\n'
+        "    Console.WriteLine($\"Area: {Math.PI * c.Radius * c.Radius:F2}\");\n"
         "\n"
         "// Switch expression with property pattern (C# 8)\n"
         "double area = shape switch\n"
@@ -1029,17 +1045,17 @@ def render_csharp():
         "    Rectangle { Width: var w, Height: var h } => w * h,\n"
         "    Triangle  { Base: var b, Height: var h }  => 0.5 * b * h,\n"
         "    null => throw new ArgumentNullException(nameof(shape)),\n"
-        '    _    => throw new NotSupportedException("Unknown shape")\n'
+        "    _    => throw new NotSupportedException(\"Unknown shape\")\n"
         "};\n"
         "\n"
         "// List pattern (C# 11)\n"
         "int[] nums = { 1, 2, 3 };\n"
         "string desc = nums switch\n"
         "{\n"
-        '    []          => "empty",\n'
-        '    [var x]     => $"single: {x}",\n'
-        '    [1, 2, ..]  => "starts with 1, 2",\n'
-        '    _           => "other"\n'
+        "    []          => \"empty\",\n"
+        "    [var x]     => $\"single: {x}\",\n"
+        "    [1, 2, ..]  => \"starts with 1, 2\",\n"
+        "    _           => \"other\"\n"
         "};",
         language="csharp",
     )

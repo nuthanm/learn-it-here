@@ -82,15 +82,9 @@ def render_blazor():
 """
     )
     paragraph("What replaced what?")
-    paragraph(
-        "- Web Forms (ASP.NET) → replaced by Blazor Server (for server-side interactive UIs)."
-    )
-    paragraph(
-        "- Silverlight / Flash → replaced by Blazor WebAssembly (for rich browser apps without plugins)."
-    )
-    paragraph(
-        "- JavaScript SPA frameworks (React/Angular/Vue) → Blazor WASM is the C# alternative."
-    )
+    paragraph("- Web Forms (ASP.NET) → replaced by Blazor Server (for server-side interactive UIs).")
+    paragraph("- Silverlight / Flash → replaced by Blazor WebAssembly (for rich browser apps without plugins).")
+    paragraph("- JavaScript SPA frameworks (React/Angular/Vue) → Blazor WASM is the C# alternative.")
 
     # ── Server vs WASM ───────────────────────────────────────────────────────
     subsection("Blazor Server vs Blazor WebAssembly — Side-by-Side")
@@ -366,19 +360,11 @@ await builder.Build().RunAsync();
         language="razor",
     )
     paragraph("Key attributes explained:")
-    paragraph(
-        '- `AppAssembly="@typeof(App).Assembly"` — tells the Router which assembly to scan for `@page` routes.'
-    )
-    paragraph(
-        '- `DefaultLayout="@typeof(MainLayout)"` — wraps every page in `MainLayout.razor` (nav bar, footer, etc.) unless overridden.'
-    )
+    paragraph("- `AppAssembly=\"@typeof(App).Assembly\"` — tells the Router which assembly to scan for `@page` routes.")
+    paragraph("- `DefaultLayout=\"@typeof(MainLayout)\"` — wraps every page in `MainLayout.razor` (nav bar, footer, etc.) unless overridden.")
     paragraph("- `<RouteView>` — the component that physically renders the matched page.")
-    paragraph(
-        "- `<FocusOnNavigate>` — accessibility helper; moves focus to the heading after navigation."
-    )
-    paragraph(
-        "- `<NotFound>` — fallback for 404-style mismatches — no redirect, just renders in-place."
-    )
+    paragraph("- `<FocusOnNavigate>` — accessibility helper; moves focus to the heading after navigation.")
+    paragraph("- `<NotFound>` — fallback for 404-style mismatches — no redirect, just renders in-place.")
 
     # ── End-to-end example ───────────────────────────────────────────────────
     subsection("Example End-to-End: learnithere.com/weather")

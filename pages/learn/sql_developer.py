@@ -266,7 +266,10 @@ def render_sql_developer():
 
     # ── Query Window ─────────────────────────────────────────────────────────
     subsection("How to open a query window and run SQL")
-    paragraph("The SQL Worksheet is where you type and run SQL queries. Here's how to use it.")
+    paragraph(
+        "The SQL Worksheet is where you type and run SQL queries. Here's how to "
+        "use it."
+    )
 
     paragraph("Open a new Worksheet (query window):")
     link_list(
