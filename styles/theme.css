@@ -198,6 +198,142 @@ h1, h2, h3 { color: var(--ink); font-weight: 700; }
   line-height: 1.6;
 }
 
+/* ─── 3-tile showcase grid (below feature row) ───────────────────── */
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 32px;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md, 10px);
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+.tile:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+.tile-icon { font-size: 22px; }
+.tile-title {
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--ink);
+}
+.tile-desc {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  line-height: 1.55;
+  flex: 1;
+}
+.tile-cta {
+  margin-top: 8px;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ─── Data-driven topics nav (sidebar) ───────────────────────────── */
+.topics-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.topics-nav .topic-link {
+  display: block;
+  padding: 8px 12px;
+  border-left: 3px solid transparent;
+  font-size: var(--fs-body);
+  color: var(--body);
+  text-decoration: none;
+  border-radius: 0 var(--r-sm, 6px) var(--r-sm, 6px) 0;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.topics-nav .topic-link:hover {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--ink);
+}
+.topics-nav .topic-link.active {
+  border-left-color: var(--accent);
+  color: var(--ink);
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.03);
+}
+.topics-nav .sub-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 4px 0 8px 18px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+}
+.topics-nav .sub-link {
+  display: block;
+  padding: 5px 10px;
+  font-size: var(--fs-small);
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: var(--r-sm, 6px);
+  transition: background 120ms ease, color 120ms ease;
+}
+.topics-nav .sub-link:hover {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--ink);
+}
+.topics-nav .sub-link.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Minimal content primitives (used by pages/learn/<topic>/...) ─ */
+.section-intro {
+  color: var(--muted);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  margin: 0 0 20px;
+}
+.body-text {
+  color: var(--body);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  margin: 0 0 12px;
+}
+.code-label {
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--muted);
+  margin: 12px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.link-list {
+  margin: 8px 0 16px;
+  padding-left: 20px;
+  color: var(--body);
+}
+.link-list li { margin: 4px 0; }
+.link-list a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+.link-list a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+.link-list .link-desc {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
 /* ─── Buttons ────────────────────────────────────────────────────── */
 div[data-testid="stButton"] > button,
 div[data-testid="stDownloadButton"] > button {
@@ -707,7 +843,20 @@ div[data-testid="stButton"].suggest-topic-btn > button:hover {
   .hero { padding: 24px 0 16px; }
   .hero .hero-headline { font-size: 22px; }
 
-  .feature-row { grid-template-columns: 1fr; gap: 16px; }
+  /* Keep feature row side-by-side; just tighten gap and shrink text. */
+  .feature-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .feature-cell strong { font-size: var(--fs-small); }
+  .feature-cell span { font-size: 12px; }
+
+  /* Keep the 3-tile grid side-by-side; tighten padding. */
+  .tile-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .tile { padding: 14px; }
+  .tile-title { font-size: var(--fs-small); }
+  .tile-desc { font-size: 12px; }
+
   .form-card { padding: 16px; }
 
   .platform-row { grid-template-columns: 1fr; }
@@ -753,4 +902,10 @@ div[data-testid="stButton"].suggest-topic-btn > button:hover {
   }
   .menu-scroll-left { left: 0; }
   .menu-scroll-right { right: 0; }
+}
+
+/* ─── Very narrow (phone portrait) ────────────────────────────────── */
+@media (max-width: 480px) {
+  .feature-row { grid-template-columns: 1fr; gap: 12px; }
+  .tile-grid { grid-template-columns: 1fr; gap: 10px; }
 }
