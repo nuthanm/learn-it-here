@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Learning Hub — Learn It Here</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        margin: 24px 0 28px;
+      }
+      .search {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      .search input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font: inherit;
+        background: transparent;
+      }
+      .filter {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+      .topic {
+        padding: 22px;
+        cursor: pointer;
+        transition: 0.15s;
+        position: relative;
+      }
+      .topic:hover {
+        transform: translateY(-2px);
+        border-color: var(--ink);
+      }
+      .topic .ico {
+        font-size: 26px;
+      }
+      .topic h3 {
+        margin: 10px 0 6px;
+        font-size: 17px;
+      }
+      .topic p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .topic .meta {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+      }
+      .suggest {
+        margin-top: 56px;
+        padding: 28px;
+        text-align: center;
+        background: var(--accent-soft);
+        border: 1px solid #cfe5b3;
+        border-radius: var(--radius);
+      }
+      .suggest h3 {
+        margin: 0 0 14px;
+        font-size: 18px;
+      }
+      .suggest .row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .suggest input {
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #b9d595;
+        width: 360px;
+        max-width: 80vw;
+        background: #fff;
+        font: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="logo">🐼</span> Learn It Here</div>
+        <ul>
+          <li>Home</li>
+          <li>Requirements</li>
+          <li class="active">Learning Hub</li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap-wide">
+      <div class="crumbs">Home <span>›</span> Learning Hub</div>
+      <h1>Learning Hub</h1>
+      <p class="muted">
+        Pick a topic. Each guide is short, opinionated, and copy-ready.
+      </p>
+
+      <div class="toolbar">
+        <div class="search">🔍 <input placeholder="Search topics…" /></div>
+        <div class="filter">Filter: All ▾</div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card topic">
+          <span class="meta pill">3 sub-pages</span>
+          <div class="ico">🌿</div>
+          <h3>GIT</h3>
+          <p>Version control demystified — basics, branching, more.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">🟣</div>
+          <h3>.NET</h3>
+          <p>The unified runtime — versions, project types, workflow.</p>
+        </div>
+        <div class="card topic">
+          <span class="meta pill">comparison</span>
+          <div class="ico">🔥</div>
+          <h3>Blazor</h3>
+          <p>Modern component model vs classic Web Forms.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">🗄️</div>
+          <h3>EF Core</h3>
+          <p>Entity Framework Core with Oracle — practical setup.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">🔗</div>
+          <h3>LINQ</h3>
+          <p>Query objects, collections, and DBs the C# way.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">#️⃣</div>
+          <h3>C#</h3>
+          <p>Language essentials, modern features worth knowing.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">🧪</div>
+          <h3>Unit Testing</h3>
+          <p>xUnit, naming, AAA, mocks — keep it boring.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">🛠️</div>
+          <h3>Visual Studio</h3>
+          <p>IDE shortcuts and workflows that pay back daily.</p>
+        </div>
+        <div class="card topic">
+          <div class="ico">💡</div>
+          <h3>Suggestions</h3>
+          <p>What others want next — vote or suggest your own.</p>
+        </div>
+      </div>
+
+      <div class="suggest">
+        <h3>💡 Suggest a topic</h3>
+        <div class="row">
+          <input placeholder="I'd like to learn about…" />
+          <button class="btn btn-accent">Submit</button>
+        </div>
+      </div>
+    </main>
+
+    <div class="panda-fab">😄</div>
+    <footer class="foot">© Learn It Here · 11 topics · growing</footer>
+  </body>
+</html>

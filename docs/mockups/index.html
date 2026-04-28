@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Learn It Here — Mockups</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      body {
+        padding: 0;
+      }
+      .hero {
+        text-align: center;
+        padding: 80px 24px 40px;
+      }
+      .hero h1 {
+        font-size: 48px;
+      }
+      .grid-mocks {
+        max-width: 980px;
+        margin: 24px auto 80px;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+      @media (max-width: 720px) {
+        .grid-mocks {
+          grid-template-columns: 1fr;
+        }
+      }
+      .mock-card {
+        display: block;
+        padding: 22px;
+      }
+      .mock-card .num {
+        font-family: var(--mono);
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .mock-card h3 {
+        margin: 6px 0 6px;
+        font-size: 18px;
+      }
+      .mock-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .mock-card:hover {
+        border-color: var(--ink);
+        transform: translateY(-2px);
+        transition: 0.15s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div style="font-size: 48px">🐼</div>
+      <h1>Page Mockups</h1>
+      <p class="muted" style="margin: 6px auto 0; max-width: 520px">
+        Static previews of the proposed designs. Click any card to open the
+        prototype.
+      </p>
+    </div>
+
+    <div class="grid-mocks">
+      <a class="card mock-card" href="01-landing.html">
+        <div class="num">01</div>
+        <h3>Landing</h3>
+        <p>Hero, primary CTA pair, trust strip, feature tiles.</p>
+      </a>
+      <a class="card mock-card" href="02-requirements.html">
+        <div class="num">02</div>
+        <h3>Project Requirements</h3>
+        <p>Wizard with progress bar, single question per step.</p>
+      </a>
+      <a class="card mock-card" href="03-learning-hub.html">
+        <div class="num">03</div>
+        <h3>Learning Hub Index</h3>
+        <p>Search + topic card grid + suggestion box.</p>
+      </a>
+      <a class="card mock-card" href="04-topic.html">
+        <div class="num">04</div>
+        <h3>Topic Page (.NET)</h3>
+        <p>Reading layout with sticky TOC, code blocks, callouts.</p>
+      </a>
+      <a class="card mock-card" href="05-git-tabs.html">
+        <div class="num">05</div>
+        <h3>Topic with Sub-pages (GIT)</h3>
+        <p>Pill tabs for sub-pages, nested content area.</p>
+      </a>
+      <a class="card mock-card" href="06-suggestions.html">
+        <div class="num">06</div>
+        <h3>Topic Suggestions</h3>
+        <p>Tag cloud sized by votes + suggestion form.</p>
+      </a>
+      <a class="card mock-card" href="07-comparison.html">
+        <div class="num">07</div>
+        <h3>Comparison (Blazor vs WebForms)</h3>
+        <p>Side-by-side table with verdict card.</p>
+      </a>
+    </div>
+    <footer class="foot">
+      Static HTML mockups · open files directly in any browser
+    </footer>
+  </body>
+</html>

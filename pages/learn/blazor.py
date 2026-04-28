@@ -9,18 +9,10 @@ from components.content import (
     section_title,
     subsection,
 )
-from pages.learn.blazor_webforms_comparison import render_blazor_webforms_comparison
+from config import PAGE_LEARN, _url_for
 
 
 def render_blazor():
-    # ── Sub-page routing ─────────────────────────────────────────────────────
-    # If the user has navigated into a Blazor sub-page, render it instead of
-    # the main Blazor page. The sub-page itself provides a "Back to Blazor"
-    # button that clears this flag.
-    if st.session_state.get("blazor_subpage") == "webforms_comparison":
-        render_blazor_webforms_comparison()
-        return
-
     section_title(
         "Blazor",
         "Microsoft's framework for building interactive web UIs in C# instead of JavaScript.",
@@ -31,20 +23,19 @@ def render_blazor():
         "familiar to React/Angular developers."
     )
 
-    # ── Sub-page link (link card → subsection + paragraph) ───────────────────
-    subsection("ASP.NET Web Forms Controls vs Blazor Equivalents")
-    paragraph(
-        "Coming from classic ASP.NET Web Forms? See a side-by-side comparison of "
-        "common Web Forms server controls and their idiomatic equivalents in Blazor "
-        "(Server, SSR, and WebAssembly), with notes on hosting-model differences."
+    # ── Sub-page link card (uses framework routing via ?sub=) ────────────────
+    sub_href = _url_for(page=PAGE_LEARN, section="blazor", sub="webforms-comparison")
+    st.markdown(
+        f'<a class="card link-card" href="{sub_href}" target="_self">'
+        f'<div class="link-card-body">'
+        f'<h3>ASP.NET Web Forms Controls vs Blazor Equivalents</h3>'
+        f'<p>Side-by-side mapping of common Web Forms server controls to their '
+        f'idiomatic Blazor equivalents (Server, SSR, WebAssembly).</p>'
+        f'</div>'
+        f'<span class="link-card-arrow">→</span>'
+        f'</a>',
+        unsafe_allow_html=True,
     )
-    if st.button(
-        "Open: Web Forms Controls vs Blazor Equivalents →",
-        key="open_blazor_webforms_comparison",
-        use_container_width=True,
-    ):
-        st.session_state.blazor_subpage = "webforms_comparison"
-        st.rerun()
 
     # ── What is Blazor? ──────────────────────────────────────────────────────
     subsection("What is Blazor? (For Complete Beginners)")

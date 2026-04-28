@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Suggestions — Learn It Here</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      .cloud {
+        padding: 28px;
+        text-align: center;
+      }
+      .cloud .tag {
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      .cloud .tag:hover {
+        border-color: var(--ink);
+      }
+      .s-xl {
+        font-size: 22px;
+        padding: 10px 18px;
+        font-weight: 600;
+        background: var(--accent-soft);
+        border-color: #cfe5b3;
+      }
+      .s-lg {
+        font-size: 18px;
+        padding: 8px 16px;
+      }
+      .s-md {
+        font-size: 15px;
+      }
+      .s-sm {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .form {
+        margin-top: 40px;
+        padding: 28px;
+      }
+      .form h3 {
+        margin: 0 0 16px;
+      }
+      .field {
+        display: block;
+        margin-bottom: 14px;
+      }
+      .field input,
+      .field textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        font: inherit;
+        background: #fff;
+        outline: none;
+      }
+      .field input:focus,
+      .field textarea:focus {
+        border-color: var(--ink);
+      }
+      .field textarea {
+        resize: vertical;
+        min-height: 88px;
+      }
+      .legend {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: -6px;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="logo">🐼</span> Learn It Here</div>
+        <ul>
+          <li>Home</li>
+          <li>Requirements</li>
+          <li class="active">Learning Hub</li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="crumbs">
+        Home <span>›</span> Learning Hub <span>›</span> Suggestions
+      </div>
+      <h1>What others want to learn</h1>
+      <p class="muted">Tag size = community votes. Click a tag to upvote.</p>
+
+      <div class="card cloud">
+        <span class="tag s-xl">#docker</span>
+        <span class="tag s-lg">#azure-devops</span>
+        <span class="tag s-md">#testcontainers</span>
+        <span class="tag s-lg">#minimal-apis</span>
+        <span class="tag s-md">#dapper</span>
+        <span class="tag s-sm">#serilog</span>
+        <span class="tag s-md">#playwright</span>
+        <span class="tag s-sm">#opentelemetry</span>
+        <span class="tag s-md">#signalr</span>
+        <span class="tag s-sm">#fluentvalidation</span>
+        <span class="tag s-lg">#kubernetes</span>
+        <span class="tag s-sm">#mediatr</span>
+      </div>
+
+      <div class="card form">
+        <h3>Suggest your own</h3>
+        <label class="field"
+          ><input placeholder="Topic name (e.g. Docker for .NET devs)"
+        /></label>
+        <label class="field">
+          <textarea placeholder="Why it matters (optional)"></textarea>
+        </label>
+        <div class="legend">Suggestions are public. Be kind. 🐼</div>
+        <button class="btn btn-accent">Submit suggestion</button>
+      </div>
+    </main>
+
+    <div class="panda-fab">💡</div>
+    <footer class="foot">© Learn It Here</footer>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Blazor vs Web Forms — Learn It Here</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      table.cmp {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        margin-top: 8px;
+      }
+      table.cmp th,
+      table.cmp td {
+        padding: 14px 18px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--line);
+        font-size: 14.5px;
+      }
+      table.cmp thead th {
+        background: #fafaf7;
+        position: sticky;
+        top: 64px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      table.cmp tbody tr:last-child td {
+        border-bottom: none;
+      }
+      table.cmp td.label {
+        width: 22%;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      table.cmp td.win {
+        background: #f4faec;
+      }
+      .verdict {
+        margin-top: 28px;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .verdict .v {
+        padding: 18px;
+        border-radius: 10px;
+      }
+      .verdict .v.good {
+        background: var(--accent-soft);
+        border: 1px solid #cfe5b3;
+      }
+      .verdict .v.legacy {
+        background: #f4f1ea;
+        border: 1px solid #e2dccc;
+      }
+      .verdict h3 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+      .verdict p {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+      }
+      @media (max-width: 720px) {
+        .verdict {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="logo">🐼</span> Learn It Here</div>
+        <ul>
+          <li>Home</li>
+          <li>Requirements</li>
+          <li class="active">Learning Hub</li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap-wide">
+      <div class="crumbs">
+        Home <span>›</span> Learning Hub <span>›</span> Blazor vs Web Forms
+      </div>
+      <h1>Blazor vs Web Forms</h1>
+      <p class="muted">
+        A side-by-side look at where each shines — and where it doesn't.
+      </p>
+
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Blazor</th>
+            <th>Web Forms</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Rendering model</td>
+            <td class="win">Component-based</td>
+            <td>Page lifecycle + postback</td>
+          </tr>
+          <tr>
+            <td class="label">Language</td>
+            <td class="win">C# (Razor)</td>
+            <td>C# / VB (.aspx)</td>
+          </tr>
+          <tr>
+            <td class="label">State management</td>
+            <td class="win">Scoped DI, services</td>
+            <td>ViewState (heavy)</td>
+          </tr>
+          <tr>
+            <td class="label">Routing</td>
+            <td class="win">Attribute / file-based</td>
+            <td>File-system based</td>
+          </tr>
+          <tr>
+            <td class="label">Tooling</td>
+            <td class="win">VS, VS Code, Rider</td>
+            <td>VS only</td>
+          </tr>
+          <tr>
+            <td class="label">Hosting</td>
+            <td class="win">Server, WASM, Hybrid</td>
+            <td>IIS only</td>
+          </tr>
+          <tr>
+            <td class="label">Active development</td>
+            <td class="win">Yes — first-class</td>
+            <td>Maintenance mode</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card verdict">
+        <div class="v good">
+          <h3>✅ Pick Blazor for new work</h3>
+          <p>
+            Modern component model, cross-platform tooling, and a clear roadmap.
+            Best fit for greenfield apps and modernization efforts.
+          </p>
+        </div>
+        <div class="v legacy">
+          <h3>🧓 Keep Web Forms only when needed</h3>
+          <p>
+            Reasonable for maintaining existing line-of-business apps where a
+            rewrite isn't justified. Plan a migration path.
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <div class="panda-fab">⚖️</div>
+    <footer class="foot">© Learn It Here</footer>
+  </body>
+</html>

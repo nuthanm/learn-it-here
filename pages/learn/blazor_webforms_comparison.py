@@ -13,10 +13,6 @@ from components.content import (
 def render_blazor_webforms_comparison():
     """Sub-page of Blazor: ASP.NET Web Forms Controls vs Blazor Equivalents."""
 
-    if st.button("← Back to Blazor", key="blazor_subpage_back"):
-        st.session_state.blazor_subpage = None
-        st.rerun()
-
     section_title(
         "ASP.NET Web Forms Controls vs Blazor Equivalents",
         "Side-by-side mapping of common Web Forms server controls to their idiomatic Blazor equivalents.",
@@ -163,8 +159,3 @@ def render_blazor_webforms_comparison():
         "calls a protected Web API; on Blazor SSR auth is enforced by the standard ASP.NET Core "
         "middleware on each request."
     )
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("← Back to Blazor", key="blazor_subpage_back_bottom"):
-        st.session_state.blazor_subpage = None
-        st.rerun()

@@ -4,23 +4,28 @@
    ================================================================= */
 
 /* ─── Tokens ─────────────────────────────────────────────────────── */
+/* Aligned with the static HTML mockups in docs/mockups/_shared.css —
+   warm-white surface, bamboo-green accent, softer radii / shadows. */
 :root {
-  /* Neutrals */
-  --ink:        #0F172A;
-  --body:       #475569;
-  --muted:      #64748B;
-  --border:     #E2E8F0;
-  --surface:    #F8FAFC;
+  /* Neutrals — warm, slightly off-white */
+  --ink:        #1A1A1A;
+  --body:       #2A2A2A;
+  --muted:      #6B6B6B;
+  --border:     #ECECE7;
+  --surface:    #FAFAF7;
   --card:       #FFFFFF;
-  /* Single accent */
-  --accent:     #16A34A;
-  --accent-hover: #15803D;
-  --accent-soft: #F0FDF4;
-  /* Shadow */
-  --shadow:     0 1px 2px rgba(15,23,42,.06);
+  /* Single accent — bamboo green */
+  --accent:     #7CB342;
+  --accent-hover: #5E8E2F;
+  --accent-soft: #E8F3DC;
+  /* Optional warn (used by some callouts) */
+  --warn:       #E8A33D;
+  --warn-soft:  #FBEBD0;
+  /* Shadow — softer & deeper */
+  --shadow:     0 1px 2px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
   /* Radii */
-  --r-sm: 6px;
-  --r-md: 10px;
+  --r-sm: 8px;
+  --r-md: 12px;
   /* Type sizes */
   --fs-h1: 28px;
   --fs-h2: 20px;
@@ -140,6 +145,69 @@ h1, h2, h3 { color: var(--ink); font-weight: 700; }
   max-width: 720px;
   margin: 0 auto;
 }
+/* Centered hero variant (mockup 01): mascot above a single-column hero */
+.hero.hero--center {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 8px 0 24px;
+}
+.hero.hero--center .hero-mascot {
+  font-size: 96px;
+  line-height: 1;
+  margin: 8px 0 18px;
+  display: inline-block;
+  animation: panda-bob 3s ease-in-out infinite;
+}
+@keyframes panda-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.hero.hero--center .hero-headline {
+  font-size: 44px;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+.hero.hero--center .hero-sub {
+  margin: 14px auto 0;
+  max-width: 560px;
+  font-size: 15px;
+}
+.hero-actions-wrap { margin: 24px auto 0; }
+/* Use `a.btn-link-secondary` so the rule beats Streamlit's default
+   anchor styling (which paints links green via a more specific selector
+   inside stMarkdownContainer). Color is locked for visited / hover too. */
+a.btn-link-secondary,
+a.btn-link-secondary:visited {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--ink) !important;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
+  min-height: 38px;
+  box-sizing: border-box;
+}
+a.btn-link-secondary:hover,
+a.btn-link-secondary:focus {
+  border-color: var(--ink);
+  background: var(--surface);
+  color: var(--ink) !important;
+  text-decoration: none;
+}
+
+.trust-strip {
+  display: flex; gap: 36px; justify-content: center;
+  margin: 28px 0 8px;
+  color: var(--muted); font-size: var(--fs-body); flex-wrap: wrap;
+}
+.trust-strip span { white-space: nowrap; }
+
 /* Left-aligned variant used inside the two-column landing hero. */
 .hero.hero--left {
   text-align: left;
@@ -173,6 +241,19 @@ h1, h2, h3 { color: var(--ink); font-weight: 700; }
   display: flex; align-items: center; justify-content: center;
   gap: 20px; flex-wrap: wrap;
 }
+a.text-link,
+a.text-link:visited {
+  color: var(--accent) !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: var(--fs-body);
+}
+a.text-link:hover,
+a.text-link:focus {
+  color: var(--accent-hover) !important;
+  text-decoration: underline;
+}
+/* Legacy non-anchor usages (.text-link on a span) keep the same look. */
 .text-link {
   color: var(--accent);
   text-decoration: none;
@@ -382,13 +463,252 @@ div[data-testid="stButton"] > button:not([kind]):hover {
   border-color: var(--ink) !important;
 }
 
-/* ─── Forms ──────────────────────────────────────────────────────── */
-.form-card {
+/* ─── Learning Hub index — topic card grid (mockup 03) ───────────── */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+@media (max-width: 880px) { .topic-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .topic-grid { grid-template-columns: 1fr; } }
+.topic-card,
+a.topic-card,
+a.topic-card:visited {
+  position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  text-decoration: none !important;
+  color: var(--ink) !important;
+  box-shadow: var(--shadow);
+  transition: transform 150ms ease, border-color 150ms ease;
+}
+a.topic-card:hover,
+a.topic-card:focus {
+  transform: translateY(-2px);
+  border-color: var(--ink);
+  color: var(--ink) !important;
+  text-decoration: none !important;
+}
+/* Kill any inherited underline / link tint on inner text. */
+a.topic-card h3,
+a.topic-card p,
+a.topic-card .ico,
+a.topic-card .meta { text-decoration: none !important; }
+.topic-card .ico { font-size: 26px; }
+.topic-card h3 {
+  margin: 10px 0 4px; font-size: 17px;
+  color: var(--ink) !important; font-weight: 700;
+}
+.topic-card p {
+  margin: 0; color: var(--muted) !important;
+  font-size: var(--fs-body); line-height: 1.55;
+}
+.topic-card .meta.pill {
+  position: absolute; top: 18px; right: 18px;
+}
+.pill {
+  display: inline-block; padding: 4px 10px; border-radius: 999px;
+  background: var(--accent-soft); color: #3d6b18;
+  font-size: 11px; font-weight: 600;
+}
+.suggest-strip {
+  margin-top: 48px; padding: 24px 28px;
+  background: var(--accent-soft);
+  border: 1px solid #cfe5b3;
+  border-radius: var(--r-md);
+  text-align: center;
+}
+.suggest-strip h3 {
+  margin: 0 0 4px; font-size: 18px; color: var(--ink);
+}
+.suggest-strip p {
+  margin: 0 0 14px; color: #3d6b18;
+  font-size: var(--fs-body);
+}
+
+/* ─── Topic page — prev/next pager (mockup 04) ───────────────────── */
+.topic-pager {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; margin-top: 56px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-body);
+}
+.topic-pager a {
+  color: var(--muted); text-decoration: none;
+  padding: 6px 0;
+}
+.topic-pager a:hover { color: var(--ink); }
+.topic-pager a.next { color: var(--ink); font-weight: 600; }
+.topic-pager .ph { color: transparent; pointer-events: none; }
+
+/* ─── Inline sub-page link card (e.g. Blazor → Web Forms comparison) ─ */
+a.link-card,
+a.link-card:visited {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 18px 22px; margin: 8px 0 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+  text-decoration: none !important;
+  color: var(--ink) !important;
+  transition: transform 150ms ease, border-color 150ms ease;
+}
+a.link-card:hover, a.link-card:focus {
+  transform: translateY(-2px);
+  border-color: var(--ink);
+  border-left-color: var(--accent-hover);
+}
+.link-card-body h3 {
+  margin: 0 0 2px; font-size: 16px; font-weight: 700;
+  color: var(--ink) !important;
+}
+.link-card-body p {
+  margin: 0; color: var(--muted) !important;
+  font-size: var(--fs-body); line-height: 1.5;
+}
+.link-card-arrow {
+  font-size: 22px; color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ─── Sub-page pill tabs (mockup 05) ─────────────────────────────── */
+.pill-tabs {
+  display: flex; gap: 8px; margin: 16px 0 28px; flex-wrap: wrap;
+}
+.pill-tabs a {
+  padding: 8px 16px; border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: var(--fs-body); font-weight: 500;
+  color: var(--body);
+  text-decoration: none;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.pill-tabs a:hover { border-color: var(--ink); color: var(--ink); }
+.pill-tabs a.active {
+  background: var(--ink); color: #fff;
+  border-color: var(--ink);
+}
+
+/* ─── Suggestions inline form (mockup 06) ────────────────────────── */
+.suggest-form-card {
+  margin-top: 32px;
+  padding: 24px 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+}
+.suggest-form-card h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  color: var(--ink);
+}
+.suggest-form-card .legend {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  margin: -4px 0 12px;
+}
+
+
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   padding: 32px;
   box-shadow: var(--shadow);
+}
+
+/* ─── Wizard (mockup 02-requirements) ────────────────────────────── */
+.wizard-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 28px 32px 24px;
+  box-shadow: var(--shadow);
+  max-width: 720px;
+  margin: 0 auto;
+}
+.wizard-card .stepper {
+  display: flex; gap: 6px; margin-bottom: 8px;
+}
+.wizard-card .stepper i {
+  flex: 1; height: 4px; border-radius: 2px;
+  background: var(--border);
+}
+.wizard-card .stepper i.done { background: var(--accent); }
+.wizard-card .stepper i.cur  { background: var(--ink); }
+.wizard-card .progress-row {
+  display: flex; justify-content: space-between;
+  font-size: var(--fs-small); color: var(--muted);
+  margin-bottom: 8px;
+}
+/* Percent label tone — same scale as the bar fill below */
+.wizard-card .progress-row .pct          { font-weight: 600; transition: color 250ms ease; }
+.wizard-card .progress-row .pct-early    { color: var(--muted); }
+.wizard-card .progress-row .pct-mid      { color: var(--accent); }
+.wizard-card .progress-row .pct-near-end { color: var(--ink); }
+
+.wizard-card .bar {
+  height: 6px; background: var(--border);
+  border-radius: 999px; overflow: hidden;
+  margin-bottom: 32px;
+}
+.wizard-card .bar > span {
+  display: block; height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 250ms ease, background 250ms ease;
+}
+/* Bar fill shifts: muted → bamboo → ink as the user nears the finish line. */
+.wizard-card .bar.bar-early    > span { background: #B8C7AC; }
+.wizard-card .bar.bar-mid      > span { background: var(--accent); }
+.wizard-card .bar.bar-near-end > span { background: var(--ink); }
+.q-headline {
+  font-size: 24px; letter-spacing: -.01em;
+  color: var(--ink); font-weight: 700;
+  margin: 0 0 6px;
+}
+.q-lead {
+  color: var(--muted); font-size: var(--fs-body);
+  margin: 0 0 20px; max-width: 60ch;
+}
+.wizard-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-top: 32px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.review-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  padding: 8px 0;
+  margin-top: 8px;
+}
+.review-card .rev-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-body);
+}
+.review-card .rev-row:last-child { border-bottom: none; }
+.review-card .rev-k {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.review-card .rev-v { color: var(--ink); word-break: break-word; }
+@media (max-width: 720px) {
+  .review-card .rev-row { grid-template-columns: 1fr; gap: 4px; }
 }
 .section-label {
   font-size: var(--fs-small);
@@ -435,6 +755,10 @@ div[data-testid="stButton"] > button:not([kind]):hover {
 }
 
 /* ─── Success state (requirements done) ──────────────────────────── */
+.success-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
 .success-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -442,6 +766,7 @@ div[data-testid="stButton"] > button:not([kind]):hover {
   border-radius: var(--r-md);
   padding: 24px;
   box-shadow: var(--shadow);
+  margin: 8px 0 24px;
 }
 .success-title {
   font-size: var(--fs-h2);
@@ -452,7 +777,14 @@ div[data-testid="stButton"] > button:not([kind]):hover {
 .success-sub {
   font-size: var(--fs-body);
   color: var(--body);
-  margin: 0 0 16px;
+  margin: 0;
+}
+.success-actions { margin: 0 0 8px; }
+.success-footnote {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  text-align: center;
 }
 
 /* ─── Breadcrumb ─────────────────────────────────────────────────── */
@@ -700,21 +1032,21 @@ div[data-testid="stButton"].suggest-topic-btn > button:hover {
 
 /* Command / JSON code blocks */
 .cmd-block, .json-block {
-  background: #0F172A !important;
-  color: #E2E8F0;
+  background: #111111 !important;
+  color: #E6E6E6;
   border-radius: var(--r-sm);
-  padding: 12px 16px;
+  padding: 14px 18px;
   font-family: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
-  font-size: 13px;
+  font-size: 13.5px;
   margin: 8px 0;
   line-height: 1.7;
   overflow-x: auto;
   white-space: pre-wrap;
   position: relative;
-  border: 1px solid #1E293B;
+  border: 1px solid #1E1E1E;
 }
 .cmd-block { color: #BBF7D0; }
-.cmd-comment { color: #94A3B8; font-style: italic; }
+.cmd-comment { color: #9CA3AF; font-style: italic; }
 .cmd-block p, .json-block p {
   background: transparent !important;
   color: inherit;
@@ -823,7 +1155,6 @@ div[data-testid="stButton"].suggest-topic-btn > button:hover {
 }
 .scroll-nav-btn.snb-visible { opacity: 1; pointer-events: auto; }
 .scroll-nav-btn:hover { background: var(--surface); }
-#snb-bot { display: none !important; }
 
 /* ─── Hide empty Streamlit containers ────────────────────────────── */
 [data-testid="stMarkdownContainer"]:empty { display: none !important; }

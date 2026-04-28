@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>.NET — Learn It Here</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 48px;
+      }
+      @media (max-width: 880px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .toc {
+          display: none;
+        }
+      }
+      .toc {
+        position: sticky;
+        top: 86px;
+        align-self: start;
+        font-size: 13px;
+        border-left: 1px solid var(--line);
+        padding-left: 18px;
+        color: var(--muted);
+      }
+      .toc h4 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+      .toc a {
+        display: block;
+        padding: 6px 0;
+      }
+      .toc a.active {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .meta-row {
+        display: flex;
+        gap: 14px;
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 18px;
+      }
+      .tldr {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 14px;
+        align-items: start;
+        border-left: 3px solid var(--ink);
+        padding: 6px 0 6px 16px;
+        margin: 18px 0 28px;
+      }
+      .tldr b {
+        font-size: 12px;
+        letter-spacing: 0.12em;
+      }
+      .pager {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 56px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .pager a {
+        color: var(--muted);
+      }
+      .pager .next {
+        color: var(--ink);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="logo">🐼</span> Learn It Here</div>
+        <ul>
+          <li>Home</li>
+          <li>Requirements</li>
+          <li class="active">Learning Hub</li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap-wide">
+      <div class="crumbs">
+        Home <span>›</span> Learning Hub <span>›</span> .NET
+      </div>
+
+      <div class="layout">
+        <article>
+          <h1>.NET — the 5-minute primer</h1>
+          <div class="meta-row">
+            <span>⏱ 5 min read</span><span>·</span><span>Updated Apr 2026</span>
+          </div>
+
+          <div class="tldr">
+            <b>TL;DR</b>
+            <span
+              >A unified, cross-platform runtime for C#, F#, and VB — one SDK,
+              many project types, runs on Windows, Linux, macOS.</span
+            >
+          </div>
+
+          <h2 id="s1">What it is</h2>
+          <p>
+            .NET is Microsoft's open-source developer platform. The same SDK
+            compiles web APIs, desktop apps, mobile apps, and background
+            services. Releases follow a predictable annual cadence with LTS
+            every two years.
+          </p>
+
+          <h2 id="s2">Versions you'll meet</h2>
+          <p>
+            You'll mostly encounter .NET 6 (LTS), .NET 8 (LTS), and the latest
+            current release. Avoid .NET Framework 4.x for greenfield projects.
+          </p>
+
+          <h2 id="s3">Project types</h2>
+          <pre class="code">
+$ dotnet new webapi      # REST API
+$ dotnet new blazor      # Blazor app
+$ dotnet new console     # CLI / job
+$ dotnet run</pre
+          >
+
+          <div class="callout tip">
+            💡 <b>Tip:</b> use <code>global.json</code> at the repo root to pin
+            the SDK version your team uses.
+          </div>
+          <div class="callout warn">
+            ⚠️ <b>Gotcha:</b> .NET Framework projects can't be opened on macOS —
+            pick .NET (Core) for cross-platform teams.
+          </div>
+
+          <h2 id="s4">Cheat sheet</h2>
+          <p>
+            Restore, build, test, publish — four commands cover 90% of daily
+            work.
+          </p>
+
+          <div class="pager">
+            <a>← Previous: C#</a>
+            <a class="next">Next: EF Core →</a>
+          </div>
+        </article>
+
+        <aside class="toc">
+          <h4>On this page</h4>
+          <a href="#s1" class="active">What it is</a>
+          <a href="#s2">Versions you'll meet</a>
+          <a href="#s3">Project types</a>
+          <a href="#s4">Cheat sheet</a>
+        </aside>
+      </div>
+    </main>
+
+    <div class="panda-fab">😎</div>
+    <footer class="foot">
+      © Learn It Here · Suggest improvements on GitHub
+    </footer>
+  </body>
+</html>

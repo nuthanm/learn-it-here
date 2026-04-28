@@ -31,25 +31,40 @@ def scroll_nav_html() -> str:
   var pdoc = window.parent ? window.parent.document : document;
   var pwin = window.parent ? window.parent : window;
 
-  /* ── Scroll-to-top / scroll-to-bottom buttons ── */
-  function getOrCreate(id, content, bottom) {
-    var btn = pdoc.getElementById(id);
+  /* ── Single smart scroll button (toggles ↑ / ↓ based on position) ── */
+  /* Remove any legacy twin buttons left over from prior renders. */
+  ['snb-top', 'snb-bot'].forEach(function(id) {
+    var stale = pdoc.getElementById(id);
+    if (stale && stale.parentNode) stale.parentNode.removeChild(stale);
+  });
+
+  function getOrCreate() {
+    var btn = pdoc.getElementById('snb-toggle');
     if (!btn) {
       btn = pdoc.createElement('button');
-      btn.id = id;
+      btn.id = 'snb-toggle';
       btn.type = 'button';
-      btn.className = 'scroll-nav-btn';
-      btn.title = id === 'snb-top' ? 'Scroll to top' : 'Scroll to bottom';
-      btn.setAttribute('aria-label', btn.title);
-      btn.innerHTML = content;
-      btn.style.bottom = bottom;
+      btn.className = 'scroll-nav-btn snb-visible';
       pdoc.body.appendChild(btn);
     }
     return btn;
   }
 
-  var topBtn = getOrCreate('snb-top', '&#8679;', '5.6rem');
-  var botBtn = getOrCreate('snb-bot', '&#8681;', '3.1rem');
+  var toggleBtn = getOrCreate();
+  var direction = 'down'; /* 'down' = scroll to bottom, 'up' = scroll to top */
+
+  function setIcon(dir) {
+    direction = dir;
+    if (dir === 'up') {
+      toggleBtn.innerHTML = '&#8679;';
+      toggleBtn.title = 'Scroll to top';
+    } else {
+      toggleBtn.innerHTML = '&#8681;';
+      toggleBtn.title = 'Scroll to bottom';
+    }
+    toggleBtn.setAttribute('aria-label', toggleBtn.title);
+  }
+  setIcon('down');
 
   function findScrollEl() {
     var candidates = [
@@ -85,8 +100,13 @@ def scroll_nav_html() -> str:
     var st = getScrollTop(el);
     var sh = el.scrollHeight || 0;
     var ch = getClientHeight(el);
-    topBtn.classList.toggle('snb-visible', st > 80);
-    botBtn.classList.toggle('snb-visible', st + ch < sh - 80);
+    var scrollable = sh > ch + 40;
+    /* Hide entirely on pages with no scrollable content. */
+    toggleBtn.classList.toggle('snb-visible', scrollable);
+    if (!scrollable) return;
+    /* Past the halfway mark → show "up"; otherwise show "down". */
+    var halfway = (sh - ch) / 2;
+    setIcon(st > halfway ? 'up' : 'down');
   }
 
   function scrollPage(top) {
@@ -99,7 +119,7 @@ def scroll_nav_html() -> str:
     }
   }
 
-  /* Replace buttons with fresh clones to clear any stale listeners */
+  /* Replace button with a fresh clone to clear any stale listeners */
   function refreshBtn(old) {
     var fresh = old.cloneNode(true);
     if (old.parentNode) {
@@ -107,13 +127,15 @@ def scroll_nav_html() -> str:
     }
     return fresh;
   }
-  topBtn = refreshBtn(topBtn);
-  botBtn = refreshBtn(botBtn);
+  toggleBtn = refreshBtn(toggleBtn);
 
-  topBtn.addEventListener('click', function() { scrollPage(0); });
-  botBtn.addEventListener('click', function() {
-    var el = findScrollEl();
-    scrollPage(el.scrollHeight - getClientHeight(el));
+  toggleBtn.addEventListener('click', function() {
+    if (direction === 'up') {
+      scrollPage(0);
+    } else {
+      var el = findScrollEl();
+      scrollPage(el.scrollHeight - getClientHeight(el));
+    }
   });
 
   /* Attach scroll listeners broadly to catch all possible containers */

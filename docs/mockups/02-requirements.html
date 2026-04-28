@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Requirements — Learn It Here</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      .progress-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .bar {
+        height: 6px;
+        background: var(--line);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-bottom: 40px;
+      }
+      .bar > span {
+        display: block;
+        height: 100%;
+        width: 37%;
+        background: var(--accent);
+        border-radius: 999px;
+      }
+      .q {
+        font-size: 28px;
+        letter-spacing: -0.01em;
+        margin: 0 0 24px;
+      }
+      .opts {
+        display: grid;
+        gap: 10px;
+      }
+      .opt {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        cursor: pointer;
+      }
+      .opt:hover {
+        border-color: var(--ink);
+      }
+      .opt.selected {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+      }
+      .radio {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #c7c7c0;
+        flex-shrink: 0;
+      }
+      .opt.selected .radio {
+        border-color: var(--accent);
+        background: var(--accent);
+        box-shadow: inset 0 0 0 3px #fff;
+      }
+      .other {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border: 1px dashed var(--line);
+        border-radius: 10px;
+      }
+      .other input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font: inherit;
+        background: transparent;
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 48px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+      .stepper {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 6px;
+      }
+      .stepper i {
+        flex: 1;
+        height: 4px;
+        background: var(--line);
+        border-radius: 2px;
+      }
+      .stepper i.done {
+        background: var(--accent);
+      }
+      .stepper i.cur {
+        background: var(--ink);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="logo">🐼</span> Learn It Here</div>
+        <ul>
+          <li>Home</li>
+          <li class="active">Requirements</li>
+          <li>Learning Hub</li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="crumbs">Home <span>›</span> Project Requirements</div>
+
+      <div class="stepper">
+        <i class="done"></i><i class="done"></i><i class="cur"></i> <i></i
+        ><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="progress-row"><span>Step 3 of 8</span><span>37%</span></div>
+      <div class="bar"><span></span></div>
+
+      <h2 class="q">How do you push code to your repository?</h2>
+      <p class="muted" style="margin-top: -12px">
+        Pick the option that matches your daily flow.
+      </p>
+
+      <div class="opts" style="margin-top: 24px">
+        <label class="opt"
+          ><span class="radio"></span> Git CLI (terminal)</label
+        >
+        <label class="opt selected"
+          ><span class="radio"></span> GitHub Desktop</label
+        >
+        <label class="opt"
+          ><span class="radio"></span> IDE integration (VS / VS Code /
+          Rider)</label
+        >
+        <label class="opt"
+          ><span class="radio"></span> CI / automation only</label
+        >
+        <div class="other">
+          <span class="radio"></span><input placeholder="Other — tell us…" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost">← Back</button>
+        <button class="btn btn-accent">Next →</button>
+      </div>
+    </main>
+
+    <div class="panda-fab">🤔</div>
+    <footer class="foot">
+      © Learn It Here · Your answers are saved as you go
+    </footer>
+  </body>
+</html>

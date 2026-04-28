@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>GIT — Learn It Here</title>
+    <link rel="stylesheet" href="_shared.css" />
+    <style>
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin: 24px 0 32px;
+        flex-wrap: wrap;
+      }
+      .tab {
+        padding: 8px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      .tab.soon {
+        color: var(--muted);
+        border-style: dashed;
+        cursor: default;
+      }
+      .pager {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 56px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand"><span class="logo">🐼</span> Learn It Here</div>
+        <ul>
+          <li>Home</li>
+          <li>Requirements</li>
+          <li class="active">Learning Hub</li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="crumbs">
+        Home <span>›</span> Learning Hub <span>›</span> GIT
+        <span>›</span> Branching
+      </div>
+      <h1>GIT</h1>
+      <p class="muted">Version control, demystified.</p>
+
+      <div class="tabs">
+        <button class="tab">Basics</button>
+        <button class="tab active">Branching</button>
+        <button class="tab soon">+ more soon</button>
+      </div>
+
+      <article>
+        <h2 style="margin-top: 0">Branching strategies that scale</h2>
+        <p>
+          Branches are cheap in Git. The real cost is coordination — keep
+          branches short-lived and merge often.
+        </p>
+
+        <h3>Trunk-based</h3>
+        <p>
+          Everyone commits to <code>main</code> behind feature flags. Best for
+          teams shipping multiple times a day.
+        </p>
+
+        <pre class="code">
+$ git switch -c feat/checkout-redesign
+$ git push -u origin feat/checkout-redesign
+# open PR → merge within 24h</pre
+        >
+
+        <div class="callout tip">
+          💡 <b>Tip:</b> name branches <code>type/short-description</code> —
+          your future self will thank you.
+        </div>
+
+        <h3>GitFlow</h3>
+        <p>
+          Heavier, with <code>develop</code>, <code>release/*</code>, and
+          <code>hotfix/*</code> branches. Useful for versioned products with
+          slow release cadences.
+        </p>
+
+        <div class="callout warn">
+          ⚠️ <b>Gotcha:</b> long-lived branches drift. Rebase or merge from
+          <code>main</code> at least daily.
+        </div>
+      </article>
+
+      <div class="pager"><a>← Basics</a><a>Next sub-page coming soon →</a></div>
+    </main>
+
+    <div class="panda-fab">🌿</div>
+    <footer class="foot">© Learn It Here</footer>
+  </body>
+</html>

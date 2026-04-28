@@ -1,11 +1,18 @@
-"""Topic Suggestions — animated tag cloud of community-requested topics."""
+"""Topic Suggestions — animated tag cloud + inline suggestion form (mockup 06)."""
 
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from html import escape
+
+import streamlit as st
 
 from components.content import section_intro, section_title
-from services.supabase_client import _get_supabase_client, fetch_topic_suggestions
+from services.supabase_client import (
+    fetch_topics,
+    get_client,
+    save_topic,
+)
 
 _TAG_COLORS = [
     "#8B1A6B",
@@ -75,26 +82,75 @@ def _render_tag_cloud(counts: dict[str, int]) -> None:
     )
 
 
-def render_topic_suggestions():
-    section_title("Topic Suggestions", "Community-requested topics.")
-    section_intro(
-        "See which topics the community is requesting most. Use the "
-        "Add your suggested topic button in the sidebar to vote for a "
-        "new topic — the most-requested ones will be added to the learning hub."
+def _render_inline_form() -> None:
+    """Inline 'Suggest your own' form (mockup 06)."""
+    db_available = get_client() is not None
+    st.markdown(
+        '<div class="suggest-form-card">'
+        '<h3>Suggest your own</h3>',
+        unsafe_allow_html=True,
     )
-    
-    db_available = _get_supabase_client() is not None
+    topic = st.text_input(
+        "Topic name",
+        key="ts_inline_topic",
+        placeholder="Topic name (e.g. Docker for .NET devs)",
+        label_visibility="collapsed",
+    )
+    why = st.text_area(  # noqa: F841 — captured but not yet persisted
+        "Why it matters (optional)",
+        key="ts_inline_why",
+        placeholder="Why it matters (optional)",
+        height=88,
+        label_visibility="collapsed",
+    )
+    st.markdown(
+        '<div class="legend">Suggestions are public. Be kind. 🐼</div>',
+        unsafe_allow_html=True,
+    )
+    if st.button(
+        "Submit suggestion",
+        type="primary",
+        key="ts_inline_submit",
+        disabled=not topic.strip(),
+    ):
+        if not db_available:
+            st.warning(
+                "Persistence is currently unavailable "
+                "(no database credentials configured)."
+            )
+        else:
+            result = save_topic(topic)
+            if result.ok:
+                st.success("Thank you! Your suggestion has been noted.")
+                st.session_state["_topic_submitted"] = True
+                # Clear the input fields for next submission.
+                st.session_state.pop("ts_inline_topic", None)
+                st.session_state.pop("ts_inline_why", None)
+                st.rerun()
+            else:
+                st.warning(f"⚠️  Could not save your suggestion — {result.message}")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+def render_topic_suggestions():
+    section_title("What others want to learn", "Community-requested topics.")
+    section_intro(
+        "Tag size reflects how many people have requested it. "
+        "The most-requested topics get added to the learning hub first."
+    )
 
     if get_client() is None:
         st.info(
             "ℹ️  No database credentials configured. "
             "Connect Supabase to persist and display community topic suggestions."
         )
+        _render_inline_form()
         return
 
     rows = fetch_topics()
     if not rows:
         st.info("No topic suggestions yet. Be the first to suggest one!")
-        return
+    else:
+        _render_tag_cloud(_build_case_insensitive_counts(rows))
 
-    _render_tag_cloud(_build_case_insensitive_counts(rows))
+    _render_inline_form()
