@@ -1,4 +1,9 @@
-"""Blazor sub-page: ASP.NET Web Forms Controls vs Blazor Equivalents."""
+"""Blazor → Web Forms vs Blazor: URL-routed sub-page.
+
+Reachable at `?section=blazor&sub=webforms-comparison` via the Learning Hub.
+Navigation back to the Blazor overview is provided by the breadcrumb and the
+left-rail "Overview" link, mirroring the GIT → Basics / Branching pattern.
+"""
 
 import streamlit as st
 
@@ -10,12 +15,8 @@ from components.content import (
 )
 
 
-def render_blazor_webforms_comparison():
+def render():
     """Sub-page of Blazor: ASP.NET Web Forms Controls vs Blazor Equivalents."""
-
-    if st.button("← Back to Blazor", key="blazor_subpage_back"):
-        st.session_state.blazor_subpage = None
-        st.rerun()
 
     section_title(
         "ASP.NET Web Forms Controls vs Blazor Equivalents",
@@ -163,8 +164,3 @@ def render_blazor_webforms_comparison():
         "calls a protected Web API; on Blazor SSR auth is enforced by the standard ASP.NET Core "
         "middleware on each request."
     )
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("← Back to Blazor", key="blazor_subpage_back_bottom"):
-        st.session_state.blazor_subpage = None
-        st.rerun()

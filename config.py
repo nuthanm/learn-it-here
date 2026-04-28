@@ -78,6 +78,13 @@ LEARN_SECTIONS = [
         "slug": "blazor",
         "title": "Blazor",
         "renderer": "pages.learn.blazor:render_blazor",
+        "subsections": [
+            {
+                "slug": "webforms-comparison",
+                "title": "Web Forms vs Blazor",
+                "renderer": "pages.learn.blazor.webforms_comparison:render",
+            },
+        ],
     },
     {
         "slug": "csharp",
