@@ -106,7 +106,7 @@ def page_learn():
     if st.session_state.pop("_topic_submitted", False):
         st.toast("✅ Your suggestion has been noted — thank you!", icon="🎉")
 
-    # ── Handle banner dismiss via query param ─────────────────────────────────
+    # ── Handle banner dismiss via query param ───────────────────────
     if st.query_params.get("banner_dismissed") == "1":
         st.session_state.learn_banner_dismissed = True
         del st.query_params["banner_dismissed"]
@@ -178,7 +178,6 @@ def page_learn():
             _suggest_topic_dialog()
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # ── Main content area ─────────────────────────────────────────────────────
     with content_col:
         _render_breadcrumb(section, sub)
 

@@ -1,3 +1,7 @@
+"""Landing page — minimalist hero with the panda mascot."""
+
+from __future__ import annotations
+
 import streamlit as st
 import streamlit.components.v1 as components
 from components.panda import _panda_landing_html

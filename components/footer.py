@@ -12,7 +12,7 @@ def _footer_html() -> str:
 """
 
 
-def _scroll_nav_html() -> str:
+def scroll_nav_html() -> str:
     """Return a full HTML document for components.html(height=0).
 
     Creates scroll-to-top / scroll-to-bottom buttons directly in the parent
@@ -245,7 +245,7 @@ def _scroll_nav_html() -> str:
 """
 
 
-def _copy_buttons_html() -> str:
+def copy_buttons_html() -> str:
     """Return a full HTML document for components.html(height=0).
 
     Injects a 'Copy' button into every ``.cmd-block`` and ``.json-block``
@@ -342,3 +342,8 @@ def _copy_buttons_html() -> str:
 </html>
 """
 
+
+# Backwards-compatible aliases — older modules import the underscore names.
+_footer_html = footer_html
+_scroll_nav_html = scroll_nav_html
+_copy_buttons_html = copy_buttons_html

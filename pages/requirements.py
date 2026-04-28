@@ -1,3 +1,9 @@
+"""Project requirements questionnaire page."""
+
+from __future__ import annotations
+
+from datetime import datetime, timezone
+
 import streamlit as st
 import streamlit.components.v1 as components
 from datetime import datetime, timezone
@@ -6,6 +12,97 @@ from components.footer import _footer_html, _scroll_nav_html, _copy_buttons_html
 from config import PAGE_REQUIREMENTS, PAGE_LANDING, PAGE_LEARN, _on_interact, _nav_to, _url_for
 from services.supabase_client import save_to_supabase
 from services.pdf_service import generate_pdf
+from services.supabase_client import save_requirements
+
+# ── Question option lists ────────────────────────────────────────────────────
+VC_OPTIONS = [
+    "Git",
+    "SVN (Subversion)",
+    "TFS (Team Foundation)",
+    "Mercurial",
+    "Perforce",
+    "None",
+    "Other",
+]
+CODE_PUSH_OPTIONS = [
+    "GIT CLI (Command Line)",
+    "GitHub Desktop",
+    "Visual Studio Built-in Git",
+    "VS Code Built-in Git",
+    "SourceTree",
+    "GitKraken",
+    "TortoiseGit",
+    "Azure DevOps (Web Push)",
+    "Fork (Git Client)",
+    "Other",
+]
+IDE_OPTIONS = [
+    "Visual Studio (Full IDE)",
+    "Visual Studio Code",
+    "IntelliJ IDEA",
+    "Eclipse",
+    "Rider (JetBrains)",
+    "PyCharm",
+    "WebStorm",
+    "Sublime Text",
+    "Atom",
+    "Notepad++",
+    "Vim / Neovim",
+    "Other",
+]
+DEPLOYMENT_OPTIONS = [
+    "Azure DevOps Pipelines (CI/CD)",
+    "GitHub Actions",
+    "Jenkins",
+    "AWS CodePipeline",
+    "Docker / Containers",
+    "Kubernetes (K8s)",
+    "Manual / FTP Deploy",
+    "Azure App Service",
+    "IIS Direct Deploy",
+    "Other",
+]
+ARCHITECTURE_OPTIONS = [
+    "Clean Architecture",
+    "Microservices",
+    "Monolithic",
+    "Layered (N-Tier)",
+    "Event-Driven",
+    "Serverless",
+    "CQRS",
+    "DDD (Domain-Driven Design)",
+    "Hexagonal (Ports & Adapters)",
+    "MVC",
+    "Other",
+]
+DESIGN_PATTERN_OPTIONS = [
+    "Repository Pattern",
+    "Unit of Work",
+    "Singleton",
+    "Factory",
+    "Strategy",
+    "Observer",
+    "Mediator (MediatR)",
+    "Dependency Injection",
+    "SOLID Principles",
+    "Builder",
+    "Decorator",
+    "Other",
+]
+ORM_OPTIONS = [
+    "Entity Framework Core",
+    "Entity Framework 6",
+    "Dapper",
+    "NHibernate",
+    "ADO.NET (Raw)",
+    "Hibernate (Java)",
+    "SQLAlchemy (Python)",
+    "Django ORM (Python)",
+    "Sequelize (Node.js)",
+    "Prisma (Node.js)",
+    "None / Not applicable",
+    "Other",
+]
 
 
 def page_requirements():
@@ -30,6 +127,7 @@ def page_requirements():
         "</div>",
         unsafe_allow_html=True,
     )
+    st.markdown("<br>", unsafe_allow_html=True)
 
     # ── Post-submission view ─────────────────────────────────────────────────
     if st.session_state.submitted:
@@ -97,9 +195,6 @@ def page_requirements():
         help="Which version control system does your team use?",
         on_change=cb,
     )
-    vc_other = ""
-    if vc == "Other":
-        vc_other = st.text_input("Specify version control", key="vc_other", on_change=cb)
 
     code_push = st.selectbox(
         "How do you push the code?",
@@ -147,9 +242,6 @@ def page_requirements():
         help="Select the IDE / editor your team primarily uses.",
         on_change=cb,
     )
-    ide_other = ""
-    if ide == "Other":
-        ide_other = st.text_input("Specify IDE / Editor", key="ide_other", on_change=cb)
 
     deployment = st.multiselect(
         "Deployment approaches",

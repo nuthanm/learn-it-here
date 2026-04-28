@@ -1,3 +1,28 @@
+"""App-wide configuration: page constants, learning-hub menu, routing helpers.
+
+Public API:
+    PAGE_LANDING, PAGE_REQUIREMENTS, PAGE_LEARN
+    LEARN_SECTIONS                      Hierarchical learning-hub menu data
+    LEARN_MENU_ITEMS                    Flat list of display titles (legacy)
+    LATEST_NEW_TOPIC                    Most recently added topic — drives banner
+    register_pages(pages)               Wire StreamlitPage objects to constants
+    init_session_state()                Seed defaults onto st.session_state
+    on_interact()                       Animation-state side-effect callback
+    nav_to(page, section, sub)          st.switch_page wrapper that syncs URL
+    url_for(page, section, sub)         Build a stable shareable URL
+    find_section(identifier)            Resolve a section by slug or title
+    find_subsection(section, ident)     Resolve a sub-section
+    default_section_slug()              Fallback section for the learning hub
+
+The leading-underscore names (``_nav_to``, ``_url_for``, ``_on_interact``)
+are kept as aliases at the bottom of this module for backwards compatibility
+with code that hasn't migrated yet.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
 import streamlit as st
 
 # ── Page name constants ────────────────────────────────────────────────────────
@@ -177,14 +202,97 @@ def register_pages(pages: dict) -> None:
     _PAGES.update(pages)
 
 
-def init_session_state():
-    for _k, _v in _DEFAULTS.items():
-        if _k not in st.session_state:
-            st.session_state[_k] = _v
+# ── Lookup helpers ───────────────────────────────────────────────────────────
+def find_section(identifier: str | None) -> dict[str, Any] | None:
+    """Return the section dict matching ``identifier``, or ``None``.
+
+    Accepts either a slug (canonical) or a display title (legacy URLs).
+    """
+    if not identifier:
+        return None
+    for section in LEARN_SECTIONS:
+        if section["slug"] == identifier or section["title"] == identifier:
+            return section
+    return None
 
 
-def _on_interact():
-    """Switch robot from 'welcome' to 'thinking' on first form interaction."""
+def find_subsection(
+    section: dict[str, Any] | None,
+    identifier: str | None,
+) -> dict[str, Any] | None:
+    """Return the subsection dict matching ``identifier`` within ``section``."""
+    if not section or not identifier:
+        return None
+    for sub in section.get("subsections") or []:
+        if sub["slug"] == identifier or sub["title"] == identifier:
+            return sub
+    return None
+
+
+def default_section_slug() -> str | None:
+    """Slug of the first section, used as the learning-hub default."""
+    return LEARN_SECTIONS[0]["slug"] if LEARN_SECTIONS else None
+
+
+# ── Sharable URL builder ─────────────────────────────────────────────────────
+def url_for(
+    page: str | None = None,
+    section: str | None = None,
+    sub: str | None = None,
+) -> str:
+    """Build a stable, shareable in-app URL using path-based routing.
+
+    Top-level pages map to a single URL path segment (the maximum Streamlit
+    Cloud supports — see README). Section / sub-section selection inside the
+    Learning Hub stays in the query string because Streamlit does not
+    support nested path segments or path segments containing spaces.
+
+    Examples::
+
+        url_for()                                      -> '/'
+        url_for(page='requirements')                   -> '/projectrequirements'
+        url_for(page='learn', section='git')           -> '/learning-hub?section=git'
+        url_for(page='learn', section='git',
+                sub='basics')                          -> '/learning-hub?section=git&sub=basics'
+    """
+    if page in (None, PAGE_LANDING):
+        return "/"
+    if page == PAGE_REQUIREMENTS:
+        return "/projectrequirements"
+    if page == PAGE_LEARN:
+        url = "/learning-hub"
+        params: list[str] = []
+        if section:
+            params.append(f"section={section}")
+            if sub:
+                params.append(f"sub={sub}")
+        if params:
+            url += "?" + "&".join(params)
+        return url
+    return "/"
+
+
+# ── Page registry (populated by app.py once st.Page objects exist) ───────────
+# `nav_to` needs the StreamlitPage objects so it can call st.switch_page on
+# them. app.py constructs the pages and registers them here on every rerun.
+_PAGES: dict[str, Any] = {}
+
+
+def register_pages(pages: dict[str, Any]) -> None:
+    """Register the StreamlitPage objects keyed by ``PAGE_*`` constants."""
+    _PAGES.clear()
+    _PAGES.update(pages)
+
+
+def init_session_state() -> None:
+    """Seed the default session-state values without overwriting existing ones."""
+    for key, value in _DEFAULTS.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def on_interact() -> None:
+    """Switch the panda from 'welcome' to 'thinking' on first form interaction."""
     if not st.session_state.interacted:
         st.session_state.interacted = True
         st.session_state.animation_state = "thinking"

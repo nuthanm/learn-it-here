@@ -1,3 +1,14 @@
+"""Streamlit entry point — page config and routing only.
+
+The actual page logic lives under ``pages/``; the routing helpers and
+constants under ``config.py``; the persistence and PDF code under
+``services/``. Keep this file thin.
+"""
+
+from __future__ import annotations
+
+import logging
+
 import streamlit as st
 from config import (
     PAGE_LANDING,
@@ -7,9 +18,22 @@ from config import (
     register_pages,
 )
 from components.css import inject_css
+from config import (
+    PAGE_LANDING,
+    PAGE_LEARN,
+    PAGE_REQUIREMENTS,
+    init_session_state,
+    register_pages,
+)
 from pages.landing import page_landing
-from pages.requirements import page_requirements
 from pages.learn import page_learn
+from pages.requirements import page_requirements
+
+# ── Logging — visible in Streamlit Community Cloud's app logs ────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
 
 st.set_page_config(
     page_title="Learn It Here 🐼",

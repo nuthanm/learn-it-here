@@ -1,9 +1,15 @@
+"""Modal dialogs."""
+
+from __future__ import annotations
+
 import streamlit as st
-from services.supabase_client import save_topic_suggestion, _get_supabase_client
+
+from services.supabase_client import get_client, save_topic
 
 
 @st.dialog("Add Your Suggested Topic")
-def _suggest_topic_dialog():
+def suggest_topic_dialog() -> None:
+    """Modal that lets users propose a new learning-hub topic."""
     st.markdown(
         "Share your idea and we'll consider adding it to the learning hub.",
     )
@@ -13,7 +19,7 @@ def _suggest_topic_dialog():
         height=130,
     )
 
-    db_available = _get_supabase_client() is not None
+    db_available = get_client() is not None
     if db_available:
         note_text = (
             "<strong>Note:</strong> Suggested topics will be reviewed by our team. "
@@ -33,16 +39,16 @@ def _suggest_topic_dialog():
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("Submit Suggestion", type="primary", use_container_width=True):
         if topic.strip():
-            ok, db_msg = save_topic_suggestion(topic)
-            if ok:
+            result = save_topic(topic)
+            if result.ok:
                 st.success("Thank you! Your suggestion has been noted.")
                 st.session_state["_topic_submitted"] = True
                 st.rerun()
             else:
-                st.warning(f"⚠️  Could not save your suggestion — {db_msg}")
+                st.warning(f"⚠️  Could not save your suggestion — {result.message}")
         else:
             st.warning("Please enter a topic before submitting.")
 
 
-# ── Learning Hub Page ─────────────────────────────────────────────────────────
-
+# Backwards-compatible alias.
+_suggest_topic_dialog = suggest_topic_dialog
