@@ -1,119 +1,76 @@
 import streamlit as st
 import streamlit.components.v1 as components
 from components.panda import _panda_landing_html
+from components.header import _site_header_html
 from components.footer import _footer_html, _scroll_nav_html
-from config import _nav_to
+from config import PAGE_LANDING, _nav_to
 
 
 def page_landing():
-    """Full-width hero landing page with Po animation and two CTAs."""
-    # Disable scroll on desktop only (≥1024 px); allow scroll on mobile/tablet
+    """Minimalist hero landing: slim header + centred hero + feature row."""
+    # Slim site header with text-link nav
+    st.markdown(_site_header_html(active=PAGE_LANDING), unsafe_allow_html=True)
+
+    # ── Centred hero ─────────────────────────────────────────────────────────
     st.markdown(
         """
-<style>
-  @media (min-width: 1024px) {
-    html, body { overflow: hidden !important; }
-    .stApp,
-    .st-emotion-cache-1nryt4l,
-    [data-testid="stAppViewContainer"],
-    .stMain,
-    [data-testid="stMain"] { overflow: hidden !important; }
-  }
-  @media (max-width: 1023px) {
-    html, body { overflow-y: auto !important; height: auto !important; min-height: 100% !important; }
-    .stApp,
-    [data-testid="stAppViewContainer"],
-    .stMain,
-    [data-testid="stMain"],
-    [data-testid="stMainBlockContainer"] { overflow-y: auto !important; height: auto !important; }
-  }
-</style>
-""",
-        unsafe_allow_html=True,
-    )
-    # Top nav bar
-    st.markdown(
-        """
-<div class="kfp-nav">
-  <a href="?go=home" target="_self" class="kfp-nav-brand">
-    <span class="kfp-nav-logo">🐼</span>
-    <div class="kfp-nav-text">
-      <div class="kfp-nav-title">Learn It Here</div>
-      <div class="kfp-nav-tagline">Hub to learn most important topics</div>
-    </div>
-  </a>
+<div class="hero">
+  <span class="page-eyebrow">Project briefs · Curated learning</span>
+  <h1 class="hero-headline">Know before you go.</h1>
+  <p class="hero-sub">
+    Capture exactly what your project needs, then learn only what moves it forward.
+    No generic tutorials, no wasted time.
+  </p>
 </div>
 """,
         unsafe_allow_html=True,
     )
 
-    # ── Centered hero: equal left/right columns ─────────────────────────────
-    col_left, col_right = st.columns([1, 1], gap="medium")
+    # ── Single primary CTA + secondary text link ─────────────────────────────
+    cta_l, cta_c, cta_r = st.columns([3, 2, 3])
+    with cta_c:
+        if st.button(
+            "Start a project brief",
+            type="primary",
+            use_container_width=True,
+            key="cta_start",
+        ):
+            _nav_to("requirements")
+    st.markdown(
+        '<div style="text-align:center;margin-top:8px;">'
+        '<a class="text-link" href="?page=learn" target="_self">'
+        "or browse the learning hub →</a></div>",
+        unsafe_allow_html=True,
+    )
 
-    with col_left:
-        st.markdown(
-            """
-<h1 class="hero-headline">Know Before You Go!</h1>
-<div class="hero-bar"></div>
-<p class="hero-sub">
-  Don't start blind — know your stack upfront, capture what your project truly needs,
-  then learn <em>exactly</em> what moves it forward. No generic tutorials, no wasted time.
-</p>
-<div class="hero-features">
-  <div class="hero-feat">
+    # ── Small panda illustration, centred ────────────────────────────────────
+    p_l, p_c, p_r = st.columns([2, 1, 2])
+    with p_c:
+        components.html(_panda_landing_html(), height=240, scrolling=False)
+
+    # ── Feature row (3 columns, no card chrome, divided by a thin line) ──────
+    st.markdown(
+        """
+<div class="feature-row">
+  <div class="feature-cell">
     <span class="feat-icon">📋</span>
-    <div class="feat-text">
-      <strong>Capture Requirements</strong>
-      <span>7 targeted questions that define your exact project context and tech stack</span>
-    </div>
+    <strong>Capture requirements</strong>
+    <span>Seven targeted questions that define your project context and tech stack.</span>
   </div>
-  <div class="hero-feat">
+  <div class="feature-cell">
     <span class="feat-icon">🎓</span>
-    <div class="feat-text">
-      <strong>Stack-Matched Guides</strong>
-      <span>Curated learning built around your specific versions, tools, and architecture</span>
-    </div>
+    <strong>Stack-matched guides</strong>
+    <span>Curated learning built around your specific versions, tools, and architecture.</span>
   </div>
-  <div class="hero-feat">
+  <div class="feature-cell">
     <span class="feat-icon">⚡</span>
-    <div class="feat-text">
-      <strong>Learn &amp; Ship Fast</strong>
-      <span>Hands-on, zero fluff — only the knowledge your project actually needs</span>
-    </div>
+    <strong>Learn &amp; ship fast</strong>
+    <span>Hands-on, zero fluff — only the knowledge your project actually needs.</span>
   </div>
 </div>
 """,
-            unsafe_allow_html=True,
-        )
-
-        bc1, bc2 = st.columns(2, gap="medium")
-        with bc1:
-            if st.button(
-                "📋 Fill Project Requirements",
-                type="primary",
-                use_container_width=True,
-            ):
-                _nav_to("requirements")
-        with bc2:
-            if st.button(
-                "🎓 Learn It Here →",
-                type="secondary",
-                use_container_width=True,
-            ):
-                _nav_to("learn")
-
-    with col_right:
-        # Center the panda both horizontally and vertically within its column
-        st.markdown(
-            '<div style="display:flex;justify-content:center;align-items:center;height:100%;">',
-            unsafe_allow_html=True,
-        )
-        components.html(_panda_landing_html(), height=510, scrolling=False)
-        st.markdown("</div>", unsafe_allow_html=True)
+        unsafe_allow_html=True,
+    )
 
     st.markdown(_footer_html(), unsafe_allow_html=True)
     components.html(_scroll_nav_html(), height=0)
-
-
-# ── Requirements Page ─────────────────────────────────────────────────────────
-
