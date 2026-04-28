@@ -24,56 +24,64 @@ st.set_page_config(
 init_session_state()
 
 # ── URL-driven routing ────────────────────────────────────────────────────────
-# The URL is the source of truth on every rerun, so the header text-link nav,
-# breadcrumbs, sidebar links and shared deep-links all just work.
-_url_page = st.query_params.get("page")
-_target_page = (
-    _url_page if _url_page in (PAGE_REQUIREMENTS, PAGE_LEARN) else PAGE_LANDING
-)
-if st.session_state.page != _target_page:
-    st.session_state.page = _target_page
+# The URL is the single source of truth for which page is active. On every
+# rerun we:
+#   1) Handle the brand-click "?go=home" sentinel by clearing the URL.
+#   2) Read the canonical (page, section, sub) from the URL.
+#   3) Re-write st.query_params so that ONLY the canonical keys remain — this
+#      guarantees the address bar matches the active page (e.g. navigating
+#      Learn → Requirements never leaves a stale "section=git" behind), so
+#      every URL is bookmarkable / shareable.
+#
+# Keys that are read transiently by individual pages (e.g. banner_dismissed)
+# are preserved here so those pages can consume + delete them.
+_PRESERVE_KEYS = {"banner_dismissed"}
 
-if _target_page == PAGE_LEARN:
-    # Resolve section: accept slug (canonical) or legacy display title.
-    _url_section = st.query_params.get("section")
-    _section = find_section(_url_section) or find_section(default_section_slug())
-    st.session_state.learn_section = _section["slug"] if _section else None
-
-    # Resolve sub: must belong to the resolved section, else clear.
-    _url_sub = st.query_params.get("sub")
-    _sub = find_subsection(_section, _url_sub) if _section else None
-    st.session_state.learn_sub = _sub["slug"] if _sub else None
-
-    # Mirror the canonical slug back to the URL so legacy/title-based links
-    # get normalised on the next render.
-    if _section and st.query_params.get("section") != _section["slug"]:
-        st.query_params["section"] = _section["slug"]
-    elif not _section and "section" in st.query_params:
-        del st.query_params["section"]
-    if _sub:
-        if st.query_params.get("sub") != _sub["slug"]:
-            st.query_params["sub"] = _sub["slug"]
-    elif "sub" in st.query_params:
-        del st.query_params["sub"]
-else:
-    # Outside the learn page, never carry section/sub in the URL.
-    for _k in ("section", "sub"):
-        if _k in st.query_params:
-            del st.query_params[_k]
-
-# ── Logo-click navigation (?go=home) ──────────────────────────────────────────
-# Only act on this when the user is actually navigating away from the current
-# page; otherwise repeated reruns would keep clearing the URL and could mask
-# the active page (e.g. requirements) in the address bar.
+# 1) Logo / brand click — force a clean landing URL even if Streamlit's
+#    anchor-link interception merged "go=home" with stale page/section/sub.
 if st.query_params.get("go") == "home":
-    del st.query_params["go"]
-    _was_elsewhere = st.session_state.get("page") != PAGE_LANDING
-    for _k in ("page", "section", "sub"):
+    for _k in ("go", "page", "section", "sub"):
         if _k in st.query_params:
             del st.query_params[_k]
-    if _was_elsewhere:
-        st.session_state.page = PAGE_LANDING
-        st.rerun()
+    st.session_state.page = PAGE_LANDING
+
+# 2) Resolve the canonical state purely from the URL.
+_url_page = st.query_params.get("page")
+if _url_page == PAGE_REQUIREMENTS:
+    _target_page = PAGE_REQUIREMENTS
+    _canonical = {"page": PAGE_REQUIREMENTS}
+elif _url_page == PAGE_LEARN:
+    _target_page = PAGE_LEARN
+    # Accept slug (canonical) or legacy display title; fall back to default.
+    _section = (
+        find_section(st.query_params.get("section"))
+        or find_section(default_section_slug())
+    )
+    _sub = (
+        find_subsection(_section, st.query_params.get("sub")) if _section else None
+    )
+    st.session_state.learn_section = _section["slug"] if _section else None
+    st.session_state.learn_sub = _sub["slug"] if _sub else None
+    _canonical = {"page": PAGE_LEARN}
+    if _section:
+        _canonical["section"] = _section["slug"]
+    if _sub:
+        _canonical["sub"] = _sub["slug"]
+else:
+    _target_page = PAGE_LANDING
+    _canonical = {}
+
+st.session_state.page = _target_page
+
+# 3) Normalize the URL to exactly match canonical state.
+#    Remove anything that shouldn't be there, then set / update the rest.
+for _k in list(st.query_params.keys()):
+    if _k in _PRESERVE_KEYS or _k in _canonical:
+        continue
+    del st.query_params[_k]
+for _k, _v in _canonical.items():
+    if st.query_params.get(_k) != _v:
+        st.query_params[_k] = _v
 
 inject_css()
 

@@ -3,18 +3,28 @@ import streamlit.components.v1 as components
 from components.panda import _panda_landing_html
 from components.header import _site_header_html
 from components.footer import _footer_html, _scroll_nav_html
-from config import PAGE_LANDING, PAGE_LEARN, PAGE_REQUIREMENTS, _nav_to, _url_for
+from config import (
+    PAGE_LANDING,
+    PAGE_LEARN,
+    PAGE_REQUIREMENTS,
+    _nav_to,
+    _url_for,
+    default_section_slug,
+)
 
 
 def page_landing():
-    """Minimalist hero landing: slim header + centred hero + feature row."""
+    """Minimalist hero landing: slim header + two-column hero + feature row."""
     # Slim site header with text-link nav
     st.markdown(_site_header_html(active=PAGE_LANDING), unsafe_allow_html=True)
 
-    # ── Centred hero ─────────────────────────────────────────────────────────
-    st.markdown(
-        """
-<div class="hero">
+    # ── Two-column hero: text + CTA on the left, panda animation on the right
+    hero_left, hero_right = st.columns([6, 5], gap="large")
+
+    with hero_left:
+        st.markdown(
+            """
+<div class="hero hero--left">
   <span class="page-eyebrow">Project briefs · Curated learning</span>
   <h1 class="hero-headline">Know before you go.</h1>
   <p class="hero-sub">
@@ -23,12 +33,10 @@ def page_landing():
   </p>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
 
-    # ── Single primary CTA + secondary text link ─────────────────────────────
-    cta_l, cta_c, cta_r = st.columns([3, 2, 3])
-    with cta_c:
+        # Primary CTA + secondary text link, left-aligned to match the hero.
         if st.button(
             "Start a project brief",
             type="primary",
@@ -36,17 +44,18 @@ def page_landing():
             key="cta_start",
         ):
             _nav_to("requirements")
-    st.markdown(
-        '<div style="text-align:center;margin-top:8px;">'
-        '<a class="text-link" href="?page=learn" target="_self">'
-        "or browse the learning hub →</a></div>",
-        unsafe_allow_html=True,
-    )
+        st.markdown(
+            f'<div class="hero-secondary">'
+            f'<a class="text-link" '
+            f'href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" '
+            f'target="_self">or browse the learning hub →</a></div>',
+            unsafe_allow_html=True,
+        )
 
-    # ── Small panda illustration, centred ────────────────────────────────────
-    p_l, p_c, p_r = st.columns([2, 1, 2])
-    with p_c:
-        components.html(_panda_landing_html(), height=240, scrolling=False)
+    with hero_right:
+        # Give the iframe enough room to fit the SVG (≈292px) plus the label
+        # row and quote box (≈130px) without clipping or overlapping.
+        components.html(_panda_landing_html(), height=460, scrolling=False)
 
     # ── Feature row (3 columns, no card chrome, divided by a thin line) ──────
     st.markdown(
@@ -84,7 +93,7 @@ def page_landing():
     <span class="tile-desc">Answer seven questions and get a shareable PDF for your team.</span>
     <span class="tile-cta">Open the form →</span>
   </a>
-  <a class="tile" href="{_url_for(page=PAGE_LEARN, section='git')}" target="_self">
+  <a class="tile" href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" target="_self">
     <span class="tile-icon">📚</span>
     <span class="tile-title">Browse the learning hub</span>
     <span class="tile-desc">Curated topics across Git, .NET, EF Core, Blazor, SQL, and more.</span>
