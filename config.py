@@ -134,23 +134,47 @@ def default_section_slug():
 
 # ── Sharable URL builder ──────────────────────────────────────────────────────
 def _url_for(page=None, section=None, sub=None):
-    """Build a stable, shareable in-app URL.
+    """Build a stable, shareable in-app URL using path-based routing.
+
+    Top-level pages are mapped to a single URL path segment (the maximum
+    Streamlit Cloud supports — see README). Section / sub-section selection
+    inside the Learning Hub stays in the query string because Streamlit does
+    not support nested path segments or path segments containing spaces.
 
     Examples:
-      _url_for()                                 -> '?go=home'
-      _url_for(page='requirements')              -> '?page=requirements'
-      _url_for(page='learn', section='git')      -> '?page=learn&section=git'
+      _url_for()                                      -> '/'
+      _url_for(page='requirements')                   -> '/projectrequirements'
+      _url_for(page='learn', section='git')           -> '/learning-hub?section=git'
       _url_for(page='learn', section='git',
-               sub='basics')                     -> '?page=learn&section=git&sub=basics'
+               sub='basics')                          -> '/learning-hub?section=git&sub=basics'
     """
     if page in (None, PAGE_LANDING):
-        return "?go=home"
-    parts = [f"page={page}"]
-    if page == PAGE_LEARN and section:
-        parts.append(f"section={section}")
-        if sub:
-            parts.append(f"sub={sub}")
-    return "?" + "&".join(parts)
+        return "/"
+    if page == PAGE_REQUIREMENTS:
+        return "/projectrequirements"
+    if page == PAGE_LEARN:
+        url = "/learning-hub"
+        params = []
+        if section:
+            params.append(f"section={section}")
+            if sub:
+                params.append(f"sub={sub}")
+        if params:
+            url += "?" + "&".join(params)
+        return url
+    return "/"
+
+
+# ── Page registry (populated by app.py once st.Page objects exist) ────────────
+# `_nav_to` needs the StreamlitPage objects so it can call st.switch_page on
+# them. app.py constructs the pages and registers them here on every rerun.
+_PAGES: dict = {}
+
+
+def register_pages(pages: dict) -> None:
+    """Register the StreamlitPage objects keyed by PAGE_* constants."""
+    _PAGES.clear()
+    _PAGES.update(pages)
 
 
 def init_session_state():
@@ -167,22 +191,33 @@ def _on_interact():
 
 
 def _nav_to(page: str, section: str = None, sub: str = None):
-    """Navigate to a page and rerun, keeping the URL in sync."""
-    st.session_state.page = page
-    if page in (PAGE_REQUIREMENTS, PAGE_LEARN):
-        st.query_params["page"] = page
-        if page == PAGE_LEARN and section:
+    """Navigate to a page via st.switch_page, keeping the URL in sync.
+
+    `st.switch_page` preserves the current query string across the rerun, so
+    we update `st.query_params` to the canonical state for the destination
+    page *before* switching.
+    """
+    if page == PAGE_LEARN:
+        if section:
             st.query_params["section"] = section
-            if sub:
-                st.query_params["sub"] = sub
-            elif "sub" in st.query_params:
-                del st.query_params["sub"]
-        else:
-            for k in ("section", "sub"):
-                if k in st.query_params:
-                    del st.query_params[k]
+        elif "section" in st.query_params:
+            del st.query_params["section"]
+        if sub:
+            st.query_params["sub"] = sub
+        elif "sub" in st.query_params:
+            del st.query_params["sub"]
     else:
-        for k in ("page", "section", "sub"):
+        for k in ("section", "sub"):
             if k in st.query_params:
                 del st.query_params[k]
-    st.rerun()
+    # Strip any legacy keys that should never appear in the new URL scheme.
+    for k in ("page", "go"):
+        if k in st.query_params:
+            del st.query_params[k]
+
+    target = _PAGES.get(page) or _PAGES.get(PAGE_LANDING)
+    if target is not None:
+        st.switch_page(target)
+    else:
+        # Fallback if registry isn't populated (shouldn't happen at runtime).
+        st.rerun()

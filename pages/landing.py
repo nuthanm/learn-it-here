@@ -14,6 +14,12 @@ from config import (
 
 def page_landing():
     """Minimalist hero landing: slim header + two-column hero + feature row."""
+    # Strip any stale query params left over from legacy URLs (e.g.
+    # ?go=home, ?page=…, or section/sub from a previous Learning Hub view).
+    for _k in ("page", "go", "section", "sub"):
+        if _k in st.query_params:
+            del st.query_params[_k]
+
     # Slim site header with text-link nav
     st.markdown(_site_header_html(active=PAGE_LANDING), unsafe_allow_html=True)
 
@@ -45,9 +51,8 @@ def page_landing():
             _nav_to("requirements")
         # Use target="_self" so the link works inside Streamlit Community
         # Cloud's sandboxed iframe (target="_top" is blocked there with an
-        # "Unsafe attempt to initiate navigation" error). The URL
-        # normalization in app.py re-syncs query params on rerun so the
-        # full ?page=learn&section=... is preserved.
+        # "Unsafe attempt to initiate navigation" error). The target page
+        # canonicalizes its own query params on render.
         st.markdown(
             f'<div class="hero-secondary">'
             f'<a class="text-link" '
