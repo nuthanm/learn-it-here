@@ -1,6 +1,6 @@
 """Shared site header — slim brand + horizontal text-link nav."""
 
-from config import PAGE_LANDING, PAGE_REQUIREMENTS, PAGE_LEARN
+from config import PAGE_LANDING, PAGE_REQUIREMENTS, PAGE_LEARN, _url_for
 
 
 def _site_header_html(active: str = PAGE_LANDING) -> str:
@@ -19,19 +19,18 @@ def _site_header_html(active: str = PAGE_LANDING) -> str:
     #   "Unsafe attempt to initiate navigation for frame ... The frame
     #    attempting navigation of the top-level window is sandboxed..."
     # which makes every header click do nothing. target="_self" navigates
-    # within the Streamlit iframe; the URL-normalization logic in app.py
-    # then re-syncs query params on the rerun, so cross-page navigation
-    # (e.g. Learn → Requirements) lands on the correct page.
+    # within the Streamlit iframe; st.navigation in app.py then matches the
+    # new URL path and runs the correct page.
     return f"""
 <div class="site-header">
-  <a class="brand" href="?go=home" target="_self">
+  <a class="brand" href="{_url_for(PAGE_LANDING)}" target="_self">
     <span class="brand-mark">🐼</span>
     <span>Learn It Here</span>
   </a>
   <nav class="site-nav" aria-label="Primary">
-    <a class="{_cls(PAGE_LANDING)}" href="?go=home" target="_self">Home</a>
-    <a class="{_cls(PAGE_REQUIREMENTS)}" href="?page=requirements" target="_self">Requirements</a>
-    <a class="{_cls(PAGE_LEARN)}" href="?page=learn" target="_self">Learn</a>
+    <a class="{_cls(PAGE_LANDING)}" href="{_url_for(PAGE_LANDING)}" target="_self">Home</a>
+    <a class="{_cls(PAGE_REQUIREMENTS)}" href="{_url_for(PAGE_REQUIREMENTS)}" target="_self">Requirements</a>
+    <a class="{_cls(PAGE_LEARN)}" href="{_url_for(PAGE_LEARN)}" target="_self">Learn</a>
   </nav>
 </div>
 """

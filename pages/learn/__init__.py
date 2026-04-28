@@ -11,12 +11,19 @@ from components.header import _site_header_html
 from config import (
     LATEST_NEW_TOPIC,
     LEARN_SECTIONS,
+    PAGE_LANDING,
     PAGE_LEARN,
     _url_for,
     default_section_slug,
     find_section,
     find_subsection,
 )
+
+
+# Query-string keys that pages other than the canonical section/sub may
+# transiently set and consume themselves (e.g. the dismiss banner). They are
+# preserved by the URL canonicalization step at the top of `page_learn`.
+_PRESERVE_KEYS = {"banner_dismissed"}
 
 
 def _resolve_renderer(dotted: str):
@@ -69,9 +76,9 @@ def _render_breadcrumb(section, sub):
     """Render the breadcrumb path for the current section/sub."""
     parts = [
         '<div class="breadcrumb">',
-        '<a href="?go=home" target="_self">Home</a>',
+        f'<a href="{_url_for(PAGE_LANDING)}" target="_self">Home</a>',
         '<span class="breadcrumb-sep">/</span>',
-        '<a href="?page=learn" target="_self">Learning Hub</a>',
+        f'<a href="{_url_for(PAGE_LEARN)}" target="_self">Learning Hub</a>',
     ]
     if section:
         parts.append('<span class="breadcrumb-sep">/</span>')
@@ -104,33 +111,63 @@ def page_learn():
         st.session_state.learn_banner_dismissed = True
         del st.query_params["banner_dismissed"]
 
+    # ── Resolve & canonicalize section / sub from the URL ─────────────────────
+    # The URL is the source of truth for which section/sub is active. Accept
+    # slug (canonical) or legacy display title; fall back to the default
+    # section. Then rewrite query params so the address bar exactly matches
+    # the active state (e.g. unknown / stale section names get dropped).
+    section = (
+        find_section(st.query_params.get("section"))
+        or find_section(default_section_slug())
+    )
+    sub_param = st.query_params.get("sub")
+    sub = find_subsection(section, sub_param) if section else None
+
+    st.session_state.learn_section = section["slug"] if section else None
+    st.session_state.learn_sub = sub["slug"] if sub else None
+
+    _canonical = {}
+    if section:
+        _canonical["section"] = section["slug"]
+    if sub:
+        _canonical["sub"] = sub["slug"]
+    for _k in list(st.query_params.keys()):
+        if _k in _PRESERVE_KEYS or _k in _canonical:
+            continue
+        del st.query_params[_k]
+    for _k, _v in _canonical.items():
+        if st.query_params.get(_k) != _v:
+            st.query_params[_k] = _v
+
     # ── Slim site header with text-link nav ──────────────────────────────────
     st.markdown(_site_header_html(active=PAGE_LEARN), unsafe_allow_html=True)
 
     # ── Optional thin "new topic" strip below the header ─────────────────────
     if not st.session_state.get("learn_banner_dismissed", False):
+        # Build a dismiss URL that preserves the current section / sub so the
+        # user lands back exactly where they were after dismissing the banner.
+        _dismiss_url = _url_for(
+            PAGE_LEARN,
+            section=section["slug"] if section else None,
+            sub=sub["slug"] if sub else None,
+        )
+        _dismiss_url += ("&" if "?" in _dismiss_url else "?") + "banner_dismissed=1"
         st.markdown(
             f'<div class="new-topic-strip">'
             f'<span class="dot" aria-hidden="true"></span>'
             f'<span><strong>New:</strong> {LATEST_NEW_TOPIC} has been added to the learning hub.</span>'
-            f'<a class="dismiss" href="?page=learn&banner_dismissed=1" target="_self" '
+            f'<a class="dismiss" href="{_dismiss_url}" target="_self" '
             f'aria-label="Dismiss">Dismiss</a>'
             f"</div>",
             unsafe_allow_html=True,
         )
-
-    # ── Resolve the active section / sub from session_state (set in app.py) ──
-    section_slug = st.session_state.get("learn_section") or default_section_slug()
-    section = find_section(section_slug)
-    sub_slug = st.session_state.get("learn_sub")
-    sub = find_subsection(section, sub_slug) if sub_slug else None
 
     # ── Two-column layout: sidebar (2) + content (8) ──────────────────────────
     nav_col, content_col = st.columns([2, 8], gap="medium")
 
     # ── Sidebar nav (data-driven anchor links, sharable URLs) ────────────────
     with nav_col:
-        _render_sidebar(section["slug"] if section else None, sub_slug)
+        _render_sidebar(section["slug"] if section else None, st.session_state.learn_sub)
         st.markdown('<hr class="sidebar-divider">', unsafe_allow_html=True)
         # Demoted: small link-style "+ Suggest a topic"
         st.markdown('<div class="suggest-topic-btn">', unsafe_allow_html=True)

@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 from datetime import datetime, timezone
 from components.header import _site_header_html
 from components.footer import _footer_html, _scroll_nav_html, _copy_buttons_html
-from config import PAGE_REQUIREMENTS, _on_interact, _nav_to
+from config import PAGE_REQUIREMENTS, PAGE_LANDING, PAGE_LEARN, _on_interact, _nav_to, _url_for
 from services.supabase_client import save_to_supabase
 from services.pdf_service import generate_pdf
 
@@ -15,10 +15,16 @@ def page_requirements():
     # Slim site header with text-link nav
     st.markdown(_site_header_html(active=PAGE_REQUIREMENTS), unsafe_allow_html=True)
 
+    # Strip any stale query params left over from legacy URLs (e.g.
+    # ?page=requirements or section/sub from a previous Learning Hub view).
+    for _k in ("page", "go", "section", "sub"):
+        if _k in st.query_params:
+            del st.query_params[_k]
+
     # Breadcrumb + title
     st.markdown(
         '<div class="breadcrumb">'
-        '<a href="?go=home" target="_self">Home</a>'
+        f'<a href="{_url_for(PAGE_LANDING)}" target="_self">Home</a>'
         '<span class="breadcrumb-sep">/</span>'
         '<span class="breadcrumb-current">Requirements</span>'
         "</div>",
@@ -57,9 +63,9 @@ def page_requirements():
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(
             '<div style="display:flex;gap:16px;align-items:center;">'
-            '<a class="text-link" href="?page=learn" target="_self">'
+            f'<a class="text-link" href="{_url_for(PAGE_LEARN)}" target="_self">'
             "Browse the learning hub →</a>"
-            '<a class="text-link" href="?page=requirements" target="_self" '
+            f'<a class="text-link" href="{_url_for(PAGE_REQUIREMENTS)}" target="_self" '
             'onclick="window.location.reload();">Submit another response</a>'
             "</div>",
             unsafe_allow_html=True,
@@ -262,7 +268,7 @@ def page_requirements():
     spacer, cancel_col, submit_col = st.columns([6, 2, 3])
     with cancel_col:
         st.markdown(
-            '<a class="text-link" href="?go=home" target="_self" '
+            f'<a class="text-link" href="{_url_for(PAGE_LANDING)}" target="_self" '
             'style="display:inline-block;padding-top:10px;">Cancel</a>',
             unsafe_allow_html=True,
         )

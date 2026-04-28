@@ -3,11 +3,8 @@ from config import (
     PAGE_LANDING,
     PAGE_REQUIREMENTS,
     PAGE_LEARN,
-    LEARN_SECTIONS,
     init_session_state,
-    find_section,
-    find_subsection,
-    default_section_slug,
+    register_pages,
 )
 from components.css import inject_css
 from pages.landing import page_landing
@@ -22,73 +19,67 @@ st.set_page_config(
 )
 
 init_session_state()
+inject_css()
 
-# ── URL-driven routing ────────────────────────────────────────────────────────
-# The URL is the single source of truth for which page is active. On every
-# rerun we:
-#   1) Handle the brand-click "?go=home" sentinel by clearing the URL.
-#   2) Read the canonical (page, section, sub) from the URL.
-#   3) Re-write st.query_params so that ONLY the canonical keys remain — this
-#      guarantees the address bar matches the active page (e.g. navigating
-#      Learn → Requirements never leaves a stale "section=git" behind), so
-#      every URL is bookmarkable / shareable.
-#
-# Keys that are read transiently by individual pages (e.g. banner_dismissed)
-# are preserved here so those pages can consume + delete them.
-_PRESERVE_KEYS = {"banner_dismissed"}
+# ── Path-based routing via st.navigation ──────────────────────────────────────
+# Each top-level page is mapped to a single URL path segment. Streamlit Cloud
+# does not support nested path segments or path segments containing spaces, so
+# section / sub-section selection inside the Learning Hub stays in the query
+# string (handled inside `page_learn`). See README for the full URL scheme.
+_landing_page = st.Page(
+    page_landing,
+    title="Home",
+    url_path="",
+    default=True,
+)
+_requirements_page = st.Page(
+    page_requirements,
+    title="Requirements",
+    url_path="projectrequirements",
+)
+_learn_page = st.Page(
+    page_learn,
+    title="Learning Hub",
+    url_path="learning-hub",
+)
 
-# 1) Logo / brand click — force a clean landing URL even if Streamlit's
-#    anchor-link interception merged "go=home" with stale page/section/sub.
-if st.query_params.get("go") == "home":
+# Make the StreamlitPage objects available to navigation helpers in config.py
+# so `_nav_to(...)` can call `st.switch_page(<page>)`.
+register_pages({
+    PAGE_LANDING: _landing_page,
+    PAGE_REQUIREMENTS: _requirements_page,
+    PAGE_LEARN: _learn_page,
+})
+
+# ── Backward-compatible legacy URL redirects ──────────────────────────────────
+# Older shared links use `?page=<name>[&section=…&sub=…]` or the brand-click
+# `?go=home` sentinel. Translate them to the new path-based URLs while
+# preserving section / sub for the Learning Hub. `st.switch_page` preserves
+# the (post-edit) query string across the rerun, so we strip the stale
+# `page` / `go` keys *before* switching.
+_legacy_go = st.query_params.get("go")
+_legacy_page = st.query_params.get("page")
+
+if _legacy_go == "home" or _legacy_page == PAGE_LANDING:
     for _k in ("go", "page", "section", "sub"):
         if _k in st.query_params:
             del st.query_params[_k]
-    st.session_state.page = PAGE_LANDING
+    st.switch_page(_landing_page)
+elif _legacy_page == PAGE_REQUIREMENTS:
+    for _k in ("page", "go", "section", "sub"):
+        if _k in st.query_params:
+            del st.query_params[_k]
+    st.switch_page(_requirements_page)
+elif _legacy_page == PAGE_LEARN:
+    # Keep `section` / `sub` (Learning Hub will canonicalize them); drop the
+    # legacy `page` / `go` keys.
+    for _k in ("page", "go"):
+        if _k in st.query_params:
+            del st.query_params[_k]
+    st.switch_page(_learn_page)
 
-# 2) Resolve the canonical state purely from the URL.
-_url_page = st.query_params.get("page")
-if _url_page == PAGE_REQUIREMENTS:
-    _target_page = PAGE_REQUIREMENTS
-    _canonical = {"page": PAGE_REQUIREMENTS}
-elif _url_page == PAGE_LEARN:
-    _target_page = PAGE_LEARN
-    # Accept slug (canonical) or legacy display title; fall back to default.
-    _section = (
-        find_section(st.query_params.get("section"))
-        or find_section(default_section_slug())
-    )
-    _sub = (
-        find_subsection(_section, st.query_params.get("sub")) if _section else None
-    )
-    st.session_state.learn_section = _section["slug"] if _section else None
-    st.session_state.learn_sub = _sub["slug"] if _sub else None
-    _canonical = {"page": PAGE_LEARN}
-    if _section:
-        _canonical["section"] = _section["slug"]
-    if _sub:
-        _canonical["sub"] = _sub["slug"]
-else:
-    _target_page = PAGE_LANDING
-    _canonical = {}
-
-st.session_state.page = _target_page
-
-# 3) Normalize the URL to exactly match canonical state.
-#    Remove anything that shouldn't be there, then set / update the rest.
-for _k in list(st.query_params.keys()):
-    if _k in _PRESERVE_KEYS or _k in _canonical:
-        continue
-    del st.query_params[_k]
-for _k, _v in _canonical.items():
-    if st.query_params.get(_k) != _v:
-        st.query_params[_k] = _v
-
-inject_css()
-
-page = st.session_state.page
-if page == PAGE_REQUIREMENTS:
-    page_requirements()
-elif page == PAGE_LEARN:
-    page_learn()
-else:
-    page_landing()
+# ── Run the active page (the URL path determines which page runs) ─────────────
+st.navigation(
+    [_landing_page, _requirements_page, _learn_page],
+    position="hidden",
+).run()
