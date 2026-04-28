@@ -3,7 +3,14 @@ import streamlit.components.v1 as components
 from components.panda import _panda_landing_html
 from components.header import _site_header_html
 from components.footer import _footer_html, _scroll_nav_html
-from config import PAGE_LANDING, PAGE_LEARN, PAGE_REQUIREMENTS, _nav_to, _url_for
+from config import (
+    PAGE_LANDING,
+    PAGE_LEARN,
+    PAGE_REQUIREMENTS,
+    _nav_to,
+    _url_for,
+    default_section_slug,
+)
 
 
 def page_landing():
@@ -39,7 +46,8 @@ def page_landing():
             _nav_to("requirements")
         st.markdown(
             f'<div class="hero-secondary">'
-            f'<a class="text-link" href="{_url_for(page=PAGE_LEARN, section="git")}" '
+            f'<a class="text-link" '
+            f'href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" '
             f'target="_self">or browse the learning hub →</a></div>',
             unsafe_allow_html=True,
         )
@@ -85,7 +93,7 @@ def page_landing():
     <span class="tile-desc">Answer seven questions and get a shareable PDF for your team.</span>
     <span class="tile-cta">Open the form →</span>
   </a>
-  <a class="tile" href="{_url_for(page=PAGE_LEARN, section='git')}" target="_self">
+  <a class="tile" href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" target="_self">
     <span class="tile-icon">📚</span>
     <span class="tile-title">Browse the learning hub</span>
     <span class="tile-desc">Curated topics across Git, .NET, EF Core, Blazor, SQL, and more.</span>

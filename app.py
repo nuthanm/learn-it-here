@@ -37,10 +37,11 @@ init_session_state()
 # are preserved here so those pages can consume + delete them.
 _PRESERVE_KEYS = {"banner_dismissed"}
 
-# 1) Logo / brand click — reset to a clean landing URL.
+# 1) Logo / brand click — force a clean landing URL even if Streamlit's
+#    anchor-link interception merged "go=home" with stale page/section/sub.
 if st.query_params.get("go") == "home":
-    for _k in list(st.query_params.keys()):
-        if _k not in _PRESERVE_KEYS:
+    for _k in ("go", "page", "section", "sub"):
+        if _k in st.query_params:
             del st.query_params[_k]
     st.session_state.page = PAGE_LANDING
 
