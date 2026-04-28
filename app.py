@@ -14,19 +14,16 @@ st.set_page_config(
 
 init_session_state()
 
-# URL routing: on a fresh load, honour the ?page= query param
+# URL-driven routing: the URL is the source of truth on every rerun so the
+# header text-link nav works from any page.
 _url_page = st.query_params.get("page")
-if _url_page in (PAGE_REQUIREMENTS, PAGE_LEARN) and st.session_state.page == "landing":
-    st.session_state.page = _url_page
-    # Deep-link support: honour the ?section= query param only on initial navigation
-    if _url_page == PAGE_LEARN:
+_target_page = _url_page if _url_page in (PAGE_REQUIREMENTS, PAGE_LEARN) else "landing"
+if st.session_state.page != _target_page:
+    st.session_state.page = _target_page
+    if _target_page == PAGE_LEARN:
         _url_section = st.query_params.get("section")
         if _url_section in LEARN_MENU_ITEMS:
             st.session_state.learn_section = _url_section
-        elif _url_section is not None:
-            # Unknown section — stay on learn hub with the default section
-            if "section" in st.query_params:
-                del st.query_params["section"]
 
 # Logo-click navigation
 if st.query_params.get("go") == "home":

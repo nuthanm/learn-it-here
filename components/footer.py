@@ -3,17 +3,11 @@ import streamlit.components.v1 as components
 
 
 def _footer_html() -> str:
-    """Fixed bottom footer — panda palette."""
+    """In-flow footer — minimal muted text."""
     return """
 <div class="kfp-footer">
-  <span style="font-size:0.9rem;font-weight:800;
-    background:linear-gradient(135deg,#74C69D,#FFB3BA);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-    🐼 Learn It Here &mdash; Developed in 2026
-  </span>
-  <span style="font-size:0.75rem;color:#888888;">
-    Powered by Streamlit &amp; Supabase
-  </span>
+  <span>© 2026 Learn It Here</span>
+  <span>Built with Streamlit</span>
 </div>
 """
 
