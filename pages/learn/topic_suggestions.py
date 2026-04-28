@@ -1,6 +1,8 @@
 import re
 import streamlit as st
 from collections import Counter, defaultdict
+
+from components.content import section_intro, section_title
 from services.supabase_client import _get_supabase_client, fetch_topic_suggestions
 
 _TAG_COLORS = [
@@ -57,20 +59,14 @@ def _render_tag_cloud(counts):
 
 
 def render_topic_suggestions():
-    db_available = _get_supabase_client() is not None
-    st.markdown(
-        """
-<div class="content-card">
-  <div class="card-title">📊 Topic Suggestions</div>
-  <div class="card-body">
-See which topics the community is requesting most. Use the
-<strong>Add your suggested topic</strong> button in the sidebar to vote for a
-new topic — the most-requested ones will be added to the learning hub.
-  </div>
-</div>
-""",
-        unsafe_allow_html=True,
+    section_title("Topic Suggestions", "Community-requested topics.")
+    section_intro(
+        "See which topics the community is requesting most. Use the "
+        "Add your suggested topic button in the sidebar to vote for a "
+        "new topic — the most-requested ones will be added to the learning hub."
     )
+    
+    db_available = _get_supabase_client() is not None
 
     if not db_available:
         st.info(
