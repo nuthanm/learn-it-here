@@ -43,15 +43,16 @@ def page_landing():
             key="cta_start",
         ):
             _nav_to("requirements")
-        # Use target="_top" so the browser performs a real navigation that
-        # updates the URL bar with the full query string (?page=learn&section=git).
-        # With target="_self", Streamlit's anchor-click interception can swallow
-        # the query params and leave the user on the landing page.
+        # Use target="_self" so the link works inside Streamlit Community
+        # Cloud's sandboxed iframe (target="_top" is blocked there with an
+        # "Unsafe attempt to initiate navigation" error). The URL
+        # normalization in app.py re-syncs query params on rerun so the
+        # full ?page=learn&section=... is preserved.
         st.markdown(
             f'<div class="hero-secondary">'
             f'<a class="text-link" '
             f'href="{_url_for(page=PAGE_LEARN, section=default_section_slug())}" '
-            f'target="_top">or browse the learning hub →</a></div>',
+            f'target="_self">or browse the learning hub →</a></div>',
             unsafe_allow_html=True,
         )
 
