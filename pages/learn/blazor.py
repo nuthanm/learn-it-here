@@ -1,7 +1,39 @@
 import streamlit as st
 
+from pages.learn.blazor_webforms_comparison import render_blazor_webforms_comparison
+
 
 def render_blazor():
+    # ── Sub-page routing ─────────────────────────────────────────────────────
+    # If the user has navigated into a Blazor sub-page, render it instead of
+    # the main Blazor page. The sub-page itself provides a "Back to Blazor"
+    # button that clears this flag.
+    if st.session_state.get("blazor_subpage") == "webforms_comparison":
+        render_blazor_webforms_comparison()
+        return
+
+    # ── Sub-page link card on the main Blazor page ───────────────────────────
+    st.markdown(
+        """
+<div class="content-card" style="border-left: 4px solid #512BD4;">
+  <div class="card-title">📘 ASP.NET Web Forms Controls vs Blazor Equivalents</div>
+  <div class="card-body">
+Coming from classic <b>ASP.NET Web Forms</b>? See a side-by-side comparison of common Web Forms
+server controls and their idiomatic equivalents in Blazor (Server, SSR, and WebAssembly), with
+notes on hosting-model differences.
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+    if st.button(
+        "Open: Web Forms Controls vs Blazor Equivalents →",
+        key="open_blazor_webforms_comparison",
+        use_container_width=True,
+    ):
+        st.session_state.blazor_subpage = "webforms_comparison"
+        st.rerun()
+
     st.markdown(
         """
 <div class="content-card">
