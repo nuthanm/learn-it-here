@@ -343,7 +343,7 @@ def copy_buttons_html() -> str:
 """
 
 
-# Backwards-compatible aliases — older modules import the underscore names.
-_footer_html = footer_html
+# Backwards-compatible aliases for both naming styles.
+footer_html = _footer_html
 _scroll_nav_html = scroll_nav_html
 _copy_buttons_html = copy_buttons_html

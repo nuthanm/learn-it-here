@@ -329,3 +329,9 @@ def _nav_to(page: str, section: str = None, sub: str = None):
     else:
         # Fallback if registry isn't populated (shouldn't happen at runtime).
         st.rerun()
+
+
+# Backwards-compatible aliases for both naming styles.
+nav_to = _nav_to
+url_for = _url_for
+_on_interact = on_interact
