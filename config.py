@@ -122,7 +122,7 @@ def find_subsection(section, identifier):
     """Return the subsection dict matching `identifier` within `section`, or None."""
     if not section or not identifier:
         return None
-    for sub in section.get("subsections", []) or []:
+    for sub in section.get("subsections") or []:
         if sub["slug"] == identifier or sub["title"] == identifier:
             return sub
     return None

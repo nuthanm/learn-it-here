@@ -41,13 +41,15 @@ if _target_page == PAGE_LEARN:
 
     # Resolve sub: must belong to the resolved section, else clear.
     _url_sub = st.query_params.get("sub")
-    _sub = find_subsection(_section, _url_sub)
+    _sub = find_subsection(_section, _url_sub) if _section else None
     st.session_state.learn_sub = _sub["slug"] if _sub else None
 
     # Mirror the canonical slug back to the URL so legacy/title-based links
     # get normalised on the next render.
     if _section and st.query_params.get("section") != _section["slug"]:
         st.query_params["section"] = _section["slug"]
+    elif not _section and "section" in st.query_params:
+        del st.query_params["section"]
     if _sub:
         if st.query_params.get("sub") != _sub["slug"]:
             st.query_params["sub"] = _sub["slug"]

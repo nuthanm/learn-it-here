@@ -7,7 +7,7 @@ content reads first.
 """
 
 from html import escape
-from typing import Iterable, Optional, Sequence, Tuple, Union
+from typing import Iterable, Optional, Tuple, Union
 
 import streamlit as st
 
@@ -78,7 +78,7 @@ def link_list(items: Iterable[LinkItem]) -> None:
         if isinstance(item, str):
             parts.append(f"<li>{escape(item)}</li>")
             continue
-        if not isinstance(item, Sequence) or len(item) < 2:
+        if not isinstance(item, (tuple, list)) or len(item) < 2:
             continue
         label = escape(str(item[0]))
         href = escape(str(item[1]), quote=True)
