@@ -155,23 +155,23 @@ var app = builder.Build();
         "(the root shell file, not a page component)."
     )
     code_block(
-        """<head>
-    <!-- Fluent UI reboot CSS — normalises browser default styles -->
-    <link rel="stylesheet"
-          href="@Assets[\\"_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css\\"]" />
-    <HeadOutlet />
-</head>
-
-<body>
-    <Routes />
-
-    <!-- Fluent UI JS module — must come BEFORE blazor.web.js -->
-    <script type="module"
-            src="@Assets[\\"_content/Microsoft.FluentUI.AspNetCore.Components/Microsoft.FluentUI.AspNetCore.Components.lib.module.js\\"]">
-    </script>
-
-    <script src="@Assets[\\"_framework/blazor.web.js\\"]"></script>
-</body>""",
+        '<head>\n'
+        '    <!-- Fluent UI reboot CSS — normalises browser default styles -->\n'
+        '    <link rel="stylesheet"\n'
+        '          href=\'@Assets["_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css"]\' />\n'
+        '    <HeadOutlet />\n'
+        '</head>\n'
+        '\n'
+        '<body>\n'
+        '    <Routes />\n'
+        '\n'
+        '    <!-- Fluent UI JS module — must come BEFORE blazor.web.js -->\n'
+        '    <script type="module"\n'
+        '            src=\'@Assets["_content/Microsoft.FluentUI.AspNetCore.Components/Microsoft.FluentUI.AspNetCore.Components.lib.module.js"]\'>\n'
+        '    </script>\n'
+        '\n'
+        '    <script src=\'@Assets["_framework/blazor.web.js"]\'></script>\n'
+        '</body>',
         language="razor",
         label="App.razor",
     )
