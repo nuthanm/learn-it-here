@@ -23,7 +23,7 @@ def render_blazor():
         "familiar to React/Angular developers."
     )
 
-    # ── Sub-page link card (uses framework routing via ?sub=) ────────────────
+    # ── Sub-page link cards (uses framework routing via ?sub=) ───────────────
     sub_href = _url_for(page=PAGE_LEARN, section="blazor", sub="webforms-comparison")
     st.markdown(
         f'<a class="card link-card" href="{sub_href}" target="_self">'
@@ -31,6 +31,19 @@ def render_blazor():
         f'<h3>ASP.NET Web Forms Controls vs Blazor Equivalents</h3>'
         f'<p>Side-by-side mapping of common Web Forms server controls to their '
         f'idiomatic Blazor equivalents (Server, SSR, WebAssembly).</p>'
+        f'</div>'
+        f'<span class="link-card-arrow">→</span>'
+        f'</a>',
+        unsafe_allow_html=True,
+    )
+
+    fluent_href = _url_for(page=PAGE_LEARN, section="blazor", sub="fluent-ui")
+    st.markdown(
+        f'<a class="card link-card" href="{fluent_href}" target="_self">'
+        f'<div class="link-card-body">'
+        f'<h3>Fluent UI Blazor Components</h3>'
+        f'<p>Install, configure, and use Microsoft\'s Fluent Design System in Blazor — '
+        f'with comparison tables, step-by-step setup, examples, and common issues explained.</p>'
         f'</div>'
         f'<span class="link-card-arrow">→</span>'
         f'</a>',
