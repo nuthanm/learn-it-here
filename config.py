@@ -109,6 +109,11 @@ LEARN_SECTIONS = [
                 "title": "Web Forms vs Blazor",
                 "renderer": "pages.learn.blazor_webforms_comparison:render_blazor_webforms_comparison",
             },
+            {
+                "slug": "fluent-ui",
+                "title": "Fluent UI Blazor",
+                "renderer": "pages.learn.blazor_fluent_ui:render_blazor_fluent_ui",
+            },
         ],
     },
     {
