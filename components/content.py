@@ -6,6 +6,7 @@ Avoid bespoke HTML / coloured cards — keep the page chrome quiet so the
 content reads first.
 """
 
+import re
 from html import escape
 from typing import Iterable, Optional, Tuple, Union
 
@@ -42,9 +43,13 @@ def subsection(heading: str) -> None:
 
 
 def paragraph(text: str) -> None:
-    """Render a plain body paragraph."""
+    """Render a plain body paragraph.
+
+    Supports ``**bold**`` markdown syntax within the text.
+    """
+    html_text = re.sub(r"\*\*(.*?)\*\*", r"<strong>\1</strong>", escape(text))
     st.markdown(
-        f'<p class="body-text">{escape(text)}</p>',
+        f'<p class="body-text">{html_text}</p>',
         unsafe_allow_html=True,
     )
 
