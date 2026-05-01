@@ -119,6 +119,11 @@ LEARN_SECTIONS = [
                 "title": "Oracle Data Access with EF Core and Dapper",
                 "renderer": "pages.learn.blazor_oracle_efcore_dapper:render_blazor_oracle_efcore_dapper",
             },
+            {
+                "slug": "cqrs",
+                "title": "CQRS Pattern with Blazor Auto",
+                "renderer": "pages.learn.blazor_cqrs:render_blazor_cqrs",
+            },
         ],
     },
     {
