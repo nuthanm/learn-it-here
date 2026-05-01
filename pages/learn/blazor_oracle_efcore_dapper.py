@@ -125,7 +125,7 @@ UI displays the data""",
     )
     paragraph("**Commands** — used when data changes.")
     paragraph("Examples: Create student, Update student, Delete student, Add event history.")
-    code_block("EF Core + Repository + Domain Entities", language="text")
+    code_block("Domain Entities", language="text")
     paragraph("**Queries** — used when data is only read.")
     paragraph(
         "Examples: Get student list, Get event history list, Get report data, Get dropdown data."
