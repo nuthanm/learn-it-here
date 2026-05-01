@@ -50,6 +50,19 @@ def render_blazor():
         unsafe_allow_html=True,
     )
 
+    oracle_href = _url_for(page=PAGE_LEARN, section="blazor", sub="oracle-efcore-dapper")
+    st.markdown(
+        f'<a class="card link-card" href="{oracle_href}" target="_self">'
+        f'<div class="link-card-body">'
+        f'<h3>Oracle Data Access with EF Core and Dapper</h3>'
+        f'<p>EF Core + Repository Pattern for write operations and Dapper + Raw SQL for '
+        f'read operations — beginner-friendly, scalable, and enterprise-ready.</p>'
+        f'</div>'
+        f'<span class="link-card-arrow">→</span>'
+        f'</a>',
+        unsafe_allow_html=True,
+    )
+
     # ── What is Blazor? ──────────────────────────────────────────────────────
     subsection("What is Blazor? (For Complete Beginners)")
     paragraph(

@@ -114,6 +114,11 @@ LEARN_SECTIONS = [
                 "title": "Fluent UI Blazor",
                 "renderer": "pages.learn.blazor_fluent_ui:render_blazor_fluent_ui",
             },
+            {
+                "slug": "oracle-efcore-dapper",
+                "title": "Oracle Data Access with EF Core and Dapper",
+                "renderer": "pages.learn.blazor_oracle_efcore_dapper:render_blazor_oracle_efcore_dapper",
+            },
         ],
     },
     {
