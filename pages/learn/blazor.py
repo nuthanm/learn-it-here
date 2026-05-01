@@ -63,6 +63,20 @@ def render_blazor():
         unsafe_allow_html=True,
     )
 
+    cqrs_href = _url_for(page=PAGE_LEARN, section="blazor", sub="cqrs")
+    st.markdown(
+        f'<a class="card link-card" href="{cqrs_href}" target="_self">'
+        f'<div class="link-card-body">'
+        f'<h3>CQRS Pattern with Blazor Auto</h3>'
+        f'<p>Command Query Responsibility Segregation from UI to API — Blazor Auto with '
+        f'Fluent UI, MediatR, EF Core (writes), and Dapper (reads) against Oracle. '
+        f'Beginner-friendly, step by step.</p>'
+        f'</div>'
+        f'<span class="link-card-arrow">→</span>'
+        f'</a>',
+        unsafe_allow_html=True,
+    )
+
     # ── What is Blazor? ──────────────────────────────────────────────────────
     subsection("What is Blazor? (For Complete Beginners)")
     paragraph(
