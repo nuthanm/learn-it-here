@@ -200,7 +200,7 @@ def render_blazor_cqrs():
     )
 
     # ── 8. Project Structure ─────────────────────────────────────────────────
-    subsection("8. Project Structure — How to Organise the Solution")
+    subsection("8. Project Structure — How to Organize the Solution")
     paragraph(
         "A clean CQRS solution typically uses multiple projects to separate concerns. "
         "Here is the recommended structure:"
