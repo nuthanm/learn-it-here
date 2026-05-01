@@ -1,5 +1,7 @@
 """VS Code: a minimal-layout page using the shared content primitives."""
 
+import streamlit as st
+
 from components.content import (
     code_block,
     link_list,
@@ -71,107 +73,38 @@ def render_vscode():
         "gives you access to literally every VS Code feature by searching for it."
     )
 
-    subsection("Multi-cursor editing")
-    paragraph(
-        "Alt+Click to add cursors. Ctrl+D selects the next occurrence. Ctrl+Shift+L selects "
-        "all occurrences. Edit many places at once."
+    subsection("Built-in features quick reference")
+    st.markdown(
+        """
+| Feature | Shortcut / How to use | What it does |
+|---|---|---|
+| **Multi-cursor editing** | Alt+Click to add cursors · Ctrl+D next · Ctrl+Shift+L all | Edit many places simultaneously — rename a CSS class in 10 spots in one keystroke |
+| **Command Palette** | Ctrl+Shift+P | Access every VS Code command by searching — format, lint, git, settings, extensions |
+| **Integrated terminal** | Ctrl+` | Full terminal right in the editor — run builds, git, npm scripts without switching windows |
+| **Live Share** | Install extension → Share | Real-time collaborative editing — teammates see your cursor, you see theirs |
+| **Remote development** | Install Remote - SSH / WSL / Dev Containers extension | Edit code running on a server, WSL, or Docker container as if it were local |
+| **Code snippets** | Type prefix (e.g. `prop`, `ctor`, `for`) + Tab | Expand full code templates; create custom snippets for repetitive patterns |
+| **Zen mode** | Ctrl+K Z | Hides all UI — just code on a clean background; perfect for focused sessions |
+| **IntelliSense** | Automatic (powered by language servers) | Completions, signatures, and hover docs for C#, Python, JS, and more |
+"""
     )
 
-    subsection("Command Palette")
-    paragraph(
-        "Ctrl+Shift+P opens every command VS Code can run — format, lint, git, settings, extensions."
-    )
-
-    subsection("Integrated terminal")
-    paragraph(
-        "Ctrl+` opens a full terminal right in the editor. Run builds, git commands, and "
-        "npm scripts without switching windows."
-    )
-
-    subsection("Live Share")
-    paragraph(
-        "Real-time collaborative editing with teammates — they see your cursor, you see "
-        "theirs. Great for pair programming and code reviews."
-    )
-
-    subsection("Remote development")
-    paragraph(
-        "Edit code running on a remote SSH server, inside WSL (Linux on Windows), or "
-        "inside Docker containers — seamlessly."
-    )
-
-    subsection("Code snippets")
-    paragraph(
-        "Type a prefix (e.g., prop, ctor, for) and press Tab to expand full code templates. "
-        "You can create custom snippets too."
-    )
-
-    subsection("Zen mode")
-    paragraph(
-        "Ctrl+K Z hides all UI — just your code on a clean background. Perfect for focused "
-        "writing or presentations."
-    )
-
-    subsection("IntelliSense")
-    paragraph(
-        "Powered by language servers (LSP). C# Dev Kit, Pylance, ESLint and others give "
-        "you completions, signatures, and hover docs just like the full IDE."
-    )
-
-    subsection("C# Dev Kit (Microsoft)")
-    paragraph(
-        "Full .NET / C# support — IntelliSense, refactoring, Test Explorer, and Solution "
-        "Explorer inside VS Code."
-    )
-
-    subsection("GitLens")
-    paragraph(
-        "Supercharges VS Code's built-in Git — inline blame, rich history, branch "
-        "comparison, PR integration."
-    )
-
-    subsection("REST Client / Thunder Client")
-    paragraph(
-        "Test HTTP APIs by writing .http files or using a GUI — no need to leave the editor."
-    )
-
-    subsection("Prettier")
-    paragraph(
-        "Opinionated code formatter for JS/TS/CSS/JSON/Markdown. Format on save with zero "
-        "configuration."
-    )
-
-    subsection("GitHub Copilot")
-    paragraph(
-        "AI pair programmer — completes functions, writes tests, and explains code from comments."
-    )
-
-    subsection("ESLint / Pylint")
-    paragraph(
-        "Language-specific linting with inline highlights for JavaScript/TypeScript and "
-        "Python respectively."
-    )
-
-    subsection("Todo Tree")
-    paragraph(
-        "Scans all files for TODO / FIXME / HACK comments and lists them in a sidebar panel."
-    )
-
-    subsection("Bracket Pair Colorizer")
-    paragraph(
-        "Matching brackets are coloured the same — makes nested code much easier to read "
-        "at a glance."
-    )
-
-    subsection("Path Intellisense")
-    paragraph(
-        "Autocompletes file paths as you type import or reference statements."
-    )
-
-    subsection("Docker")
-    paragraph(
-        "Browse containers, images, and registries. Build and run Dockerfiles from the "
-        "explorer panel."
+    subsection("Extensions worth installing")
+    st.markdown(
+        """
+| Extension | What it does | Best for |
+|---|---|---|
+| **C# Dev Kit** (Microsoft) | Full .NET / C# support — IntelliSense, refactoring, Test Explorer, Solution Explorer | Any C# / .NET developer using VS Code |
+| **GitHub Copilot** | AI pair programmer — completes functions, writes tests, explains code | Everyone — free for students / OSS, paid for professional use |
+| **GitLens** | Inline blame, rich history, branch comparison, PR integration on top of built-in Git | Teams wanting deep Git visibility |
+| **REST Client / Thunder Client** | Test HTTP APIs with `.http` files or a GUI — no need to leave the editor | Backend and API developers |
+| **Prettier** | Opinionated code formatter for JS/TS/CSS/JSON/Markdown with format-on-save | Front-end and full-stack developers |
+| **ESLint / Pylint** | Language-specific linting with inline highlights for JS/TS and Python | JavaScript, TypeScript, and Python developers |
+| **Todo Tree** | Scans all files for TODO / FIXME / HACK comments and lists them in a sidebar | Keeping track of technical debt across large repos |
+| **Bracket Pair Colorizer** | Matching brackets get the same colour — nested code is much easier to read | Any developer working with deeply nested code |
+| **Path Intellisense** | Autocompletes file paths as you type import or reference statements | Reducing typos in import paths |
+| **Docker** | Browse containers, images, registries; build and run Dockerfiles from the explorer | Developers working with Docker and containerised apps |
+"""
     )
 
     subsection("Recommended settings.json")
@@ -208,24 +141,25 @@ def render_vscode():
     )
 
     subsection("Essential keyboard shortcuts")
-    code_block(
-        """Shortcut          Action
-----------------  ---------------------------------------------
-Ctrl+P            Quick file open (fuzzy search)
-Ctrl+Shift+P      Command Palette — search all commands
-Ctrl+`            Toggle integrated terminal
-Ctrl+B            Toggle sidebar visibility
-Ctrl+/            Toggle line comment
-Alt+Up / Alt+Down Move current line up / down
-Shift+Alt+Down    Duplicate current line below
-Ctrl+D            Select next occurrence of current word
-Ctrl+Shift+L      Select ALL occurrences of current word
-F12               Go to Definition
-Shift+F12         Find All References
-F2                Rename symbol everywhere
-Ctrl+K Z          Zen mode (distraction-free)
-Ctrl+Shift+`      New terminal instance""",
-        language="",
+    st.markdown(
+        """
+| Shortcut | Action |
+|---|---|
+| Ctrl+P | Quick file open (fuzzy search) |
+| Ctrl+Shift+P | Command Palette — search all commands |
+| Ctrl+` | Toggle integrated terminal |
+| Ctrl+B | Toggle sidebar visibility |
+| Ctrl+/ | Toggle line comment |
+| Alt+Up / Alt+Down | Move current line up / down |
+| Shift+Alt+Down | Duplicate current line below |
+| Ctrl+D | Select next occurrence of current word |
+| Ctrl+Shift+L | Select ALL occurrences of current word |
+| F12 | Go to Definition |
+| Shift+F12 | Find All References |
+| F2 | Rename symbol everywhere |
+| Ctrl+K Z | Zen mode (distraction-free) |
+| Ctrl+Shift+` | New terminal instance |
+"""
     )
 
     subsection("Further reading")

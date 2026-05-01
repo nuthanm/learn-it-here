@@ -1,5 +1,7 @@
 """Visual Studio IDE: a minimal-layout page using shared content primitives."""
 
+import streamlit as st
+
 from components.content import (
     code_block,
     link_list,
@@ -90,168 +92,71 @@ public class TestResult
     )
 
     subsection("Key productivity features")
-
-    subsection("Paste JSON as Classes")
-    paragraph(
-        "Edit → Paste Special → Paste JSON as Classes. Copies JSON from clipboard and "
-        "auto-generates matching C# model classes. A huge time-saver."
-    )
-
-    subsection("Paste XML as Classes")
-    paragraph(
-        "Edit → Paste Special → Paste XML as Classes. Same idea for XML data — instant "
-        "model generation."
-    )
-
-    subsection("Quick Actions (Lightbulb)")
-    paragraph(
-        "Press Ctrl+. anywhere to get context-aware suggestions: generate constructors, "
-        "implement interfaces, extract methods, rename symbols."
-    )
-
-    subsection("Generate from usage")
-    paragraph(
-        "Type a class or method that doesn't exist yet, press Ctrl+. and choose "
-        "\"Generate class / method\" — VS creates the skeleton automatically."
-    )
-
-    subsection("Live code analysis")
-    paragraph(
-        "Roslyn analysers flag issues, suggest improvements, and enforce code style in "
-        "real time — no need to build first."
-    )
-
-    subsection("Test Explorer")
-    paragraph(
-        "View → Test Explorer. Run, debug, and profile all xUnit / NUnit / MSTest tests "
-        "directly from the IDE with green/red indicators per test."
-    )
-
-    subsection("NuGet Package Manager")
-    paragraph(
-        "Tools → NuGet Package Manager → Manage NuGet Packages for Solution — search, "
-        "install, and update packages across all projects at once."
-    )
-
-    subsection("Solution Explorer")
-    paragraph(
-        "The backbone of VS — browse files, projects, and dependencies. Right-click a "
-        "project for Add → New Item, scaffolding, and class diagrams."
-    )
-
-    subsection("Class Diagram")
-    paragraph(
-        "Right-click a project → Add → New Item → Class Diagram. A visual representation "
-        "of all classes, interfaces, and their relationships."
-    )
-
-    subsection("Object Browser")
-    paragraph(
-        "View → Object Browser — explore all types, members, and assemblies in your "
-        "solution and referenced NuGet packages."
-    )
-
-    subsection("Performance Profiler")
-    paragraph(
-        "Debug → Performance Profiler — analyse CPU usage, memory allocations, and "
-        "database query times without leaving VS."
-    )
-
-    subsection("Refactor menu")
-    paragraph(
-        "Right-click any symbol → Refactor: rename everywhere, extract interface, "
-        "extract method, inline temporary variable, and more — safely across the whole "
-        "solution."
+    st.markdown(
+        """
+| Feature | How to access | What it does |
+|---|---|---|
+| **Paste JSON as Classes** | Edit → Paste Special → Paste JSON as Classes | Copies JSON from clipboard and auto-generates matching C# model classes. Huge time-saver for API integrations |
+| **Paste XML as Classes** | Edit → Paste Special → Paste XML as Classes | Same idea for XML — instant model generation from clipboard |
+| **Quick Actions (Lightbulb)** | Ctrl+. | Context-aware suggestions: generate constructors, implement interfaces, extract methods, rename symbols |
+| **Generate from usage** | Ctrl+. on missing type/method | Type a class or method that doesn't exist yet — VS generates the skeleton automatically |
+| **Live code analysis** | Always on | Roslyn analysers flag issues, suggest improvements, and enforce code style in real time — no build needed |
+| **Test Explorer** | View → Test Explorer | Run, debug, and profile all xUnit / NUnit / MSTest tests with green/red indicators per test |
+| **NuGet Package Manager** | Tools → NuGet Package Manager → Manage NuGet Packages for Solution | Search, install, and update packages across all projects at once |
+| **Solution Explorer** | Ctrl+Alt+L | The backbone of VS — browse files, projects, and dependencies. Right-click a project for scaffolding and class diagrams |
+| **Class Diagram** | Right-click project → Add → New Item → Class Diagram | Visual representation of all classes, interfaces, and their relationships |
+| **Object Browser** | View → Object Browser | Explore all types, members, and assemblies in your solution and NuGet packages |
+| **Performance Profiler** | Debug → Performance Profiler | Analyse CPU usage, memory allocations, and database query times without leaving VS |
+| **Refactor menu** | Right-click any symbol → Refactor | Rename everywhere, extract interface/method, inline temporary variable — safely across the whole solution |
+"""
     )
 
     subsection("Productivity settings worth configuring")
-
-    subsection("Font and editor size")
-    paragraph(
-        "Tools → Options → Environment → Fonts and Colors. Set font to Cascadia Code "
-        "or JetBrains Mono at size 14–15 for ligatures."
-    )
-
-    subsection("IntelliSense completion")
-    paragraph(
-        "Tools → Options → Text Editor → C# → IntelliSense. Enable \"Show completion "
-        "list after character is deleted\" and \"Highlight matching portions\"."
-    )
-
-    subsection("Code style and formatting")
-    paragraph(
-        "Tools → Options → Text Editor → C# → Code Style. Configure naming conventions, "
-        "prefer var vs explicit types, expression-bodied members."
-    )
-
-    subsection("Format on save")
-    paragraph(
-        "Use a .editorconfig file in the solution root to enforce formatting rules "
-        "across the whole team automatically on save."
-    )
-
-    subsection("Word wrap")
-    paragraph(
-        "Edit → Advanced → Word Wrap (Ctrl+E, W). Prevents horizontal scrolling on "
-        "long lines — great for wide monitors."
-    )
-
-    subsection("Column guides")
-    paragraph(
-        "Add the guidelines extension or set column guides in .editorconfig to keep "
-        "lines under 120 characters."
+    st.markdown(
+        """
+| Setting | Where to find it | What to configure |
+|---|---|---|
+| **Font and editor size** | Tools → Options → Environment → Fonts and Colors | Set font to Cascadia Code or JetBrains Mono at size 14–15 for ligatures |
+| **IntelliSense completion** | Tools → Options → Text Editor → C# → IntelliSense | Enable "Show completion list after character is deleted" and "Highlight matching portions" |
+| **Code style and formatting** | Tools → Options → Text Editor → C# → Code Style | Configure naming conventions, prefer var vs explicit types, expression-bodied members |
+| **Format on save** | Add `.editorconfig` to solution root | Enforces formatting rules across the whole team automatically on save |
+| **Word wrap** | Edit → Advanced → Word Wrap (Ctrl+E, W) | Prevents horizontal scrolling on long lines — great for wide monitors |
+| **Column guides** | `.editorconfig` or Guidelines extension | Keep lines under 120 characters — shown as a vertical ruler in the editor |
+"""
     )
 
     subsection("Extensions worth installing")
-
-    subsection("GitHub Copilot")
-    paragraph(
-        "AI pair programmer — suggests whole lines, methods, and even entire classes "
-        "as you type."
-    )
-
-    subsection("ReSharper / Rider")
-    paragraph(
-        "JetBrains' powerful refactoring and analysis tools. Deep code inspections, "
-        "rename across solutions."
-    )
-
-    subsection("CodeMaid")
-    paragraph(
-        "Cleans up code — removes unused usings, reorganises members, formats on save."
-    )
-
-    subsection("Visual Studio IntelliCode")
-    paragraph(
-        "AI-assisted IntelliCode completions trained on open-source .NET code patterns."
-    )
-
-    subsection("Web Essentials")
-    paragraph(
-        "Browser sync, BundlerMinifier, and CSS / JavaScript helpers for web projects."
-    )
-
-    subsection("Productivity Power Tools")
-    paragraph(
-        "Double-click to select word, middle-click to close tabs, enhanced scrollbar — "
-        "a quality-of-life pack."
+    st.markdown(
+        """
+| Extension | What it does | Best for |
+|---|---|---|
+| **GitHub Copilot** | AI pair programmer — suggests lines, methods, and entire classes as you type | Everyone — free for students / OSS, paid for professional use |
+| **ReSharper** | Deep code inspections, refactoring, and rename across entire solutions | Teams that want maximum code quality tooling |
+| **CodeMaid** | Cleans up code — removes unused usings, reorganises members, formats on save | Keeping codebases tidy with minimal effort |
+| **Visual Studio IntelliCode** | AI-assisted completions trained on open-source .NET code patterns | Free alternative / complement to Copilot |
+| **Web Essentials** | Browser sync, BundlerMinifier, and CSS / JavaScript helpers | Front-end and web project work |
+| **Productivity Power Tools** | Double-click to select word, middle-click to close tabs, enhanced scrollbar | Quality-of-life improvements for daily VS use |
+"""
     )
 
     subsection("Essential keyboard shortcuts")
-    code_block(
-        """Ctrl+.            Quick Actions / Lightbulb fixes
-Ctrl+R, R         Rename symbol everywhere
-F12               Go to Definition
-Alt+F12           Peek Definition (inline preview)
-Shift+F12         Find All References
-Ctrl+K, D         Format document
-Ctrl+K, C / U     Comment / Uncomment selection
-Ctrl+Shift+B      Build solution
-F5 / Ctrl+F5      Debug / Run without debug
-Ctrl+0, Ctrl+G    Open Git Changes window
-Ctrl+T            Go to file / type / member
-Ctrl+Q            Quick Launch — search VS menus""",
-        language="",
+    st.markdown(
+        """
+| Shortcut | Action |
+|---|---|
+| Ctrl+. | Quick Actions / Lightbulb fixes |
+| Ctrl+R, R | Rename symbol everywhere |
+| F12 | Go to Definition |
+| Alt+F12 | Peek Definition (inline preview) |
+| Shift+F12 | Find All References |
+| Ctrl+K, D | Format document |
+| Ctrl+K, C / U | Comment / Uncomment selection |
+| Ctrl+Shift+B | Build solution |
+| F5 / Ctrl+F5 | Debug / Run without debug |
+| Ctrl+0, Ctrl+G | Open Git Changes window |
+| Ctrl+T | Go to file / type / member (Search Everything) |
+| Ctrl+Q | Quick Launch — search VS menus |
+"""
     )
 
     subsection("Further reading")
