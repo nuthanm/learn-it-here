@@ -68,60 +68,20 @@ def render_csharp():
     # ------------------------------------------------------------------
     subsection("What makes C# special?")
     paragraph("Capabilities that set C# apart from other mainstream languages:")
-
-    subsection("Unified full-stack")
-    paragraph(
-        "Build front-end (Blazor), back-end (ASP.NET), mobile (MAUI), and games (Unity) "
-        "— all in the same language."
-    )
-
-    subsection("async/await pioneer")
-    paragraph(
-        "C# popularised async/await in 2012 — before JS, Python, or Kotlin added it. "
-        "Asynchronous code reads like synchronous code."
-    )
-
-    subsection("LINQ")
-    paragraph(
-        "Language-Integrated Query lets you query arrays, databases, XML, and JSON with "
-        "SQL-like syntax directly in C# code. No other mainstream language has this "
-        "built in."
-    )
-
-    subsection("Nullable reference types")
-    paragraph(
-        "C# 8 introduced compile-time null-safety — the compiler warns you before you "
-        "cause a NullReferenceException at runtime."
-    )
-
-    subsection("Records and immutability")
-    paragraph(
-        "C# 9 added record types — immutable data objects with value equality built in. "
-        "Less boilerplate than Java POJOs or Python dataclasses."
-    )
-
-    subsection("Unity game development")
-    paragraph(
-        "C# is the scripting language for Unity — used to build over 60% of all mobile "
-        "games worldwide."
-    )
-
-    subsection("Pattern matching")
-    paragraph(
-        "Advanced switch expressions, positional patterns, and property patterns — "
-        "cleaner than if/else chains, more powerful than Java's instanceof."
-    )
-
-    subsection("NuGet ecosystem")
-    paragraph(
-        "Over 300,000 open-source packages on NuGet.org — the .NET package manager "
-        "integrates seamlessly into Visual Studio."
-    )
-
-    subsection("Native AOT and performance")
-    paragraph(
-        "C# / .NET 8 supports Native AOT compilation — produces tiny, fast executables "
-        "without needing the .NET runtime installed."
+    st.markdown(
+        """
+| Feature | What it means | Why it matters |
+|---|---|---|
+| **Unified full-stack** | Build front-end (Blazor), back-end (ASP.NET), mobile (MAUI), and games (Unity) in the same language | One language for your entire stack — no context-switching between JS and a backend language |
+| **async/await pioneer** | C# popularised async/await in 2012 — before JS, Python, or Kotlin added it | Asynchronous code reads exactly like synchronous code — no callback hell |
+| **LINQ** | Language-Integrated Query lets you query arrays, databases, XML, and JSON with SQL-like syntax in C# | No other mainstream language has data querying built directly into the language |
+| **Nullable reference types** | C# 8 introduced compile-time null-safety | The compiler warns you before you cause a NullReferenceException at runtime |
+| **Records and immutability** | C# 9 added record types — immutable data objects with value equality built in | Less boilerplate than Java POJOs or Python dataclasses |
+| **Unity game development** | C# is the scripting language for Unity | Used to build over 60% of all mobile games worldwide |
+| **Pattern matching** | Advanced switch expressions, positional patterns, and property patterns | Cleaner than if/else chains, more powerful than Java's instanceof |
+| **NuGet ecosystem** | 300,000+ open-source packages at NuGet.org | Integrates seamlessly into Visual Studio — install any library with one click |
+| **Native AOT and performance** | .NET 8 supports Native AOT compilation | Produces tiny, fast executables without needing the .NET runtime installed |
+"""
     )
 
     # ------------------------------------------------------------------
@@ -193,49 +153,20 @@ def render_csharp():
     # Best-fit app types
     # ------------------------------------------------------------------
     subsection("What types of apps are best built with C#?")
-
-    subsection("Web APIs and microservices")
-    paragraph(
-        "ASP.NET Core is one of the fastest web frameworks. Used by Stack Overflow, "
-        "Microsoft, and thousands of enterprises."
+    st.markdown(
+        """
+| App type | Framework / Technology | Real-world examples |
+|---|---|---|
+| **Web APIs and microservices** | ASP.NET Core | Stack Overflow, Microsoft, thousands of enterprises — one of the fastest web frameworks |
+| **Enterprise line-of-business** | ASP.NET Core or WPF | CRM, ERP, inventory systems — C# is the go-to in corporate environments |
+| **Video games** | Unity | Pokémon GO, Cuphead, Cities: Skylines, Among Us |
+| **Cross-platform mobile** | .NET MAUI | One codebase → iOS, Android, Windows, and macOS apps |
+| **Cloud and serverless** | Azure Functions, Azure App Services | C# is Azure's first-class citizen |
+| **Windows desktop apps** | WPF (rich UI) / WinForms (classic) | Internal business tools, admin panels |
+| **AI and machine learning** | ML.NET | Machine learning pipelines; integration with Python AI models via REST |
+| **Dev tools and CLIs** | .NET, Roslyn | Roslyn compiler, PowerShell, NuGet — all built in C# / .NET |
+"""
     )
-
-    subsection("Enterprise line-of-business apps")
-    paragraph(
-        "CRM, ERP, and inventory systems — C# with WPF or ASP.NET is the go-to in "
-        "corporate environments."
-    )
-
-    subsection("Video games (Unity)")
-    paragraph(
-        "Pokémon GO, Cuphead, Cities: Skylines, and Among Us are all built with Unity "
-        "and C#."
-    )
-
-    subsection("Cross-platform mobile apps")
-    paragraph(
-        ".NET MAUI: one codebase produces iOS, Android, Windows, and macOS apps."
-    )
-
-    subsection("Cloud and serverless")
-    paragraph(
-        "Azure Functions and Azure App Services — C# is Azure's first-class citizen."
-    )
-
-    subsection("Windows desktop apps")
-    paragraph(
-        "WPF (rich UI) and WinForms (classic) remain popular for internal business "
-        "tools."
-    )
-
-    subsection("AI and ML")
-    paragraph(
-        "ML.NET for machine learning pipelines; integration with Python AI models via "
-        "REST."
-    )
-
-    subsection("Dev tools and CLIs")
-    paragraph("Roslyn compiler, PowerShell, and NuGet are all built in C# / .NET.")
 
     # ------------------------------------------------------------------
     # Challenges
@@ -265,35 +196,16 @@ def render_csharp():
         "water, then make an omelette, then a full meal — don't try a five-course "
         "dinner on day one."
     )
-
-    subsection("Phase 1 — Install and Hello World (days 1–3)")
-    paragraph(
-        "Install the .NET SDK, then VS Code or Visual Studio, then run "
-        "`dotnet new console` and execute your first Hello World program."
-    )
-
-    subsection("Phase 2 — Core language basics (weeks 1–3)")
-    paragraph(
-        "Variables and types, operators, if/else, loops (for, while, foreach), "
-        "methods, and arrays."
-    )
-
-    subsection("Phase 3 — Object-oriented programming (weeks 4–6)")
-    paragraph(
-        "Classes, objects, constructors, properties, inheritance, interfaces, and "
-        "abstract classes."
-    )
-
-    subsection("Phase 4 — Intermediate C# (month 2)")
-    paragraph(
-        "Generics, collections (List, Dictionary), LINQ, exception handling, file I/O, "
-        "and async/await."
-    )
-
-    subsection("Phase 5 — A real framework (month 3 onwards)")
-    paragraph(
-        "Pick one: ASP.NET Core (web), Unity (games), or WPF (desktop) and build a "
-        "project."
+    st.markdown(
+        """
+| Phase | Timeline | Topics to cover |
+|---|---|---|
+| **Phase 1 — Install and Hello World** | Days 1–3 | Install the .NET SDK, then VS Code or Visual Studio, run `dotnet new console` and execute your first Hello World |
+| **Phase 2 — Core language basics** | Weeks 1–3 | Variables and types, operators, if/else, loops (for, while, foreach), methods, arrays |
+| **Phase 3 — Object-oriented programming** | Weeks 4–6 | Classes, objects, constructors, properties, inheritance, interfaces, abstract classes |
+| **Phase 4 — Intermediate C#** | Month 2 | Generics, collections (List, Dictionary), LINQ, exception handling, file I/O, async/await |
+| **Phase 5 — A real framework** | Month 3 onwards | Pick one: ASP.NET Core (web), Unity (games), or WPF (desktop) — and build a real project |
+"""
     )
 
     subsection("Free learning resources")
