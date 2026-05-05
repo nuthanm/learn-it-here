@@ -93,6 +93,23 @@ LEARN_SECTIONS = [
         "slug": "unit-testing",
         "title": "Unit Testing",
         "renderer": "pages.learn.unit_testing:render_unit_testing",
+        "subsections": [
+            {
+                "slug": "tdd",
+                "title": "TDD",
+                "renderer": "pages.learn.unit_testing.tdd:render",
+            },
+            {
+                "slug": "unit-test",
+                "title": "Unit Test",
+                "renderer": "pages.learn.unit_testing.unit_test:render",
+            },
+            {
+                "slug": "integration-test",
+                "title": "Integration Test",
+                "renderer": "pages.learn.unit_testing.integration_test:render",
+            },
+        ],
     },
     {
         "slug": "linq",
