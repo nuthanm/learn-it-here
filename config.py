@@ -157,6 +157,13 @@ LEARN_SECTIONS = [
         "slug": "sql-developer",
         "title": "SQL Developer",
         "renderer": "pages.learn.sql_developer:render_sql_developer",
+        "subsections": [
+            {
+                "slug": "query-comparison",
+                "title": "SQL Server vs Oracle vs PostgreSQL Queries",
+                "renderer": "pages.learn.sql_query_comparison:render_sql_query_comparison",
+            },
+        ],
     },
 ]
 
@@ -165,7 +172,7 @@ LEARN_MENU_ITEMS = [s["title"] for s in LEARN_SECTIONS]
 
 # LATEST_NEW_TOPIC is the item that triggers the "new menu" banner.
 # Update this string whenever a brand-new item is added.
-LATEST_NEW_TOPIC = "SQL Developer"
+LATEST_NEW_TOPIC = "SQL Server vs Oracle vs PostgreSQL Queries"
 
 
 # ── Lookup helpers ─────────────────────────────────────────────────────────────
