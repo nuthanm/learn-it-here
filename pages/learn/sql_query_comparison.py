@@ -115,10 +115,11 @@ def render_sql_query_comparison() -> None:
     subsection("5) Conversion functions (CAST / CONVERT / TO_*)")
     code_block(
         "-- SQL Server\n"
-        "SELECT\n"
+        "SELECT TOP 1\n"
         "    CAST(customer_id AS VARCHAR(20)) AS customer_id_text,\n"
         "    CONVERT(VARCHAR(10), created_at, 23) AS created_date_yyyy_mm_dd,\n"
-        "    TRY_CONVERT(INT, '123') AS safe_int;\n\n"
+        "    TRY_CONVERT(INT, '123') AS safe_int\n"
+        "FROM customers;\n\n"
         "-- Oracle\n"
         "SELECT\n"
         "    TO_CHAR(customer_id) AS customer_id_text,\n"
