@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   if (!process.env.DATABASE_URL) {
     fallbackTopicSuggestions.unshift({ topic, created_at: new Date().toISOString() });
     if (fallbackTopicSuggestions.length > MAX_FALLBACK_TOPICS) {
-      fallbackTopicSuggestions.length = MAX_FALLBACK_TOPICS;
+      fallbackTopicSuggestions.splice(MAX_FALLBACK_TOPICS);
     }
     return NextResponse.json({
       ok: true,
