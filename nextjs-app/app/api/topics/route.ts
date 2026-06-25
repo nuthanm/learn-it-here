@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSql } from "@/lib/db";
 
 const fallbackTopicSuggestions: { topic: string; created_at: string }[] = [];
+const MAX_FALLBACK_TOPICS = 100;
 
 export async function GET() {
   if (!process.env.DATABASE_URL) {
@@ -32,6 +33,9 @@ export async function POST(req: NextRequest) {
 
   if (!process.env.DATABASE_URL) {
     fallbackTopicSuggestions.unshift({ topic, created_at: new Date().toISOString() });
+    if (fallbackTopicSuggestions.length > MAX_FALLBACK_TOPICS) {
+      fallbackTopicSuggestions.length = MAX_FALLBACK_TOPICS;
+    }
     return NextResponse.json({
       ok: true,
       message: "Saved in temporary in-memory storage for this server instance. Configure DATABASE_URL for persistent storage."
