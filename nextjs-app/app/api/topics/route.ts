@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSql } from "@/lib/db";
 
+const fallbackTopicSuggestions: { topic: string; created_at: string }[] = [];
+
 export async function GET() {
   if (!process.env.DATABASE_URL) {
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json(fallbackTopicSuggestions, { status: 200 });
   }
   try {
     const sql = getSql();
@@ -29,10 +31,11 @@ export async function POST(req: NextRequest) {
   }
 
   if (!process.env.DATABASE_URL) {
-    return NextResponse.json(
-      { ok: false, message: "Database not configured — suggestion was not saved." },
-      { status: 503 }
-    );
+    fallbackTopicSuggestions.unshift({ topic, created_at: new Date().toISOString() });
+    return NextResponse.json({
+      ok: true,
+      message: "Saved in local runtime memory. Configure DATABASE_URL for persistent storage."
+    });
   }
 
   try {
