@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     fallbackTopicSuggestions.unshift({ topic, created_at: new Date().toISOString() });
     return NextResponse.json({
       ok: true,
-      message: "Saved in local runtime memory. Configure DATABASE_URL for persistent storage."
+      message: "Saved in temporary in-memory storage for this server instance. Configure DATABASE_URL for persistent storage."
     });
   }
 
