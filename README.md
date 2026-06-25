@@ -1,13 +1,14 @@
 # 🐼 Learn It Here
 
-**Learn It Here** is a multi-page Streamlit web app that helps developers know
-their project stack before they start. Capture project requirements with a
-targeted questionnaire, then dive into curated learning guides matched to your
-exact tools and versions. Responses are stored in **Supabase (PostgreSQL)**
-and can be exported as a **PDF report** with a single click.
+**Learn It Here** helps developers know their project stack before they start. Capture project requirements with a targeted questionnaire, then dive into curated learning guides matched to your exact tools and versions. Responses are stored in **Supabase / Neon (PostgreSQL)** and can be exported as a **PDF report** with a single click.
 
 <img width="959" height="369" alt="image" src="https://github.com/user-attachments/assets/9225a4df-6bbb-4436-9dc9-aa04ef92aeed" />
 
+> **Two implementations coexist in this repo:**
+> | App | Stack | Directory |
+> |---|---|---|
+> | **Next.js app** *(current)* | Next.js 14 + Tailwind + Neon DB | [`nextjs-app/`](./nextjs-app/) |
+> | **Streamlit app** *(original)* | Python + Streamlit + Supabase | root directory |
 
 ---
 
@@ -316,6 +317,39 @@ learn-it-here/
 | Streamlit Docs | https://docs.streamlit.io |
 | Supabase Docs | https://supabase.com/docs |
 | fpdf2 Docs | https://py-fpdf2.readthedocs.io |
+
+---
+
+## 🚀 Next.js App (current version)
+
+The `nextjs-app/` subdirectory contains a full rewrite of the Streamlit app as a **Next.js 14 (App Router)** application.
+
+### Quick start
+
+```bash
+cd nextjs-app
+npm install
+cp .env.local.example .env.local
+# Edit .env.local → set DATABASE_URL to your Neon connection string
+npm run dev
+# → http://localhost:3000
+```
+
+### What's new in the Next.js version
+
+| Improvement | Detail |
+|---|---|
+| **Hero landing page** | Animated panda, stat strip, topics grid, CTA banner |
+| **Sticky header** | Backdrop-blurred nav with active-state highlight and mobile hamburger |
+| **Progress bar** | Live answer-count progress on the requirements form |
+| **Sub-topic tabs** | Inline tab strip for topics with multiple sub-pages |
+| **Mobile topic picker** | Dropdown topic selector in the learning hub on small screens |
+| **Richer footer** | Navigation links + tech attribution |
+| **Design tokens** | Full CSS custom-property system for easy theming |
+| **Neon DB** | Serverless PostgreSQL replacing Supabase |
+| **Server-side PDF** | jsPDF via Next.js API route |
+
+See [`nextjs-app/README.md`](./nextjs-app/README.md) for the full Next.js documentation.
 
 ---
 
