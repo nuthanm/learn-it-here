@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 interface CodeBlockProps {
+  /** Reserved for future syntax highlighting (e.g. "bash", "csharp"). Currently unused. */
   language?: string;
   children: string;
 }
