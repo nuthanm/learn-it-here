@@ -7,6 +7,27 @@ import { RequirementsRecord } from "@/lib/types";
 
 type FormValues = Record<string, string | string[]>;
 
+// ── Section progress tracker ──────────────────────────────────────────────────
+function SectionProgress({ completedCount, totalCount }: { completedCount: number; totalCount: number }) {
+  const pct = Math.round((completedCount / totalCount) * 100);
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <div className="flex items-center justify-between mb-2">
+        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)" }}>
+          {completedCount} of {totalCount} answered
+        </span>
+        <span style={{ fontSize: 12, fontWeight: 700, color: pct === 100 ? "var(--accent-hover)" : "var(--muted)" }}>
+          {pct}%
+        </span>
+      </div>
+      <div className="progress-track">
+        <div className="progress-fill" style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
+// ── Select widget ─────────────────────────────────────────────────────────────
 function SelectWidget({
   step,
   value,
@@ -22,10 +43,10 @@ function SelectWidget({
 }) {
   return (
     <div className="mb-5">
-      <label className="block font-semibold mb-1 text-sm" style={{ color: "var(--ink)" }}>
+      <label className="block mb-1" style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
         {step.title}
         {step.help && (
-          <span className="ml-2 font-normal" style={{ color: "var(--muted)", fontSize: 12 }}>
+          <span style={{ fontSize: 12, fontWeight: 400, color: "var(--muted)", marginLeft: 6 }}>
             {step.help}
           </span>
         )}
@@ -33,17 +54,11 @@ function SelectWidget({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
-        style={{
-          borderColor: "var(--border)",
-          background: "var(--card)",
-          color: value ? "var(--ink)" : "var(--muted)",
-        }}>
-        <option value="">Choose an option</option>
+        className="form-input"
+        style={{ color: value ? "var(--ink)" : "var(--muted)" }}>
+        <option value="">Choose an option…</option>
         {step.options!.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
+          <option key={opt} value={opt}>{opt}</option>
         ))}
       </select>
       {value === "Other" && (
@@ -52,14 +67,14 @@ function SelectWidget({
           placeholder={`Specify ${step.title.toLowerCase()}`}
           value={otherValue}
           onChange={(e) => onOtherChange(e.target.value)}
-          className="mt-2 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
-          style={{ borderColor: "var(--border)", background: "var(--card)", color: "var(--ink)" }}
+          className="form-input mt-2"
         />
       )}
     </div>
   );
 }
 
+// ── Multi-select widget ───────────────────────────────────────────────────────
 function MultiWidget({
   step,
   value,
@@ -83,15 +98,15 @@ function MultiWidget({
 
   return (
     <div className="mb-5">
-      <label className="block font-semibold mb-1 text-sm" style={{ color: "var(--ink)" }}>
+      <label className="block mb-2" style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
         {step.title}
         {step.help && (
-          <span className="ml-2 font-normal" style={{ color: "var(--muted)", fontSize: 12 }}>
+          <span style={{ fontSize: 12, fontWeight: 400, color: "var(--muted)", marginLeft: 6 }}>
             {step.help}
           </span>
         )}
       </label>
-      <div className="flex flex-wrap gap-2 mt-1">
+      <div className="flex flex-wrap gap-2">
         {step.options!.map((opt) => {
           const checked = value.includes(opt);
           return (
@@ -99,12 +114,18 @@ function MultiWidget({
               key={opt}
               type="button"
               onClick={() => toggle(opt)}
-              className="px-3 py-1 rounded-full text-xs font-medium border transition-colors duration-100"
               style={{
-                borderColor: checked ? "var(--accent)" : "var(--border)",
+                padding: "5px 14px",
+                borderRadius: 999,
+                fontSize: 12,
+                fontWeight: 500,
+                border: checked ? "1.5px solid var(--accent)" : "1.5px solid var(--border)",
                 background: checked ? "var(--accent-soft)" : "var(--card)",
                 color: checked ? "var(--accent-hover)" : "var(--muted)",
+                cursor: "pointer",
+                transition: "all 120ms ease",
               }}>
+              {checked && <span style={{ marginRight: 4 }}>✓</span>}
               {opt}
             </button>
           );
@@ -116,21 +137,21 @@ function MultiWidget({
           placeholder={`Specify other ${step.title.toLowerCase()}`}
           value={otherValue}
           onChange={(e) => onOtherChange(e.target.value)}
-          className="mt-2 w-full border rounded-lg px-3 py-2 text-sm focus:outline-none"
-          style={{ borderColor: "var(--border)", background: "var(--card)", color: "var(--ink)" }}
+          className="form-input mt-2"
         />
       )}
     </div>
   );
 }
 
+// ── Text widget ───────────────────────────────────────────────────────────────
 function TextWidget({ step, value, onChange }: { step: Step; value: string; onChange: (v: string) => void }) {
   return (
     <div className="mb-5">
-      <label className="block font-semibold mb-1 text-sm" style={{ color: "var(--ink)" }}>
+      <label className="block mb-1" style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
         {step.title}
         {step.help && (
-          <span className="ml-2 font-normal" style={{ color: "var(--muted)", fontSize: 12 }}>
+          <span style={{ fontSize: 12, fontWeight: 400, color: "var(--muted)", marginLeft: 6 }}>
             {step.help}
           </span>
         )}
@@ -140,13 +161,13 @@ function TextWidget({ step, value, onChange }: { step: Step; value: string; onCh
         onChange={(e) => onChange(e.target.value)}
         placeholder={step.placeholder ?? ""}
         rows={4}
-        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none resize-y"
-        style={{ borderColor: "var(--border)", background: "var(--card)", color: "var(--ink)" }}
+        className="form-input resize-y"
       />
     </div>
   );
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function resolveSelect(key: string, value: string, others: Record<string, string>): string {
   if (!value) return "";
   if (value === "Other") return (others[`${key}_other`] || "Other").trim();
@@ -163,9 +184,7 @@ function resolveMulti(key: string, value: string[], others: Record<string, strin
 }
 
 function buildRecord(values: FormValues, others: Record<string, string>): RequirementsRecord {
-  const record: RequirementsRecord = {
-    submitted_at: new Date().toISOString(),
-  };
+  const record: RequirementsRecord = { submitted_at: new Date().toISOString() };
   for (const step of STEPS) {
     const raw = values[step.key];
     if (step.kind === "select") {
@@ -179,6 +198,16 @@ function buildRecord(values: FormValues, others: Record<string, string>): Requir
   return record;
 }
 
+function countAnswered(values: FormValues): number {
+  return STEPS.filter((s) => {
+    const v = values[s.key];
+    if (!v) return false;
+    if (Array.isArray(v)) return v.length > 0;
+    return (v as string).length > 0;
+  }).length;
+}
+
+// ── Main form ─────────────────────────────────────────────────────────────────
 export default function RequirementsForm() {
   const [values, setValues] = useState<FormValues>({});
   const [others, setOthers] = useState<Record<string, string>>({});
@@ -222,8 +251,7 @@ export default function RequirementsForm() {
         body: JSON.stringify(record),
       });
       if (pdfRes.ok) {
-        const blob = await pdfRes.blob();
-        setPdfBlob(blob);
+        setPdfBlob(await pdfRes.blob());
         setPdfError(null);
       } else {
         setPdfError("PDF generation failed.");
@@ -256,51 +284,60 @@ export default function RequirementsForm() {
     setDbMessage(null);
   };
 
+  // ── Success view ────────────────────────────────────────────────────────────
   if (submitted) {
     return (
-      <div style={{ maxWidth: 640 }}>
-        <h2 className="font-bold text-2xl mb-2" style={{ color: "var(--ink)" }}>
-          All done — great work 🎉
-        </h2>
-        <p className="mb-4 text-sm" style={{ color: "var(--body)" }}>
-          Your project requirements have been captured.
-        </p>
-
-        {dbMessage && (
-          <div className="p-3 rounded-lg mb-4 text-sm"
-            style={{ background: "var(--accent-soft)", color: "var(--ink)", border: "1px solid var(--accent)" }}>
-            {dbMessage}
-          </div>
-        )}
-
-        <div className="success-card mb-6">
-          <p className="font-semibold mb-1" style={{ color: "var(--ink)" }}>Submission saved</p>
-          <p className="text-sm" style={{ color: "var(--body)" }}>
-            Download a shareable PDF of your project brief below, or move on to the learning hub.
+      <div style={{ maxWidth: 560 }}>
+        {/* Confetti header */}
+        <div
+          style={{
+            background: "var(--hero-grad)",
+            border: "1px solid rgba(93,163,52,.2)",
+            borderRadius: "var(--r-lg)",
+            padding: "32px 28px",
+            textAlign: "center",
+            marginBottom: 20,
+          }}>
+          <div style={{ fontSize: 48, marginBottom: 10 }}>🎉</div>
+          <h2 style={{ fontSize: 22, fontWeight: 800, color: "var(--ink)", marginBottom: 6 }}>
+            All done — great work!
+          </h2>
+          <p style={{ fontSize: 14, color: "var(--body)", lineHeight: 1.7 }}>
+            Your project requirements have been captured.
           </p>
         </div>
 
-        <div className="flex gap-3 flex-wrap">
+        {dbMessage && (
+          <div className="info-card mb-4">
+            ℹ️ {dbMessage}
+          </div>
+        )}
+
+        <div className="success-card mb-5">
+          <p style={{ fontWeight: 700, color: "var(--ink)", marginBottom: 4 }}>📄 Your PDF is ready</p>
+          <p style={{ fontSize: 13, color: "var(--body)", lineHeight: 1.6 }}>
+            Download a branded, shareable PDF summary of your project brief — or jump straight into the learning hub.
+          </p>
+        </div>
+
+        <div className="flex gap-3 flex-wrap mb-4">
           <button
             onClick={downloadPdf}
             disabled={!pdfBlob}
-            className="px-5 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: "var(--accent)" }}>
+            className="btn-primary">
             📄 Download PDF
           </button>
-          <button
-            onClick={reset}
-            className="px-5 py-2 rounded-lg text-sm font-semibold border"
-            style={{ borderColor: "var(--border)", color: "var(--ink)", background: "var(--card)" }}>
+          <button onClick={reset} className="btn-secondary">
             Submit another response
           </button>
         </div>
+
         {pdfError && (
-          <p className="mt-3 text-xs" style={{ color: "var(--muted)" }}>{pdfError}</p>
+          <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 12 }}>{pdfError}</p>
         )}
-        <p className="mt-5 text-sm">
-          <Link href="/learning-hub" className="font-semibold no-underline hover:underline"
-            style={{ color: "var(--accent)" }}>
+
+        <p style={{ fontSize: 14, marginTop: 16 }}>
+          <Link href="/learning-hub" className="no-underline hover:underline" style={{ color: "var(--accent)", fontWeight: 700 }}>
             Browse the learning hub →
           </Link>
         </p>
@@ -308,11 +345,17 @@ export default function RequirementsForm() {
     );
   }
 
+  // ── Form view ───────────────────────────────────────────────────────────────
+  const answered = countAnswered(values);
   let lastSection = "";
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 640 }}>
-      <div className="rounded-xl p-6 mb-6" style={{ background: "var(--card)", boxShadow: "var(--shadow)" }}>
+    <form onSubmit={handleSubmit}>
+      {/* Progress bar */}
+      <SectionProgress completedCount={answered} totalCount={STEPS.length} />
+
+      {/* Questions card */}
+      <div className="card" style={{ padding: "28px 28px", marginBottom: 20 }}>
         {STEPS.map((step) => {
           const sectionHeader = step.section !== lastSection ? step.section : null;
           if (step.section !== lastSection) lastSection = step.section;
@@ -320,8 +363,19 @@ export default function RequirementsForm() {
           return (
             <div key={step.key}>
               {sectionHeader && (
-                <div className="text-xs font-semibold uppercase tracking-wider mb-3 mt-5 first:mt-0 pb-1 border-b"
-                  style={{ color: "var(--accent)", borderColor: "var(--border)", letterSpacing: "1px" }}>
+                <div
+                  style={{
+                    fontSize: 10,
+                    fontWeight: 800,
+                    textTransform: "uppercase" as const,
+                    letterSpacing: "0.08em",
+                    color: "var(--accent)",
+                    marginTop: 20,
+                    marginBottom: 12,
+                    paddingBottom: 8,
+                    borderBottom: "1px solid var(--border)",
+                  }}
+                  className="first:mt-0">
                   {sectionHeader}
                 </div>
               )}
@@ -355,19 +409,25 @@ export default function RequirementsForm() {
         })}
       </div>
 
-      <div className="flex justify-end gap-3">
-        <Link href="/"
-          className="inline-flex items-center px-5 py-2 rounded-lg text-sm font-semibold border no-underline"
-          style={{ borderColor: "var(--border)", color: "var(--ink)", background: "var(--card)" }}>
-          Cancel
-        </Link>
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-5 py-2 rounded-lg text-sm font-semibold text-white disabled:opacity-60"
-          style={{ background: "var(--accent)" }}>
-          {loading ? "Submitting…" : "Submit requirements"}
-        </button>
+      {/* Submit row */}
+      <div className="flex justify-between items-center gap-3 flex-wrap">
+        <p style={{ fontSize: 12, color: "var(--muted)" }}>
+          {answered === STEPS.length
+            ? "✅ All questions answered — ready to submit!"
+            : `${STEPS.length - answered} question${STEPS.length - answered > 1 ? "s" : ""} remaining`}
+        </p>
+        <div className="flex gap-3">
+          <Link href="/" className="btn-secondary" style={{ fontSize: 13 }}>
+            Cancel
+          </Link>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary"
+            style={{ fontSize: 13 }}>
+            {loading ? "Submitting…" : "Submit requirements"}
+          </button>
+        </div>
       </div>
     </form>
   );
